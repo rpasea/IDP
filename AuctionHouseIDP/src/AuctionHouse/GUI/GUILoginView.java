@@ -26,11 +26,11 @@ public class GUILoginView extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        UsernameField = new javax.swing.JTextField();
-        RoleCombo = new javax.swing.JComboBox();
-        LoginButton = new javax.swing.JButton();
+        usernameField = new javax.swing.JTextField();
+        roleCombo = new javax.swing.JComboBox();
+        loginButton = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        PasswordField = new javax.swing.JPasswordField();
+        passwordField = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -43,17 +43,17 @@ public class GUILoginView extends javax.swing.JFrame {
 
         jLabel4.setText("Account type:");
 
-        RoleCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Furnizor", "Cumparator" }));
-        RoleCombo.addActionListener(new java.awt.event.ActionListener() {
+        roleCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Furnizor", "Cumparator" }));
+        roleCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RoleComboActionPerformed(evt);
+                roleComboActionPerformed(evt);
             }
         });
 
-        LoginButton.setText("Login");
-        LoginButton.addActionListener(new java.awt.event.ActionListener() {
+        loginButton.setText("Login");
+        loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LoginButtonActionPerformed(evt);
+                loginButtonActionPerformed(evt);
             }
         });
 
@@ -70,14 +70,14 @@ public class GUILoginView extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(86, 86, 86)
-                        .addComponent(UsernameField))
+                        .addComponent(usernameField))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(LoginButton))
+                        .addComponent(loginButton))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(27, 27, 27)
-                        .addComponent(RoleCombo, 0, 228, Short.MAX_VALUE))
+                        .addComponent(roleCombo, 0, 228, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -86,7 +86,7 @@ public class GUILoginView extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(49, 49, 49)
-                        .addComponent(PasswordField)))
+                        .addComponent(passwordField)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -97,20 +97,20 @@ public class GUILoginView extends javax.swing.JFrame {
                 .addGap(50, 50, 50)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(UsernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(40, 40, 40)
-                        .addComponent(LoginButton)
+                        .addComponent(loginButton)
                         .addGap(15, 15, 15)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
-                            .addComponent(PasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(RoleCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(roleCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -134,17 +134,17 @@ public class GUILoginView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void RoleComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RoleComboActionPerformed
+    private void roleComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roleComboActionPerformed
         // Nothing
-    }//GEN-LAST:event_RoleComboActionPerformed
+    }//GEN-LAST:event_roleComboActionPerformed
 
-    private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
+    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         System.out.println("Login fired!");
         
-        controller.login(UsernameField.getText(),
-                        new String(PasswordField.getPassword()),
-                        RoleCombo.getSelectedIndex());
-    }//GEN-LAST:event_LoginButtonActionPerformed
+        controller.login(usernameField.getText(),
+                        new String(passwordField.getPassword()),
+                        roleCombo.getSelectedIndex());
+    }//GEN-LAST:event_loginButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,15 +181,15 @@ public class GUILoginView extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton LoginButton;
-    private javax.swing.JPasswordField PasswordField;
-    private javax.swing.JComboBox RoleCombo;
-    private javax.swing.JTextField UsernameField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton loginButton;
+    private javax.swing.JPasswordField passwordField;
+    private javax.swing.JComboBox roleCombo;
+    private javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables
 }
