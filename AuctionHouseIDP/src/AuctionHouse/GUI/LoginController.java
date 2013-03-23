@@ -11,11 +11,11 @@ import java.util.LinkedList;
  *
  * @author iulius
  */
-public class GUILoginController {
-    private GUILoginView view;
+public class LoginController {
+    private LoginView view;
     private GUIMediator mediator;
     
-    public GUILoginController(GUILoginView associatedView, GUIMediator med){
+    public LoginController(LoginView associatedView, GUIMediator med){
         view = associatedView;
         mediator = med;
     }
@@ -34,7 +34,7 @@ public class GUILoginController {
                      "Active", null}
         };
         AHTableModel tableModel = new AHTableModel(data, columnNames);
-        GUIMainView guiMainWindow = new GUIMainView(tableModel, mediator, this);
+        MainView guiMainWindow = new MainView(tableModel, mediator, this);
         
         // Switch to MainView window
         view.setVisible(false);

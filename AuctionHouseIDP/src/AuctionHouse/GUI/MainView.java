@@ -3,17 +3,17 @@ package AuctionHouse.GUI;
 import AuctionHouse.Mediator.GUIMediator;
 
 
-public class GUIMainView extends javax.swing.JFrame {
+public class MainView extends javax.swing.JFrame {
     private AHTableModel tableModel;
-    private GUIMainController controller;
+    private MainController controller;
     
     /**
      * Creates new form GUIMainView
      */
-    public GUIMainView(AHTableModel model, GUIMediator med,
-            GUILoginController loginController) {
+    public MainView(AHTableModel model, GUIMediator med,
+            LoginController loginController) {
         this.tableModel = model;
-        controller = new GUIMainController(this, model, med, loginController);
+        controller = new MainController(this, model, med, loginController);
         initComponents();
     }
 

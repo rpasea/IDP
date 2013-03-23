@@ -3,14 +3,14 @@ package AuctionHouse.GUI;
 import AuctionHouse.Mediator.GUIMediator;
 
 
-public class GUIMainController {
-    private GUIMainView view;
+public class MainController {
+    private MainView view;
     private AHTableModel tableModel;
     private GUIMediator mediator;
-    private GUILoginController loginController;
+    private LoginController loginController;
     
-    public GUIMainController(GUIMainView view, AHTableModel model,
-            GUIMediator med, GUILoginController loginController){
+    public MainController(MainView view, AHTableModel model,
+            GUIMediator med, LoginController loginController){
         this.view = view;
         tableModel = model;
         mediator = med;

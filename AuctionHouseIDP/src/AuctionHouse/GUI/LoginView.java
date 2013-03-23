@@ -2,16 +2,16 @@ package AuctionHouse.GUI;
 
 import AuctionHouse.Mediator.GUIMediator;
 
-public class GUILoginView extends javax.swing.JFrame {
+public class LoginView extends javax.swing.JFrame {
 
-    private GUILoginController controller;
+    private LoginController controller;
     
     /**
-     * Creates new form GUILoginView
+     * Creates new form LoginView
      */
-    public GUILoginView(GUIMediator mediator) {
+    public LoginView(GUIMediator mediator) {
         initComponents();
-        controller = new GUILoginController(this, mediator);
+        controller = new LoginController(this, mediator);
     }
 
     /**

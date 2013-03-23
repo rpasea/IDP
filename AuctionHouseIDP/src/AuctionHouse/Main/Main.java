@@ -4,7 +4,7 @@
  */
 package AuctionHouse.Main;
 
-import AuctionHouse.GUI.GUILoginView;
+import AuctionHouse.GUI.LoginView;
 import AuctionHouse.Mediator.Mediator;
 import AuctionHouse.Mediator.MockMediator;
 
@@ -27,13 +27,13 @@ public class Main {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUILoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUILoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUILoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUILoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -44,7 +44,7 @@ public class Main {
                 MockMediator med = new MockMediator();
                 
                 // Instantiate first GUI window
-                new GUILoginView(med).setVisible(true);
+                new LoginView(med).setVisible(true);
             }
         });
     }
