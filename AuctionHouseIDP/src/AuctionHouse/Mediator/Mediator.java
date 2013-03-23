@@ -14,8 +14,9 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	 * Methods of GUIMediator interface
 	 */
 	@Override
-	public boolean isLoginValid(String user, String password, int category) {
-		// TODO Auto-generated method stub
+	public boolean isLoginValid(String user, String password, int role) {
+                // Checks if credentials are valid
+		// TODO
 		return false;
 	}
 	

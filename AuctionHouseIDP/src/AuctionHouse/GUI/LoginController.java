@@ -21,9 +21,11 @@ public class LoginController {
     }
     
     public boolean login(String user, String password, int role){
+        // Checks login credentials with the mediator
         if(!mediator.isLoginValid(user, password, role))
             return false;
         
+        // Creaza model dummy
         String[] columnNames  = { "Name" , "People" , "Status" , "Progress" };
         String[] people = {"Bibi, Sibi, Cici" };
         LinkedList<String> list = new LinkedList<String> ();
@@ -34,6 +36,8 @@ public class LoginController {
                      "Active", null}
         };
         AHTableModel tableModel = new AHTableModel(data, columnNames);
+        
+        // Instantiates a new MainWindow to be displayed
         MainView guiMainWindow = new MainView(tableModel, mediator, this);
         
         // Switch to MainView window
