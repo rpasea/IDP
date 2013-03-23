@@ -4,6 +4,7 @@
  */
 package AuctionHouse.GUI;
 
+import AuctionHouse.Mediator.GUIMediator;
 import java.util.LinkedList;
 
 /**
@@ -11,7 +12,18 @@ import java.util.LinkedList;
  * @author iulius
  */
 public class GUILoginController {
+    private GUILoginView view;
+    private GUIMediator mediator;
+    
+    public GUILoginController(GUILoginView associatedView, GUIMediator med){
+        view = associatedView;
+        mediator = med;
+    }
+    
     public boolean login(String user, String password, int role){
+        if(!mediator.isLoginValid(user, password, role))
+            return false;
+        
         String[] columnNames  = { "Name" , "People" , "Status" , "Progress" };
         String[] people = {"Bibi, Sibi, Cici" };
         LinkedList<String> list = new LinkedList<String> ();
@@ -21,12 +33,19 @@ public class GUILoginController {
                     {"BaniGratis", list,
                      "Active", null}
         };
-        AHTableModel mockModel = new AHTableModel(data, columnNames);
-        GUIView gwindow = new GUIView(mockModel);
-        gwindow.setVisible(true);
+        AHTableModel tableModel = new AHTableModel(data, columnNames);
+        GUIMainView guiMainWindow = new GUIMainView(tableModel, mediator, this);
+        
+        // Switch to MainView window
+        view.setVisible(false);
+        guiMainWindow.setVisible(true);
         
         System.out.println("LOGED IN: " + user + " / " + password + " (role: " + role + ")");
         
         return true;
+    }
+    
+    public void showLoginWin(){
+        view.setVisible(true);
     }
 }
