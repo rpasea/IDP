@@ -101,6 +101,9 @@
                   <Connection code="tableModel" type="code"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseAdapter" parameters="java.awt.event.MouseEvent" handler="mouseClickPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

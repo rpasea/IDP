@@ -20,13 +20,15 @@ public class MainController {
     }
     
     public void logout(){
-        // Just switch to LoginView window
-        // I think...
     	LogoutMessage msg = new LogoutMessage();
         mediator.sendMessage(msg);
     }
     
     public void setVisibility(boolean value){
         view.setVisible(value);
+    }
+    
+    public void tableClicked(java.awt.event.MouseEvent evt) {
+    	System.out.println("Cliiiiiick!");
     }
 }

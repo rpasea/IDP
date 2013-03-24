@@ -67,6 +67,12 @@ public class MainView extends javax.swing.JFrame {
 
         table.setModel(tableModel);
         jScrollPane1.setViewportView(table);
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            	mouseClickPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -101,6 +107,11 @@ public class MainView extends javax.swing.JFrame {
         controller.logout();
     }//GEN-LAST:event_logoutButtonActionPerformed
 
+    public void mouseClickPerformed(java.awt.event.MouseEvent evt) {
+    	controller.tableClicked(evt);
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

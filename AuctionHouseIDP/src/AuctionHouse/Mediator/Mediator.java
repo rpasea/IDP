@@ -19,15 +19,16 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	public void init() {
 		controllerMediator.initGui();
 	}
-
-	/*
-	 * Methods of GUIMediator interface
-	 */
+	
 	private boolean isLoginValid(String user, String password, int role) {
 		if (user.equals("gicu") && role == Mediator.ROL_FURNIZOR)
 			return true;
 		return false;
 	}
+
+	/*
+	 * Methods of GUIMediator interface
+	 */
 
 	@Override
 	public Object sendGuiMessage(Message message) {
