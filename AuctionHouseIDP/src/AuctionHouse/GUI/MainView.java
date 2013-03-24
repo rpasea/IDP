@@ -95,13 +95,12 @@ public class MainView extends javax.swing.JFrame {
         );
 
         table.setModel(tableModel);
-        jScrollPane1.setViewportView(table);
         table.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-            	mouseClickPerformed(evt);
+                tableMouseClicked(evt);
             }
         });
+        jScrollPane1.setViewportView(table);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -115,7 +114,7 @@ public class MainView extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -136,9 +135,9 @@ public class MainView extends javax.swing.JFrame {
         controller.logout();
     }//GEN-LAST:event_logoutButtonActionPerformed
 
-    public void mouseClickPerformed(java.awt.event.MouseEvent evt) {
-    	controller.tableClicked(evt);
-    }
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        controller.tableClicked(evt);
+    }//GEN-LAST:event_tableMouseClicked
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
