@@ -13,6 +13,8 @@ public class AHTableModel extends DefaultTableModel{
 	}
 	
 	public boolean isCellEditable (int row, int column) {
+		//if (column == this.getColumnCount() - 1)
+		//	return true;
 		return false;
 	}
 

@@ -1,7 +1,15 @@
 package Commands;
 
+import java.awt.Dimension;
 import java.util.LinkedList;
 
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
+
+import AuctionHouse.GUI.AHTableCellRenderer;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.GUI.MainView;
@@ -20,14 +28,31 @@ public class LoginCommand implements Command {
 		this.mediator = med;
 	}
 	public Object run() {
-		String[] columnNames  = { "Name" , "People" , "Status" , "Progress" };
+		String[] columnNames  = { "Service", "Status" , "Users"};
+		String[] embeddedCNames = { "Name", "Status" , "Progress" };
+		
         String[] people = {"Bibi, Sibi, Cici" };
-        LinkedList<String> list = new LinkedList<String> ();
-        for(String s : people) 
-                list.add(s);
+        Object[][] embeddedData = {
+        		{ "Bibi", "Active", ""},
+        		{ "Sibi", "Active", ""},
+        		{ "Cici", "Active", ""}
+        };
+        
+        AHTableModel embeddedTableModel = new AHTableModel(embeddedData, embeddedCNames);
+        JTable embedded = new JTable(embeddedTableModel);
+        embedded.setName("EmbeddedTable");
+        TableColumnModel tcm = embedded.getColumnModel();
+        TableCellRenderer tcr = new AHTableCellRenderer();
+        for(int it = 0; it < tcm.getColumnCount(); it++){
+            tcm.getColumn(it).setCellRenderer(tcr);
+        }
+        //JScrollPane panel = new JScrollPane();
+        //panel.setViewportView(embedded);
+        //panel.setPreferredSize(new Dimension(embedded.getPreferredSize().width,embedded.getPreferredSize().height + 30));
+        
+        
         Object[][] data = {
-                    {"BaniGratis", list,
-                     "Active", null}
+                    {"BaniGratis", "Active", embedded }
         };
         AHTableModel tableModel = new AHTableModel(data, columnNames);
         

@@ -1,5 +1,12 @@
 package AuctionHouse.GUI;
 
+import java.awt.Component;
+
+import javax.swing.DefaultCellEditor;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
+
 import AuctionHouse.Mediator.GUIMediator;
 
 
@@ -15,10 +22,32 @@ public class MainView extends javax.swing.JFrame {
         this.tableModel = model;
         controller = new MainController(this, model, med, loginController);
         initComponents();
+        
+        TableColumnModel tcm = table.getColumnModel();
+        TableCellRenderer tcr = new AHTableCellRenderer();
+        
+        for(int it = 0; it < tcm.getColumnCount(); it++){
+            tcm.getColumn(it).setCellRenderer(tcr);
+            if (it != tcm.getColumnCount() - 1)
+            	tcm.getColumn(it).setPreferredWidth((int) (20 * 10000));
+            else {
+            	tcm.getColumn(it).setPreferredWidth((int) (60 * 10000));
+            }
+        }
+
+        for (int i = 0 ; i < table.getRowCount(); i++) {
+        	table.setRowHeight(i, ((Component)table.getValueAt(i, 2)).getPreferredSize().height);
+        }
+        table.setFocusable(false);
+        table.setRowSelectionAllowed(false);
     }
     
     public MainController getController() {
     	return controller;
+    }
+    
+    public JTable getTable() {
+    	return table;
     }
 
     /**
