@@ -1,4 +1,4 @@
-package Commands;
+package AuctionHouse.Commands;
 
 import java.awt.Dimension;
 import java.util.LinkedList;

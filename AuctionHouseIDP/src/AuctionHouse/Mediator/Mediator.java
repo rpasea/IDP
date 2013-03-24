@@ -1,8 +1,8 @@
 package AuctionHouse.Mediator;
 
+import AuctionHouse.Commands.*;
 import AuctionHouse.GUI.ControllerMediator;
-import Commands.*;
-import Messages.*;
+import AuctionHouse.Messages.*;
 
 public class Mediator implements GUIMediator, NetworkMediator,
 		WebClientMediator {

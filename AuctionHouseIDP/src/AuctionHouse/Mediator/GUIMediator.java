@@ -1,6 +1,6 @@
 package AuctionHouse.Mediator;
 
-import Messages.Message;
+import AuctionHouse.Messages.Message;
 
 public interface GUIMediator {
 	

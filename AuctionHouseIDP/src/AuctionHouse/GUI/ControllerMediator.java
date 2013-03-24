@@ -1,7 +1,7 @@
 package AuctionHouse.GUI;
 
 import AuctionHouse.Mediator.Mediator;
-import Messages.Message;
+import AuctionHouse.Messages.Message;
 
 public class ControllerMediator {
 	private Mediator mediator;

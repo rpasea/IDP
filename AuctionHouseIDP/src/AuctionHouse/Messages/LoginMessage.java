@@ -1,4 +1,4 @@
-package Messages;
+package AuctionHouse.Messages;
 
 public class LoginMessage implements Message {
 

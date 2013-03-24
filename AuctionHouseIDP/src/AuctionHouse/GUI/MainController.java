@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import Messages.LogoutMessage;
+import AuctionHouse.Messages.LogoutMessage;
 
 public class MainController {
 	private MainView view;

@@ -5,7 +5,7 @@
 package AuctionHouse.GUI;
 
 import AuctionHouse.Mediator.GUIMediator;
-import Messages.LoginMessage;
+import AuctionHouse.Messages.LoginMessage;
 
 import java.util.LinkedList;
 
