@@ -9,9 +9,13 @@ public class LoginView extends javax.swing.JFrame {
     /**
      * Creates new form LoginView
      */
-    public LoginView(GUIMediator mediator) {
+    public LoginView(ControllerMediator mediator) {
         initComponents();
         controller = new LoginController(this, mediator);
+    }
+    
+    public LoginController getController() {
+    	return controller;
     }
 
     /**

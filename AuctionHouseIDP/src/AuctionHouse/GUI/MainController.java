@@ -1,16 +1,18 @@
 package AuctionHouse.GUI;
 
 import AuctionHouse.Mediator.GUIMediator;
+import Messages.LoginMessage;
+import Messages.LogoutMessage;
 
 
 public class MainController {
     private MainView view;
     private AHTableModel tableModel;
-    private GUIMediator mediator;
+    private ControllerMediator mediator;
     private LoginController loginController;
     
     public MainController(MainView view, AHTableModel model,
-            GUIMediator med, LoginController loginController){
+            ControllerMediator med, LoginController loginController){
         this.view = view;
         tableModel = model;
         mediator = med;
@@ -20,7 +22,11 @@ public class MainController {
     public void logout(){
         // Just switch to LoginView window
         // I think...
-        view.setVisible(false);
-        loginController.showLoginWin();
+    	LogoutMessage msg = new LogoutMessage();
+        mediator.sendMessage(msg);
+    }
+    
+    public void setVisibility(boolean value){
+        view.setVisible(value);
     }
 }

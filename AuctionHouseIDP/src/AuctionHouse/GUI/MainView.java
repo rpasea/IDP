@@ -10,11 +10,15 @@ public class MainView extends javax.swing.JFrame {
     /**
      * Creates new form GUIMainView
      */
-    public MainView(AHTableModel model, GUIMediator med,
+    public MainView(AHTableModel model, ControllerMediator med,
             LoginController loginController) {
         this.tableModel = model;
         controller = new MainController(this, model, med, loginController);
         initComponents();
+    }
+    
+    public MainController getController() {
+    	return controller;
     }
 
     /**

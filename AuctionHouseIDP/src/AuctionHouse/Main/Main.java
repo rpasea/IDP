@@ -6,7 +6,6 @@ package AuctionHouse.Main;
 
 import AuctionHouse.GUI.LoginView;
 import AuctionHouse.Mediator.Mediator;
-import AuctionHouse.Mediator.MockMediator;
 
 /**
  *
@@ -41,10 +40,9 @@ public class Main {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 // Create a new Mediator for all the components
-                MockMediator med = new MockMediator();
+                Mediator med = new Mediator();
                 
-                // Instantiate first GUI window
-                new LoginView(med).setVisible(true);
+                med.init();
             }
         });
     }
