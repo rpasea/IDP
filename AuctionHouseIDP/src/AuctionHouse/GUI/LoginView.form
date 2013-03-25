@@ -136,6 +136,13 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="usernameField">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="gicu"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="usernameFieldActionPerformed"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="usernameFieldKeyReleased"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="roleCombo">
           <Properties>

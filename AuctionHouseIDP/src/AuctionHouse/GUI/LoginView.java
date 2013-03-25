@@ -1,6 +1,7 @@
 package AuctionHouse.GUI;
 
 import AuctionHouse.Mediator.GUIMediator;
+import java.awt.event.KeyEvent;
 
 public class LoginView extends javax.swing.JFrame {
 
@@ -48,6 +49,18 @@ public class LoginView extends javax.swing.JFrame {
         jLabel3.setText("Password:");
 
         jLabel4.setText("Account type:");
+
+        usernameField.setText("gicu");
+        usernameField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usernameFieldActionPerformed(evt);
+            }
+        });
+        usernameField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                usernameFieldKeyReleased(evt);
+            }
+        });
 
         roleCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Furnizor", "Cumparator" }));
         roleCombo.addActionListener(new java.awt.event.ActionListener() {
@@ -151,6 +164,20 @@ public class LoginView extends javax.swing.JFrame {
                         new String(passwordField.getPassword()),
                         roleCombo.getSelectedIndex());
     }//GEN-LAST:event_loginButtonActionPerformed
+
+    private void usernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usernameFieldActionPerformed
+
+    private void usernameFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameFieldKeyReleased
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            System.out.println("Enter Login fired!");
+        
+            controller.login(usernameField.getText(),
+                        new String(passwordField.getPassword()),
+                        roleCombo.getSelectedIndex());
+        }
+    }//GEN-LAST:event_usernameFieldKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
