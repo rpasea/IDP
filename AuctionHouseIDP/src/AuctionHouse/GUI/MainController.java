@@ -5,23 +5,27 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
+import AuctionHouse.Mediator.Mediator;
 import AuctionHouse.Messages.LogoutMessage;
+import AuctionHouse.Messages.Message;
 
 public class MainController {
 	private MainView view;
 	private AHTableModel tableModel;
 	private ControllerMediator mediator;
-	private LoginController loginController;
+	private MenuStateManager menuManager;
 
 	public MainController(MainView view, AHTableModel model,
-			ControllerMediator med, LoginController loginController) {
+			ControllerMediator med) {
 		this.view = view;
 		tableModel = model;
 		mediator = med;
-		this.loginController = loginController;
+
+		menuManager = new MenuStateManager(this);
 	}
 
 	public void logout() {
@@ -52,23 +56,54 @@ public class MainController {
 						pnt.translate(-cellRect.x, -cellRect.y);
 						int rowIndex = innerTable.rowAtPoint(pnt);
 						int colIndex = innerTable.columnAtPoint(pnt);
-						System.out.println("INNERTABLE:" + rowIndex + "*"
-								+ colIndex);
+						if (mediator.GetRole() == Mediator.ROL_CUMPARATOR) {
+							menuManager
+									.setToDemandContextualMenu(evt.getX(), evt
+											.getY(),
+											tableModel.getValueAt(row, 0)
+													.toString(),
+											((JTable) tableModel.getValueAt(
+													row, col)).getModel()
+													.getValueAt(rowIndex, 0)
+													.toString());
+						} else {
+							menuManager
+									.setToOfferContextualMenu(evt.getX(), evt
+											.getY(),
+											tableModel.getValueAt(row, 0)
+													.toString(),
+											((JTable) tableModel.getValueAt(
+													row, col)).getModel()
+													.getValueAt(rowIndex, 0)
+													.toString());
+						}
 					}
-				} else if (col == 1) {
-
+				} else if (col == 0) {
+					if (mediator.GetRole() == Mediator.ROL_CUMPARATOR)
+						menuManager.setToDemandServiceMenu(evt.getX(), evt
+								.getY(), tableModel.getValueAt(row, col)
+								.toString());
+					else
+						menuManager.setToNoMenu();
 				} else {
-
+					menuManager.setToNoMenu();
 				}
 			}
 		} else {
-			
+			menuManager.setToNoMenu();
 		}
-
-		System.out.println("Cliiiiiick!");
 	}
 
 	public void refresh() {
-		view.resizeTable();	
+		view.resizeTable();
 	}
+
+	public JTable getTable() {
+		return view.getTable();
+	}
+
+	public Object sendMessage(Message m) {
+		return mediator.sendMessage(m);
+	}
+
 }

@@ -11,6 +11,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	public static final int ROL_CUMPARATOR = 1;
 
 	private ControllerMediator controllerMediator;
+	private int role;
 
 	public Mediator() {
 		controllerMediator = new ControllerMediator(this);
@@ -21,7 +22,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	}
 	
 	private boolean isLoginValid(String user, String password, int role) {
-		if (user.equals("gicu") && role == Mediator.ROL_FURNIZOR)
+		if (user.equals("gicu") && role == Mediator.ROL_CUMPARATOR)
 			return true;
 		return false;
 	}
@@ -43,6 +44,9 @@ public class Mediator implements GUIMediator, NetworkMediator,
 				Command com = new LoginCommand(mess.getUser(),
 						mess.getPassword(), mess.getRole(), controllerMediator);
 				result = com.run();
+				// if logged in, set the role
+				if ((Boolean)result)
+					this.role = mess.getRole();
 			}
 			break;
 		}
@@ -52,6 +56,10 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		}
 
 		return result;
+	}
+	
+	public int getRole() {
+		return this.role;
 	}
 
 	/*

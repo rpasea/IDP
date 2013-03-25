@@ -1,5 +1,7 @@
 package AuctionHouse.GUI;
 
+import javax.swing.JPopupMenu;
+
 import AuctionHouse.Mediator.Mediator;
 import AuctionHouse.Messages.Message;
 
@@ -19,7 +21,7 @@ public class ControllerMediator {
 	}
 	
 	public void switchToMain(AHTableModel model) {
-		 MainView guiMainWindow = new MainView(model, this, loginController);
+		 MainView guiMainWindow = new MainView(model, this);
 		 mainController = guiMainWindow.getController();
 		 loginController.setVisibility(false);
 		 guiMainWindow.setVisible(true);
@@ -42,6 +44,10 @@ public class ControllerMediator {
 		if (mainController != null)
 			mainController.refresh();
 		
+	}
+	
+	public int GetRole() {
+		return mediator.getRole();
 	}
 
 }
