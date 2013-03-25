@@ -52,6 +52,7 @@ public class LoginCommand implements Command {
         
         
         Object[][] data = {
+                    {"BaniGratis", "Active", embedded },
                     {"BaniGratis", "Active", embedded }
         };
         AHTableModel tableModel = new AHTableModel(data, columnNames);

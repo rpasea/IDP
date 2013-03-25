@@ -1,5 +1,6 @@
 package AuctionHouse.GUI;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
@@ -17,12 +18,19 @@ public class AHTableCellRenderer implements TableCellRenderer {
 					.getTableCellRendererComponent(table, value, isSelected,
 							hasFocus, row, column);
 		if (value.getClass().getName().equals("javax.swing.JTable")) {
+
+			((Component) value).setBackground(Color.white);
+
 			return (Component) value;
-		}
-		else
-			return table.getDefaultRenderer(value.getClass())
+		} else {
+			Component c = table.getDefaultRenderer(value.getClass())
 					.getTableCellRendererComponent(table, value, isSelected,
 							hasFocus, row, column);
+
+			c.setBackground(Color.white);
+			return c;
+		}
+
 	}
 
 }
