@@ -67,4 +67,8 @@ public class MainController {
 
 		System.out.println("Cliiiiiick!");
 	}
+
+	public void refresh() {
+		view.resizeTable();	
+	}
 }

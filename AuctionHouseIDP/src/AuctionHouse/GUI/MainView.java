@@ -35,11 +35,15 @@ public class MainView extends javax.swing.JFrame {
             }
         }
 
-        for (int i = 0 ; i < table.getRowCount(); i++) {
-        	table.setRowHeight(i, ((Component)table.getValueAt(i, 2)).getPreferredSize().height);
-        }
+        resizeTable();
         table.setFocusable(false);
         table.setRowSelectionAllowed(false);
+    }
+    
+    public void resizeTable() {
+    	for (int i = 0 ; i < table.getRowCount(); i++) {
+        	table.setRowHeight(i, ((Component)table.getValueAt(i, 2)).getPreferredSize().height);
+        }
     }
     
     public MainController getController() {

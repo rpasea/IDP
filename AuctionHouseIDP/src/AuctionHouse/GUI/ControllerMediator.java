@@ -38,4 +38,10 @@ public class ControllerMediator {
 		return true;
 	}
 
+	public void refreshGUI() {
+		if (mainController != null)
+			mainController.refresh();
+		
+	}
+
 }
