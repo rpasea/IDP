@@ -51,9 +51,10 @@ public class XMLDataManager implements DataManager {
 	
 	public List<Service> doLogin(String user, String password, int role) {
 		for (Person p : db.getPeople()) {
-			if (p.getName() == user && p.getRole() == role && p.getPassword() == password)
+			if (p.getName().equals(user) && p.getRole()==role && p.getPassword().equals(password) ) {
 				identity = p;
 				return p.getServices();
+			}
 		}
 		return null;
 	}
