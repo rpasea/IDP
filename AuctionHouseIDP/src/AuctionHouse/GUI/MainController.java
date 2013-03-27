@@ -49,6 +49,10 @@ public class MainController {
 							.getCellRenderer(row, col);
 					Component c = table.prepareRenderer(tableCellRenderer, row,
 							col);
+					if ( ! (c instanceof JTable)) {
+						menuManager.setToNoMenu();
+						return;
+					}
 					JTable innerTable = (JTable) c;
 					if (innerTable != null) {
 						Point pnt = evt.getPoint();
@@ -56,7 +60,7 @@ public class MainController {
 						pnt.translate(-cellRect.x, -cellRect.y);
 						int rowIndex = innerTable.rowAtPoint(pnt);
 						int colIndex = innerTable.columnAtPoint(pnt);
-						if (mediator.GetRole() == Mediator.ROL_CUMPARATOR) {
+						if (mediator.getRole() == Mediator.ROL_CUMPARATOR) {
 							menuManager
 									.setToDemandContextualMenu(evt.getX(), evt
 											.getY(),
@@ -79,7 +83,7 @@ public class MainController {
 						}
 					}
 				} else if (col == 0) {
-					if (mediator.GetRole() == Mediator.ROL_CUMPARATOR)
+					if (mediator.getRole() == Mediator.ROL_CUMPARATOR)
 						menuManager.setToDemandServiceMenu(evt.getX(), evt
 								.getY(), tableModel.getValueAt(row, col)
 								.toString());
@@ -104,6 +108,10 @@ public class MainController {
 
 	public Object sendMessage(Message m) {
 		return mediator.sendMessage(m);
+	}
+	
+	public AHTableModel getModel() {
+		return tableModel;
 	}
 
 }

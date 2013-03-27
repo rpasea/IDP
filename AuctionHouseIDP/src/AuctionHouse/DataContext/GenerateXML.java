@@ -17,10 +17,10 @@ public class GenerateXML {
 
 		List<ServiceEntry> entries = new LinkedList<ServiceEntry>();
 
-		entries.add(new ServiceEntry("Ion", "Active", ""));
-		entries.add(new ServiceEntry("Lulache", "Active", ""));
-		entries.add(new ServiceEntry("Fragulea", "Active", ""));
-		entries.add(new ServiceEntry("Bilioana", "Active", ""));
+		entries.add(new ServiceEntry("Ion", "No Offer", ""));
+		entries.add(new ServiceEntry("Lulache", "No Offer", ""));
+		entries.add(new ServiceEntry("Fragulea", "No Offer", ""));
+		entries.add(new ServiceEntry("Bilioana", "No Offer", ""));
 
 		Service service = new Service("BaniGratis", entries);
 
@@ -34,10 +34,10 @@ public class GenerateXML {
 
 		entries = new LinkedList<ServiceEntry>();
 
-		entries.add(new ServiceEntry("gicu", "Active", ""));
-		entries.add(new ServiceEntry("Pamfila", "Active", ""));
-		entries.add(new ServiceEntry("LotoProno", "Active", ""));
-		entries.add(new ServiceEntry("Bilioana", "Active", ""));
+		entries.add(new ServiceEntry("gicu", "No Offer", ""));
+		entries.add(new ServiceEntry("Pamfila", "No Offer", ""));
+		entries.add(new ServiceEntry("LotoProno", "No Offer", ""));
+		entries.add(new ServiceEntry("Bilioana", "No Offer", ""));
 
 		service = new Service("BaniGratis", entries);
 

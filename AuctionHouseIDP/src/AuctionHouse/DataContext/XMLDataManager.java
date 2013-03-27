@@ -58,4 +58,14 @@ public class XMLDataManager implements DataManager {
 		}
 		return null;
 	}
+
+	@Override
+	public Service getService(String service) {
+		if (identity == null)
+			return null;
+		for (Service s : identity.services)
+			if (s.getName().equals(service))
+				return s;
+		return null;
+	}
 }

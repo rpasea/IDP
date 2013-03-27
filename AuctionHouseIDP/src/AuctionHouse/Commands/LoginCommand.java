@@ -16,6 +16,7 @@ import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableCellRenderer;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
+import AuctionHouse.Mediator.Mediator;
 
 public class LoginCommand implements Command {
 
@@ -34,12 +35,12 @@ public class LoginCommand implements Command {
 	}
 
 	public Object run() {
-		
+
 		if (!dataManager.isLoginValid(user, password, role))
 			return false;
 
 		List<Service> services = dataManager.doLogin(user, password, role);
-		
+
 		Vector<Object> columnNames = new Vector<Object>();
 		columnNames.add("Service");
 		columnNames.add("Status");
@@ -49,44 +50,50 @@ public class LoginCommand implements Command {
 		embeddedCNames.add("Status");
 		embeddedCNames.add("Offer");
 		embeddedCNames.add("Progress");
-		
-		final AHTableModel tableModel = new AHTableModel(columnNames,0);
-		
+
+		final AHTableModel tableModel = new AHTableModel(columnNames, 0);
+
 		for (Service s : services) {
 			Vector<Object> outerTableEntry = new Vector<Object>();
 			outerTableEntry.add(s.getName());
-			// TODO: change according to role
-			outerTableEntry.add("Active");
-			Vector<Object> innerTable = new Vector<Object>();
-			for (ServiceEntry entry : s.getEntries()) {
-				Vector<Object> innerTableEntry = new Vector<Object>();
-				innerTableEntry.add(entry.getPerson());
-				innerTableEntry.add(entry.getStatus());
-				innerTableEntry.add(entry.getOffer());
-				//TODO: progress bar goes here
-				innerTableEntry.add("");
-				innerTable.add(innerTableEntry);
-			}
-			AHTableModel embeddedTableModel = new AHTableModel(innerTable,
-					embeddedCNames);
-			JTable embedded = new JTable(embeddedTableModel);
-			embedded.setName("EmbeddedTable");
-			TableColumnModel tcm = embedded.getColumnModel();
-			TableCellRenderer tcr = new AHTableCellRenderer();
-			for (int it = 0; it < tcm.getColumnCount(); it++) {
-				tcm.getColumn(it).setCellRenderer(tcr);
-			}
-			embeddedTableModel.addTableModelListener(new TableModelListener() {
-				@Override
-				public void tableChanged(TableModelEvent arg0) {
-					tableModel.fireTableDataChanged();
-					mediator.refreshGUI();
-
+			if (role == Mediator.ROL_FURNIZOR) {
+				outerTableEntry.add("Active");
+				Vector<Object> innerTable = new Vector<Object>();
+				for (ServiceEntry entry : s.getEntries()) {
+					Vector<Object> innerTableEntry = new Vector<Object>();
+					innerTableEntry.add(entry.getPerson());
+					innerTableEntry.add(entry.getStatus());
+					innerTableEntry.add(entry.getOffer());
+					// TODO: progress bar goes here
+					innerTableEntry.add("");
+					innerTable.add(innerTableEntry);
 				}
-			});
-			outerTableEntry.add(embedded);
-			tableModel.addRow(outerTableEntry);
-			
+				AHTableModel embeddedTableModel = new AHTableModel(innerTable,
+						embeddedCNames);
+				JTable embedded = new JTable(embeddedTableModel);
+				embedded.setName("EmbeddedTable");
+				TableColumnModel tcm = embedded.getColumnModel();
+				TableCellRenderer tcr = new AHTableCellRenderer();
+				for (int it = 0; it < tcm.getColumnCount(); it++) {
+					tcm.getColumn(it).setCellRenderer(tcr);
+				}
+				embeddedTableModel
+						.addTableModelListener(new TableModelListener() {
+							@Override
+							public void tableChanged(TableModelEvent arg0) {
+								tableModel.fireTableDataChanged();
+								mediator.refreshGUI();
+
+							}
+						});
+				outerTableEntry.add(embedded);
+				tableModel.addRow(outerTableEntry);
+			} else {
+				outerTableEntry.add("Inactive");
+				outerTableEntry.add("");
+				tableModel.addRow(outerTableEntry);
+			}
+
 		}
 
 		// Instantiates a new MainWindow to be displayed

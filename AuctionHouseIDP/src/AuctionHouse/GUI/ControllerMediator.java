@@ -46,8 +46,14 @@ public class ControllerMediator {
 		
 	}
 	
-	public int GetRole() {
+	public int getRole() {
 		return mediator.getRole();
+	}
+	
+	public AHTableModel getModel() {
+		if (mainController == null)
+			return null;
+		return mainController.getModel();
 	}
 
 }

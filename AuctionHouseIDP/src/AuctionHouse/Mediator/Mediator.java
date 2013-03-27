@@ -43,6 +43,14 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		case Logout:
 			result = controllerMediator.logout();
 			break;
+		case LaunchOffer: {
+			LaunchOfferMessage mess = (LaunchOfferMessage) message;
+			//TODO: don't forget the NetworkCommunicator here
+			Command com = new LaunchOfferCommand(mess.getService(), controllerMediator,
+					 dataManager, null);
+			result = com.run();
+			break;
+		}
 		}
 
 		return result;
