@@ -45,17 +45,25 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			break;
 		case LaunchOffer: {
 			LaunchOfferMessage mess = (LaunchOfferMessage) message;
-			//TODO: don't forget the NetworkCommunicator here
-			Command com = new LaunchOfferCommand(mess.getService(), controllerMediator,
-					 dataManager, null);
+			// TODO: don't forget the NetworkCommunicator here
+			Command com = new LaunchOfferCommand(mess.getService(),
+					controllerMediator, dataManager, null);
 			result = com.run();
 			break;
 		}
 		case DropOffer: {
 			DropOfferMessage mess = (DropOfferMessage) message;
-			//TODO: don't forget the NetworkCommunicator here
-			Command com = new DropOfferCommand(mess.getService(), controllerMediator,
-					 dataManager, null);
+			// TODO: don't forget the NetworkCommunicator here
+			Command com = new DropOfferCommand(mess.getService(),
+					controllerMediator, dataManager, null);
+			result = com.run();
+			break;
+		}
+		case AcceptOffer: {
+			AcceptOfferMessage mess = (AcceptOfferMessage) message;
+			// TODO: don't forget the NetworkCommunicator here
+			Command com = new AcceptOfferCommand(mess.getService(),
+					mess.getPerson(), controllerMediator, dataManager, null);
 			result = com.run();
 			break;
 		}
@@ -71,9 +79,21 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	/*
 	 * Methods of NetworkMediator interface
 	 */
+	
+	@Override
+	public Object sendWebClientMessage(Message message) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/*
 	 * Methods of WebClientMediator interface
 	 */
+	
+	@Override
+	public Object sendNetworkMessage(Message message) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

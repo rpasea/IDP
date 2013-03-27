@@ -19,10 +19,10 @@ public class GenerateXML {
 
 		entries.add(new ServiceEntry("Ion", "No Offer", ""));
 		entries.add(new ServiceEntry("Lulache", "No Offer", ""));
-		entries.add(new ServiceEntry("Fragulea", "No Offer", ""));
+		entries.add(new ServiceEntry("Fragulea", "Offer Made", "100"));
 		entries.add(new ServiceEntry("Bilioana", "No Offer", ""));
 
-		Service service = new Service("BaniGratis", entries);
+		Service service = new Service("BaniGratis", entries, "");
 
 		List<Service> services = new LinkedList<Service>();
 		services.add(service);
@@ -39,7 +39,7 @@ public class GenerateXML {
 		entries.add(new ServiceEntry("LotoProno", "No Offer", ""));
 		entries.add(new ServiceEntry("Bilioana", "No Offer", ""));
 
-		service = new Service("BaniGratis", entries);
+		service = new Service("BaniGratis", entries, "");
 
 		services = new LinkedList<Service>();
 		services.add(service);

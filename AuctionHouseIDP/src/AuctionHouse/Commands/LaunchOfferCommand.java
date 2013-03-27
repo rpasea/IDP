@@ -50,11 +50,11 @@ public class LaunchOfferCommand implements Command{
 		
 		if (row == null) 
 			return false;
-		if (row.get(1).equals("Active"))
-			return false;
 		
 		Service s = dataManager.getService(service);
 		if (s == null)
+			return false;
+		if (s.getStatus().equals("Active") || row.get(1).equals("Active"))
 			return false;
 		
 		Vector<Object> embeddedCNames = new Vector<Object>();
@@ -94,6 +94,7 @@ public class LaunchOfferCommand implements Command{
 		
 		model.setValueAt("Active", rowNr, 1);
 		model.setValueAt(embedded, rowNr, 2);
+		s.setStatus("Active");
 		mediator.refreshGUI();
 		return true;
 		

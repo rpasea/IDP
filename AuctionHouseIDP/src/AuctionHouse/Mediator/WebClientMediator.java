@@ -1,5 +1,7 @@
 package AuctionHouse.Mediator;
 
-public interface WebClientMediator {
+import AuctionHouse.Messages.Message;
 
+public interface WebClientMediator {
+	public Object sendWebClientMessage(Message message);
 }

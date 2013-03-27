@@ -6,9 +6,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import AuctionHouse.Messages.AcceptOfferMessage;
 import AuctionHouse.Messages.DropAuctionMessage;
 import AuctionHouse.Messages.MakeOfferMessage;
 import AuctionHouse.Messages.Message;
+import AuctionHouse.Messages.RejectOfferMessage;
 
 public class DemandContextualMenu implements MenuState {
 	private MainController mediator;
@@ -45,12 +47,12 @@ public class DemandContextualMenu implements MenuState {
 	}
 	
 	private void launchOfferHandler(ActionEvent event) {
-		Message mess = new MakeOfferMessage ( service,supplier);
+		Message mess = new AcceptOfferMessage ( service,supplier);
 		mediator.sendMessage(mess);
 	}
 	
 	private void dropOfferHandler(ActionEvent event) {
-		Message mess = new DropAuctionMessage ( service,supplier);
+		Message mess = new RejectOfferMessage ( service,supplier);
 		mediator.sendMessage(mess);
 	}
 

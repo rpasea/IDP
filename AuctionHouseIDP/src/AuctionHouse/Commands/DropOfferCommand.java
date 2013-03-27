@@ -50,9 +50,13 @@ public class DropOfferCommand implements Command{
 		
 		if (row == null) 
 			return false;
-		if (row.get(1).equals("Inactive"))
+		Service s = dataManager.getService(service);
+		if (s == null)
+			return false;
+		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))
 			return false;
 		
+		s.setStatus("Inactive");
 		model.setValueAt("Inactive", rowNr, 1);
 		model.setValueAt("", rowNr, 2);
 		mediator.refreshGUI();

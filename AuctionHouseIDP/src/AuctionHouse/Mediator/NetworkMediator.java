@@ -1,5 +1,7 @@
 package AuctionHouse.Mediator;
 
-public interface NetworkMediator {
+import AuctionHouse.Messages.Message;
 
+public interface NetworkMediator {
+	public Object sendNetworkMessage(Message message);
 }

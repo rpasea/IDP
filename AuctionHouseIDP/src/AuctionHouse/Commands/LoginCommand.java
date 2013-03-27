@@ -88,10 +88,12 @@ public class LoginCommand implements Command {
 						});
 				outerTableEntry.add(embedded);
 				tableModel.addRow(outerTableEntry);
+				s.setStatus("Active");
 			} else {
 				outerTableEntry.add("Inactive");
 				outerTableEntry.add("");
 				tableModel.addRow(outerTableEntry);
+				s.setStatus("Inactive");
 			}
 
 		}
