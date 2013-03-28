@@ -4,6 +4,8 @@
  */
 package AuctionHouse.Main;
 
+import AuctionHouse.DataContext.DataManager;
+import AuctionHouse.DataContext.XMLDataManager;
 import AuctionHouse.GUI.LoginView;
 import AuctionHouse.Mediator.Mediator;
 
@@ -39,8 +41,10 @@ public class Main {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+            	DataManager dataManager = new XMLDataManager("Database.xml");
+            	
                 // Create a new Mediator for all the components
-                Mediator med = new Mediator();
+                Mediator med = new Mediator(dataManager);
                 
                 med.init();
             }

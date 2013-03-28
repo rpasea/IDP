@@ -15,9 +15,9 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	private ControllerMediator controllerMediator;
 	private DataManager dataManager;
 
-	public Mediator() {
+	public Mediator(DataManager dataMgr) {
 		controllerMediator = new ControllerMediator(this);
-		dataManager = new XMLDataManager("Database.xml");
+		dataManager = dataMgr;
 	}
 
 	public void init() {
