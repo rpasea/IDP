@@ -24,6 +24,7 @@ public class ControllerMediator {
 		 MainView guiMainWindow = new MainView(model, this);
 		 mainController = guiMainWindow.getController();
 		 loginController.setVisibility(false);
+		 guiMainWindow.setUsername(loginController.username);
 		 guiMainWindow.setVisible(true);
 	}
 	

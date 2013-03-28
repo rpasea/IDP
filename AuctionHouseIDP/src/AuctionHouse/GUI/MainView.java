@@ -179,6 +179,12 @@ public class MainView extends javax.swing.JFrame {
 		controller.tableClicked(evt);
 	}// GEN-LAST:event_tableMouseClicked
 
+	
+	public void setUsername(String username) {
+		usernameLabel.setText(username);
+	}
+	
+	
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JPanel jPanel2;
