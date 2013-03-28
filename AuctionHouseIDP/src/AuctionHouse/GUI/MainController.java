@@ -38,13 +38,16 @@ public class MainController {
 	}
 
 	public void tableClicked(java.awt.event.MouseEvent evt) {
-
+		// Check if triggered by Right-click
 		if (evt.getButton() == MouseEvent.BUTTON3) {
 			JTable table = view.getTable();
+			// Get clicked cell
 			int row = table.rowAtPoint(evt.getPoint());
 			int col = table.columnAtPoint(evt.getPoint());
+
 			if (row >= 0 && col >= 0) {
 				if (col == table.getColumnCount() - 1) {
+					// The click was inside the sub-table on the last column
 					TableCellRenderer tableCellRenderer = table
 							.getCellRenderer(row, col);
 					Component c = table.prepareRenderer(tableCellRenderer, row,
@@ -58,31 +61,36 @@ public class MainController {
 						Point pnt = evt.getPoint();
 						Rectangle cellRect = table.getCellRect(row, col, false);
 						pnt.translate(-cellRect.x, -cellRect.y);
+						// Identify clicked cell of the inner table
 						int rowIndex = innerTable.rowAtPoint(pnt);
 						int colIndex = innerTable.columnAtPoint(pnt);
 						if (mediator.getRole() == Mediator.ROL_CUMPARATOR) {
-							menuManager
+							// Check if an offer is present
+							if (!innerTable.getModel()
+										.getValueAt(rowIndex, 1)
+										.toString().equals("No Offer")){
+								menuManager
 									.setToDemandContextualMenu(evt.getX(), evt
 											.getY(),
 											tableModel.getValueAt(row, 0)
 													.toString(),
-											((JTable) tableModel.getValueAt(
-													row, col)).getModel()
+											innerTable.getModel()
 													.getValueAt(rowIndex, 0)
 													.toString());
-						} else {
+							}
+						} else {  // ROL_FURNIZOR
 							menuManager
 									.setToOfferContextualMenu(evt.getX(), evt
 											.getY(),
 											tableModel.getValueAt(row, 0)
 													.toString(),
-											((JTable) tableModel.getValueAt(
-													row, col)).getModel()
+											innerTable.getModel()
 													.getValueAt(rowIndex, 0)
 													.toString());
 						}
 					}
 				} else if (col == 0) {
+					// The click was on Service column
 					if (mediator.getRole() == Mediator.ROL_CUMPARATOR)
 						menuManager.setToDemandServiceMenu(evt.getX(), evt
 								.getY(), tableModel.getValueAt(row, col)
