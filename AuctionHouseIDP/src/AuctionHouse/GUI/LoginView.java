@@ -62,6 +62,12 @@ public class LoginView extends javax.swing.JFrame {
             }
         });
 
+        passwordField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+            	passwordFieldKeyReleased(evt);
+            }
+        });
+        
         roleCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Furnizor", "Cumparator" }));
         roleCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,31 +159,35 @@ public class LoginView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void roleComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roleComboActionPerformed
+    private void roleComboActionPerformed(java.awt.event.ActionEvent evt) {
         // Nothing
-    }//GEN-LAST:event_roleComboActionPerformed
+    }
 
-    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        System.out.println("Login fired!");
-        
+    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {
         controller.login(usernameField.getText(),
                         new String(passwordField.getPassword()),
                         roleCombo.getSelectedIndex());
-    }//GEN-LAST:event_loginButtonActionPerformed
+    }
 
-    private void usernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameFieldActionPerformed
+    private void usernameFieldActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    }//GEN-LAST:event_usernameFieldActionPerformed
-
-    private void usernameFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameFieldKeyReleased
+    }
+    
+    private void usernameFieldKeyReleased(java.awt.event.KeyEvent evt) {
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            System.out.println("Enter Login fired!");
-        
             controller.login(usernameField.getText(),
                         new String(passwordField.getPassword()),
                         roleCombo.getSelectedIndex());
         }
-    }//GEN-LAST:event_usernameFieldKeyReleased
+    }
+    
+    private void passwordFieldKeyReleased(java.awt.event.KeyEvent evt) {
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            controller.login(usernameField.getText(),
+                        new String(passwordField.getPassword()),
+                        roleCombo.getSelectedIndex());
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
