@@ -87,6 +87,26 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			tip = "RejectOffer";
 			break;
 		}
+		case MakeOffer: {
+			MakeOfferMessage mess = (MakeOfferMessage) message;
+			// TODO: don't forget the NetworkCommunicator here
+			Command com = new MakeOfferCommand(mess.getService(),
+					mess.getPerson(), controllerMediator, dataManager, null);
+			result = com.run();
+			
+			tip = "MakeOffer";
+			break;
+		}
+		case DropOffer: {
+			DropOfferMessage mess = (DropOfferMessage) message;
+			// TODO: don't forget the NetworkCommunicator here
+			Command com = new DropOfferCommand(mess.getService(),
+					mess.getPerson(), controllerMediator, dataManager, null);
+			result = com.run();
+			
+			tip = "DropOffer";
+			break;
+		}
 		}
 		
 		System.out.println("Mesaj: "+tip);
