@@ -83,8 +83,11 @@ public class MakeOfferCommand implements Command {
 		
 		se.setStatus("Offer Made");
 		embeddedModel.setValueAt("Offer Made", offerRow, 1);
+		embeddedModel.setValueAt(offer, offerRow, 2);
 		
-		
+		/*
+		 * TODO: use the network module to send the offer
+		 */
 //		Message msg = ...;
 //		networkMediator.sendNetworkMessage(msg);
 		
