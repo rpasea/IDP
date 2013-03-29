@@ -15,7 +15,7 @@ import AuctionHouse.GUI.AHTableCellRenderer;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 
-public class LaunchOfferCommand implements Command{
+public class LaunchAuctionCommand implements Command{
 
 	private DataManager dataManager;
 
@@ -24,7 +24,7 @@ public class LaunchOfferCommand implements Command{
 	private String service;
 	private ControllerMediator mediator;
 
-	public LaunchOfferCommand(String service, ControllerMediator mediator,
+	public LaunchAuctionCommand(String service, ControllerMediator mediator,
 			DataManager dataManager, Object networkCommunicator) {
 		this.service = service;
 		this.mediator = mediator;

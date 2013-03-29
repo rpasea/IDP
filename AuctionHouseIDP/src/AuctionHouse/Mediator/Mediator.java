@@ -31,31 +31,40 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	@Override
 	public Object sendGuiMessage(Message message) {
 		Object result = null;
+		String tip = "";
 		switch (message.getType()) {
 		case Login: {
 			LoginMessage mess = (LoginMessage) message;
 			Command com = new LoginCommand(mess.getUser(), mess.getPassword(),
 					mess.getRole(), dataManager, controllerMediator);
 			result = com.run();
+			
+			tip = "Login";
 			break;
 		}
 		case Logout:
 			result = controllerMediator.logout();
+			
+			tip = "Logout";
 			break;
 		case LaunchAuction: {
 			LaunchAuctionMessage mess = (LaunchAuctionMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
-			Command com = new LaunchOfferCommand(mess.getService(),
+			Command com = new LaunchAuctionCommand(mess.getService(),
 					controllerMediator, dataManager, null);
 			result = com.run();
+			
+			tip = "LaunchAuction";
 			break;
 		}
 		case DropAuction: {
 			DropAuctionMessage mess = (DropAuctionMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
-			Command com = new DropOfferCommand(mess.getService(),
+			Command com = new DropAuctionCommand(mess.getService(),
 					controllerMediator, dataManager, null);
 			result = com.run();
+			
+			tip = "DropAuction";
 			break;
 		}
 		case AcceptOffer: {
@@ -64,9 +73,23 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			Command com = new AcceptOfferCommand(mess.getService(),
 					mess.getPerson(), controllerMediator, dataManager, null);
 			result = com.run();
+			
+			tip = "AcceptOffer";
+			break;
+		}
+		case RejectOffer: {
+			RejectOfferMessage mess = (RejectOfferMessage) message;
+			// TODO: don't forget the NetworkCommunicator here
+			Command com = new RejectOfferCommand(mess.getService(),
+					mess.getPerson(), controllerMediator, dataManager, null);
+			result = com.run();
+			
+			tip = "RejectOffer";
 			break;
 		}
 		}
+		
+		System.out.println("Mesaj: "+tip);
 
 		return result;
 	}
