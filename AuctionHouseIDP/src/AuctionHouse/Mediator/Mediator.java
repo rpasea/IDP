@@ -19,17 +19,17 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	private ControllerMediator controllerMediator;
 	private DataManager dataManager;
 	private HashMap<String, Transaction> transactions;
-	
-	//FIXME: Sters la etapa 2
+
+	// FIXME: Sters la etapa 2
 	private SimulatorThread simulation;
 
 	public Mediator(DataManager dataMgr) {
 		controllerMediator = new ControllerMediator(this);
 		dataManager = dataMgr;
 		transactions = new HashMap<String, Transaction>();
-		
-		//FIXME: Sters la etapa 2
-		simulation =  new SimulatorThread(this, controllerMediator, dataManager);
+
+		// FIXME: Sters la etapa 2
+		simulation = new SimulatorThread(this, controllerMediator, dataManager);
 	}
 
 	public void init() {
@@ -54,17 +54,19 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			Command com = new LoginCommand(mess.getUser(), mess.getPassword(),
 					mess.getRole(), dataManager, controllerMediator);
 			result = com.run();
-			
-			//FIXME: Sters la etapa 2
-			if(mess.getUser().equals("gicu")){
-				// Simulare cumparator
-				simulation.role = ROL_CUMPARATOR;
-			} else {
-				simulation.role = ROL_FURNIZOR;
+
+			// FIXME: Sters la etapa 2
+			if ((Boolean) result) {
+				if (mess.getUser().equals("gicu")) {
+					// Simulare cumparator
+					simulation.role = ROL_CUMPARATOR;
+					simulation.start();
+				} else {
+					simulation.role = ROL_FURNIZOR;
+				}
+				// Porneste simularea
+				simulation.start();
 			}
-			// Porneste simularea
-			simulation.start();
-			
 
 			tip = "Login";
 			break;
@@ -184,9 +186,9 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			if (result != null) {
 				transactions.put(mess.getService() + "_" + mess.getSeller()
 						+ "_" + mess.getBuyer(), (Transaction) result);
-				final Transaction t = (Transaction)result;
+				final Transaction t = (Transaction) result;
 				result = true;
-				//FIXME: for testing purpose 
+				// FIXME: for testing purpose
 				(new TestWorker(t)).execute();
 			} else {
 				result = false;

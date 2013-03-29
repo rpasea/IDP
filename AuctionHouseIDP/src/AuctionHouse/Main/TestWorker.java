@@ -15,6 +15,8 @@ public class TestWorker extends SwingWorker<Integer, Integer> {
 	protected Integer doInBackground() throws Exception {
 		try {
 			Thread.sleep(5000);
+			t.setToStarted();
+			Thread.sleep(5000);
 			t.setToInProgress();
 
 			Thread.sleep(5000);

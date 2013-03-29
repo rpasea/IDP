@@ -38,7 +38,6 @@ public class MakeOfferCommand implements Command {
 	
 	@Override
 	public Object run() {
-		
 		AHTableModel model = mediator.getModel();
 
 		Vector<Vector<Object>> data = model.getDataVector();

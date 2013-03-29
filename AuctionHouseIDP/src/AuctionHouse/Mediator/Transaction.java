@@ -9,7 +9,7 @@ import javax.swing.SwingWorker;
 
 public class Transaction extends Observable {
 
-	public static int MaxProgress = 2;
+	public static int MaxProgress = 3;
 	private String service, seller, buyer, offer;
 	private int progress;
 	private String state;
@@ -20,25 +20,25 @@ public class Transaction extends Observable {
 		this.buyer = buyer;
 		this.offer = offer;
 		progress = 0;
-		state = "Transfer Started";
+		state = "Offer Accepted";
 	}
 	
 	public void setToStarted() {
-		progress = 0;
+		progress = 1;
 		state = "Transfer Started";
 		setChanged();
 		notifyObservers();
 	}
 	
 	public void setToInProgress() {
-		progress = 1;
+		progress = 2;
 		state = "Transfer in Progress";
 		setChanged();
 		notifyObservers();
 	}
 	
 	public void setToCompleted() {
-		progress = 2;
+		progress = 3;
 		state = "Transfer Complete";
 		setChanged();
 		notifyObservers();
