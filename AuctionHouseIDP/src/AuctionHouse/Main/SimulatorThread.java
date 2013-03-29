@@ -34,23 +34,23 @@ public class SimulatorThread extends Thread {
 			System.out.println("Simulare CUMPARATOR inceputa.");
 			System.out.println("-----------------------------");
 			
-			sleep(1000);
+			sleep(5000);
 			
 			mediator.sendGuiMessage(new LaunchAuctionMessage("BaniGratis"));
 			
-			sleep(1000);
+			sleep(5000);
 			
 			mediator.sendGuiMessage(new DropAuctionMessage("BaniGratis"));
 			
-			sleep(1000);
+			sleep(5000);
 			
 			mediator.sendGuiMessage(new LaunchAuctionMessage("BaniGratis"));
 			
-			sleep(2000);
+			sleep(5000);
 			
 			mediator.sendGuiMessage(new AcceptOfferMessage("BaniGratis", "Fragulea", "100"));
 			
-			sleep(1000);
+			sleep(20000);
 			
 			mediator.sendGuiMessage(new DropAuctionMessage("BaniGratis"));
 		} else {
