@@ -57,11 +57,12 @@ public class Mediator implements GUIMediator, NetworkMediator,
 				if (mess.getUser().equals("gicu")) {
 					// Simulare cumparator
 					simulation.role = ROL_CUMPARATOR;
+					simulation.start();
 				} else {
 					simulation.role = ROL_FURNIZOR;
 				}
 				// Porneste simularea
-				simulation.start();
+				//simulation.start();
 			}
 
 			tip = "Login";
@@ -117,7 +118,8 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			MakeOfferMessage mess = (MakeOfferMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new MakeOfferCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, dataManager, null);
+					mess.getPerson(), mess.getOffer(), controllerMediator,
+					dataManager, null);
 			result = com.run();
 
 			tip = "MakeOffer";

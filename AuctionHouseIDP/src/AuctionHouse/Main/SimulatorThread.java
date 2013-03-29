@@ -50,7 +50,7 @@ public class SimulatorThread extends Thread {
 			
 			mediator.sendGuiMessage(new AcceptOfferMessage("BaniGratis", "Fragulea", "100"));
 			
-			sleep(20000);
+			sleep(22000);
 			
 			mediator.sendGuiMessage(new DropAuctionMessage("BaniGratis"));
 		} else {

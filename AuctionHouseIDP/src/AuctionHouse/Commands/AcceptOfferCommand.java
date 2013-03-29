@@ -84,9 +84,7 @@ public class AcceptOfferCommand implements Command {
 		embeddedModel.setValueAt("Offer Accepted", offerRow, 1);
 		
 		/*
-		 * TODO: Do something to attach the transaction to the service entry
-		 * 		create the progress bar, propagate it's change events all the 
-		 *      way  to the primary table
+		 * TODO: use the network module to notify the seller
 		 */
 		Message msg = new StartTransactionMessage(service,seller, dataManager.getIdentity().getName(),offer);
 		networkMediator.sendNetworkMessage(msg);
