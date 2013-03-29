@@ -42,16 +42,16 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		case Logout:
 			result = controllerMediator.logout();
 			break;
-		case LaunchOffer: {
-			LaunchOfferMessage mess = (LaunchOfferMessage) message;
+		case LaunchAuction: {
+			LaunchAuctionMessage mess = (LaunchAuctionMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new LaunchOfferCommand(mess.getService(),
 					controllerMediator, dataManager, null);
 			result = com.run();
 			break;
 		}
-		case DropOffer: {
-			DropOfferMessage mess = (DropOfferMessage) message;
+		case DropAuction: {
+			DropAuctionMessage mess = (DropAuctionMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new DropOfferCommand(mess.getService(),
 					controllerMediator, dataManager, null);

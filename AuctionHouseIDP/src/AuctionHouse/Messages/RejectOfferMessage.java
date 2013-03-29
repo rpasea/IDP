@@ -1,6 +1,6 @@
 package AuctionHouse.Messages;
 
-public class RejectOfferMessage extends AcceptOfferMessage {
+public class RejectOfferMessage extends OfferMessage {
 	
 	public RejectOfferMessage(String service, String supplier) {
 		super(service,supplier);

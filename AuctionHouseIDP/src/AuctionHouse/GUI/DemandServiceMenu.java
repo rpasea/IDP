@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import AuctionHouse.Messages.DropOfferMessage;
-import AuctionHouse.Messages.LaunchOfferMessage;
+import AuctionHouse.Messages.DropAuctionMessage;
+import AuctionHouse.Messages.LaunchAuctionMessage;
 import AuctionHouse.Messages.Message;
 
 public class DemandServiceMenu implements MenuState {
@@ -29,13 +29,13 @@ public class DemandServiceMenu implements MenuState {
 		
 		JMenuItem item;
 		popup.setBounds(x, y, 75, 50);
-		popup.add( item = new JMenuItem("Launch Offer Request"));
+		popup.add( item = new JMenuItem("Launch Auction Request"));
 		item.addActionListener(menuListener);
-		popup.add( item = new JMenuItem("Drop Offer Request"));
+		popup.add( item = new JMenuItem("Drop Auction Request"));
 		
 		menuListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dropOfferHandler(e);
+				dropAuctionHandler(e);
 			}
 		};
 		item.addActionListener(menuListener);
@@ -43,12 +43,12 @@ public class DemandServiceMenu implements MenuState {
 	}
 	
 	private void launchOfferHandler(ActionEvent event) {
-		Message mess = new LaunchOfferMessage ( service);
+		Message mess = new LaunchAuctionMessage ( service);
 		mediator.sendMessage(mess);
 	}
 	
-	private void dropOfferHandler(ActionEvent event) {
-		Message mess = new DropOfferMessage ( service);
+	private void dropAuctionHandler(ActionEvent event) {
+		Message mess = new DropAuctionMessage(service);
 		mediator.sendMessage(mess);
 	}
 

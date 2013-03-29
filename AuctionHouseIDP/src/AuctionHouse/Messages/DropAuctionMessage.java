@@ -1,9 +1,9 @@
 package AuctionHouse.Messages;
 
-public class DropAuctionMessage extends AcceptOfferMessage {
+public class DropAuctionMessage extends AuctionMessage {
 	
-	public DropAuctionMessage(String service, String person) {
-		super(service,person);
+	public DropAuctionMessage(String service) {
+		super(service);
 	}
 
 	@Override

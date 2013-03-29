@@ -1,21 +1,13 @@
 package AuctionHouse.Messages;
 
-public class DropOfferMessage implements Message{
+public class DropOfferMessage extends OfferMessage{
 
-	private String service;
-	
-	public DropOfferMessage(String service) {
-		this.service = service;
+	public DropOfferMessage(String service, String person) {
+		super(service, person);
 	}
-	public String getService() {
-		return service;
-	}
-	public void setService(String service) {
-		this.service = service;
-	}
+
 	@Override
 	public MessageType getType() {
 		return MessageType.DropOffer;
 	}
-
 }
