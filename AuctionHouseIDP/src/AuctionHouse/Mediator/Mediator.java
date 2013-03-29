@@ -58,9 +58,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			// FIXME: Sters la etapa 2
 			if ((Boolean) result) {
 				if (mess.getUser().equals("gicu")) {
-					// Simulare cumparator
 					simulation.role = ROL_CUMPARATOR;
-					simulation.start();
 				} else {
 					simulation.role = ROL_FURNIZOR;
 				}
