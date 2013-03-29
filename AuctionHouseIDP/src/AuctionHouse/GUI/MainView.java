@@ -45,6 +45,8 @@ public class MainView extends javax.swing.JFrame {
 				table.setRowHeight(
 						i,
 						((Component) table.getValueAt(i, 2)).getPreferredSize().height);
+			} else {
+				table.setRowHeight(i, table.getRowHeight());
 			}
 		}
 	}

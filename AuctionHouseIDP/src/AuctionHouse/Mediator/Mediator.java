@@ -2,7 +2,6 @@ package AuctionHouse.Mediator;
 
 import AuctionHouse.Commands.*;
 import AuctionHouse.DataContext.DataManager;
-import AuctionHouse.DataContext.XMLDataManager;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Messages.*;
 
