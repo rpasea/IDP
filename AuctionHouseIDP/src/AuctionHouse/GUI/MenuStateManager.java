@@ -9,15 +9,15 @@ public class MenuStateManager {
 		this.mediator = mediator;
 	}
 	
-	public void setToDemandContextualMenu(int x, int y, String service, String supplier) {
+	public void setToDemandContextualMenu(int x, int y, String service, String supplier, String offer) {
 		setToNoMenu();
-		state = new DemandContextualMenu(mediator, x, y, service, supplier);
+		state = new DemandContextualMenu(mediator, x, y, service, supplier, offer);
 		
 	}
 	
-	public void setToOfferContextualMenu(int x, int y, String service, String supplier) {
+	public void setToOfferContextualMenu(int x, int y, String service, String supplier, String offer) {
 		setToNoMenu();
-		state = new SupplyContextualMenu(mediator, x, y, service, supplier);
+		state = new SupplyContextualMenu(mediator, x, y, service, supplier, offer);
 	}
 	
 	public void setToDemandServiceMenu(int x, int y, String service) {

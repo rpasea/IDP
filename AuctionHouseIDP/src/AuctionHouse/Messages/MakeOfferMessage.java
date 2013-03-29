@@ -2,8 +2,8 @@ package AuctionHouse.Messages;
 
 public class MakeOfferMessage extends OfferMessage {
 	
-	public MakeOfferMessage(String service, String person) {
-		super(service, person);
+	public MakeOfferMessage(String service, String person, String offer) {
+		super(service, person, offer);
 	}
 
 	@Override

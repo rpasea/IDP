@@ -23,6 +23,10 @@ public class AHTableCellRenderer implements TableCellRenderer {
 			((JTable)value).setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, Color.BLACK));
 
 			return (Component) value;
+		}else if (value.getClass().getName().equals("javax.swing.JProgressBar")) {
+			//((Component) value).setBackground(Color.white);
+
+			return (Component) value;
 		} else {
 			Component c = table.getDefaultRenderer(value.getClass())
 					.getTableCellRendererComponent(table, value, isSelected,

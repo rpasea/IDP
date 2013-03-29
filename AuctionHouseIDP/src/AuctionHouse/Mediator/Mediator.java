@@ -1,8 +1,12 @@
 package AuctionHouse.Mediator;
 
+import java.util.HashMap;
+
 import AuctionHouse.Commands.*;
 import AuctionHouse.DataContext.DataManager;
+import AuctionHouse.DataContext.XMLDataManager;
 import AuctionHouse.GUI.ControllerMediator;
+import AuctionHouse.Main.TestWorker;
 import AuctionHouse.Messages.*;
 
 public class Mediator implements GUIMediator, NetworkMediator,
@@ -13,10 +17,12 @@ public class Mediator implements GUIMediator, NetworkMediator,
 
 	private ControllerMediator controllerMediator;
 	private DataManager dataManager;
+	private HashMap<String, Transaction> transactions;
 
 	public Mediator(DataManager dataMgr) {
 		controllerMediator = new ControllerMediator(this);
 		dataManager = dataMgr;
+		transactions = new HashMap<String, Transaction>();
 	}
 
 	public void init() {
@@ -38,13 +44,13 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			Command com = new LoginCommand(mess.getUser(), mess.getPassword(),
 					mess.getRole(), dataManager, controllerMediator);
 			result = com.run();
-			
+
 			tip = "Login";
 			break;
 		}
 		case Logout:
 			result = controllerMediator.logout();
-			
+
 			tip = "Logout";
 			break;
 		case LaunchAuction: {
@@ -53,7 +59,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			Command com = new LaunchAuctionCommand(mess.getService(),
 					controllerMediator, dataManager, null);
 			result = com.run();
-			
+
 			tip = "LaunchAuction";
 			break;
 		}
@@ -63,7 +69,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			Command com = new DropAuctionCommand(mess.getService(),
 					controllerMediator, dataManager, null);
 			result = com.run();
-			
+
 			tip = "DropAuction";
 			break;
 		}
@@ -71,9 +77,10 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			AcceptOfferMessage mess = (AcceptOfferMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new AcceptOfferCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, dataManager, null);
+					mess.getPerson(), mess.getOffer(), controllerMediator,
+					dataManager, null, this);
 			result = com.run();
-			
+
 			tip = "AcceptOffer";
 			break;
 		}
@@ -83,7 +90,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			Command com = new RejectOfferCommand(mess.getService(),
 					mess.getPerson(), controllerMediator, dataManager, null);
 			result = com.run();
-			
+
 			tip = "RejectOffer";
 			break;
 		}
@@ -93,7 +100,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			Command com = new MakeOfferCommand(mess.getService(),
 					mess.getPerson(), controllerMediator, dataManager, null);
 			result = com.run();
-			
+
 			tip = "MakeOffer";
 			break;
 		}
@@ -103,13 +110,12 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			Command com = new DropOfferCommand(mess.getService(),
 					mess.getPerson(), controllerMediator, dataManager, null);
 			result = com.run();
-			
 			tip = "DropOffer";
 			break;
 		}
 		}
-		
-		System.out.println("Mesaj: "+tip);
+
+		System.out.println("Mesaj: " + tip);
 
 		return result;
 	}
@@ -121,7 +127,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	/*
 	 * Methods of NetworkMediator interface
 	 */
-	
+
 	@Override
 	public Object sendWebClientMessage(Message message) {
 		// TODO Auto-generated method stub
@@ -131,11 +137,36 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	/*
 	 * Methods of WebClientMediator interface
 	 */
-	
+
 	@Override
 	public Object sendNetworkMessage(Message message) {
-		// TODO Auto-generated method stub
-		return null;
+		Object result = null;
+		String tip = "";
+		switch (message.getType()) {
+		case StartTransaction: {
+			StartTransactionMessage mess = (StartTransactionMessage) message;
+			// TODO: don't forget the NetworkCommunicator here
+			Command com = new StartTransactionCommand(mess.getService(),
+					mess.getSeller(), mess.getBuyer(), mess.getOffer(),
+					controllerMediator, dataManager, null);
+			result = com.run();
+			if (result != null) {
+				transactions.put(mess.getService() + "_" + mess.getSeller()
+						+ "_" + mess.getBuyer(), (Transaction) result);
+				final Transaction t = (Transaction)result;
+				result = true;
+				//for testing purpose 
+				(new TestWorker(t)).execute();
+			} else {
+				result = false;
+			}
+			tip = "StartTransaction";
+			break;
+		}
+
+		}
+		System.out.println("Mesaj: " + tip);
+		return result;
 	}
 
 }

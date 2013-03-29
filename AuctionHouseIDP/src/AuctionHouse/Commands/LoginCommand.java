@@ -83,8 +83,8 @@ public class LoginCommand implements Command {
 							public void tableChanged(TableModelEvent arg0) {
 								tableModel.fireTableDataChanged();
 								mediator.refreshGUI();
-
 							}
+							
 						});
 				outerTableEntry.add(embedded);
 				tableModel.addRow(outerTableEntry);

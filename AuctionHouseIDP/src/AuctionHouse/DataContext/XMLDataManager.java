@@ -68,4 +68,9 @@ public class XMLDataManager implements DataManager {
 				return s;
 		return null;
 	}
+
+	@Override
+	public Person getIdentity() {
+		return identity;
+	}
 }

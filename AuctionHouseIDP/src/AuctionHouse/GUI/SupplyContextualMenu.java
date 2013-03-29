@@ -14,10 +14,11 @@ public class SupplyContextualMenu implements MenuState {
 	private MainController mediator;
 	private String service;
 	private String supplier;
+	private String offer;
 	private JPopupMenu popup;
 
 	public SupplyContextualMenu(MainController mediator, int x, int y,
-			String service, String supplier) {
+			String service, String supplier, String offer) {
 		this.mediator = mediator;
 		this.service = service;
 		this.supplier = supplier;
@@ -45,12 +46,12 @@ public class SupplyContextualMenu implements MenuState {
 	}
 	
 	private void launchOfferHandler(ActionEvent event) {
-		Message mess = new MakeOfferMessage(service,supplier);
+		Message mess = new MakeOfferMessage(service,supplier,offer);
 		mediator.sendMessage(mess);
 	}
 	
 	private void dropOfferHandler(ActionEvent event) {
-		Message mess = new DropOfferMessage ( service,supplier);
+		Message mess = new DropOfferMessage ( service,supplier,offer);
 		mediator.sendMessage(mess);
 	}
 

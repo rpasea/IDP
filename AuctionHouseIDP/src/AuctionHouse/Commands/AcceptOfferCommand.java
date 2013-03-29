@@ -9,6 +9,9 @@ import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
+import AuctionHouse.Mediator.NetworkMediator;
+import AuctionHouse.Messages.Message;
+import AuctionHouse.Messages.StartTransactionMessage;
 
 public class AcceptOfferCommand implements Command {
 	private DataManager dataManager;
@@ -17,16 +20,20 @@ public class AcceptOfferCommand implements Command {
 	private Object networkCommunicator;
 	private String service;
 	private String seller;
+	private String offer;
 	private ControllerMediator mediator;
+	private NetworkMediator networkMediator;
 
-	public AcceptOfferCommand(String service, String seller,
+	public AcceptOfferCommand(String service, String seller, String offer,
 			ControllerMediator mediator, DataManager dataManager,
-			Object networkCommunicator) {
+			Object networkCommunicator, NetworkMediator networkMediator) {
 		this.service = service;
 		this.seller = seller;
+		this.offer = offer;
 		this.mediator = mediator;
 		this.dataManager = dataManager;
 		this.networkCommunicator = networkCommunicator;
+		this.networkMediator = networkMediator;
 	}
 
 	@Override
@@ -81,6 +88,8 @@ public class AcceptOfferCommand implements Command {
 		 * 		create the progress bar, propagate it's change events all the 
 		 *      way  to the primary table
 		 */
+		Message msg = new StartTransactionMessage(service,seller, dataManager.getIdentity().getName(),offer);
+		networkMediator.sendNetworkMessage(msg);
 		return true;
 	}
 

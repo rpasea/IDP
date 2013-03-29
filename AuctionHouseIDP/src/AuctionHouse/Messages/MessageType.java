@@ -8,5 +8,6 @@ public enum MessageType {
 	AcceptOffer,
 	RejectOffer,
 	MakeOffer,
-	DropAuction
+	DropAuction,
+	StartTransaction
 }

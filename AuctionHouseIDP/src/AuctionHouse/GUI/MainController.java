@@ -76,6 +76,9 @@ public class MainController {
 													.toString(),
 											innerTable.getModel()
 													.getValueAt(rowIndex, 0)
+													.toString(),
+													innerTable.getModel()
+													.getValueAt(rowIndex, 2)
 													.toString());
 							}
 						} else {  // ROL_FURNIZOR
@@ -86,6 +89,9 @@ public class MainController {
 													.toString(),
 											innerTable.getModel()
 													.getValueAt(rowIndex, 0)
+													.toString(),
+													innerTable.getModel()
+													.getValueAt(rowIndex, 2)
 													.toString());
 						}
 					}
