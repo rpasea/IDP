@@ -6,6 +6,7 @@ import AuctionHouse.Commands.*;
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.XMLDataManager;
 import AuctionHouse.GUI.ControllerMediator;
+import AuctionHouse.Main.SimulatorThread;
 import AuctionHouse.Main.TestWorker;
 import AuctionHouse.Messages.*;
 
@@ -18,11 +19,17 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	private ControllerMediator controllerMediator;
 	private DataManager dataManager;
 	private HashMap<String, Transaction> transactions;
+	
+	//FIXME: Sters la etapa 2
+	private SimulatorThread simulation;
 
 	public Mediator(DataManager dataMgr) {
 		controllerMediator = new ControllerMediator(this);
 		dataManager = dataMgr;
 		transactions = new HashMap<String, Transaction>();
+		
+		//FIXME: Sters la etapa 2
+		simulation =  new SimulatorThread(this, controllerMediator, dataManager);
 	}
 
 	public void init() {
@@ -44,6 +51,17 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			Command com = new LoginCommand(mess.getUser(), mess.getPassword(),
 					mess.getRole(), dataManager, controllerMediator);
 			result = com.run();
+			
+			//FIXME: Sters la etapa 2
+			if(mess.getUser().equals("gicu")){
+				// Simulare cumparator
+				simulation.role = ROL_CUMPARATOR;
+			} else {
+				simulation.role = ROL_FURNIZOR;
+			}
+			// Porneste simularea
+			simulation.start();
+			
 
 			tip = "Login";
 			break;
@@ -125,7 +143,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	}
 
 	/*
-	 * Methods of NetworkMediator interface
+	 * Methods of WebClientMediator interface
 	 */
 
 	@Override
@@ -135,7 +153,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	}
 
 	/*
-	 * Methods of WebClientMediator interface
+	 * Methods of NetworkMediator interface
 	 */
 
 	@Override
