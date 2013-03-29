@@ -27,13 +27,11 @@ public class MainView extends javax.swing.JFrame {
 
 		for (int it = 0; it < tcm.getColumnCount(); it++) {
 			tcm.getColumn(it).setCellRenderer(tcr);
-			if (it != tcm.getColumnCount() - 1)
-				tcm.getColumn(it).setPreferredWidth((int) (20 * 10000));
-			else {
-				tcm.getColumn(it).setPreferredWidth((int) (60 * 10000));
-			}
 		}
-
+		tcm.getColumn(0).setPreferredWidth((int) (18 * 10000));
+		tcm.getColumn(1).setPreferredWidth((int) (8 * 10000));
+		tcm.getColumn(2).setPreferredWidth((int) (74 * 10000));
+		
 		resizeTable();
 		table.setFocusable(false);
 		table.setRowSelectionAllowed(false);
