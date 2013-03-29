@@ -25,9 +25,6 @@ public class MakeOfferCommand implements Command {
 	@Override
 	public Object run() {
 		
-		/**
-		 * TODO: Afiseaza dialog oferta
-		 */
 		
 		return null;
 	}

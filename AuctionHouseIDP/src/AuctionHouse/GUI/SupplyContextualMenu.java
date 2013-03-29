@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 import AuctionHouse.Messages.DropOfferMessage;
@@ -46,6 +47,17 @@ public class SupplyContextualMenu implements MenuState {
 	}
 	
 	private void launchOfferHandler(ActionEvent event) {
+		String str = JOptionPane.showInputDialog(null, "Enter your offer:", 
+				"Offer", JOptionPane.QUESTION_MESSAGE);
+		while ("".equals(str)){
+			str = JOptionPane.showInputDialog(null, "Enter your offer:", 
+					"Offer", JOptionPane.QUESTION_MESSAGE);
+		}
+		if(str == null)
+			return;
+		
+		offer = str;
+		
 		Message mess = new MakeOfferMessage(service,supplier,offer);
 		mediator.sendMessage(mess);
 	}

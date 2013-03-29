@@ -60,7 +60,7 @@ public class SimulatorThread extends Thread {
 
 			sleep(1000);
 			
-			mediator.sendGuiMessage(new MakeOfferMessage("BaniGratis", "Pamfila", ""));
+			mediator.sendGuiMessage(new MakeOfferMessage("BaniGratis", "Pamfila", "500"));
 			
 			
 		}
