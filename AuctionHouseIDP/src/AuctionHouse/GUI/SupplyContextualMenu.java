@@ -35,7 +35,7 @@ public class SupplyContextualMenu implements MenuState {
 		popup.setBounds(x, y, 75, 50);
 		popup.add( item = new JMenuItem("Make offer"));
 		item.addActionListener(menuListener);
-		popup.add( item = new JMenuItem("Drop auction"));
+		popup.add( item = new JMenuItem("Drop offer"));
 		
 		menuListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

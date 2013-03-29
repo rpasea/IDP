@@ -62,7 +62,31 @@ public class SimulatorThread extends Thread {
 			
 			mediator.sendGuiMessage(new MakeOfferMessage("BaniGratis", "Pamfila", "500"));
 			
+			sleep(1000);
 			
+			mediator.sendGuiMessage(new MakeOfferMessage("BaniGratis", "gicu", "2300"));
+
+			sleep(1000);
+			
+			mediator.sendGuiMessage(new MakeOfferMessage("BaniGratis", "Bilioana", "2"));
+			
+			sleep(4000);
+			
+			mediator.sendNetworkMessage(new OfferRefusedMessage("BaniGratis", "Pamfila", "500"));
+			
+			sleep(3000);
+			
+			mediator.sendNetworkMessage(new OfferExceedMessage("BaniGratis", "gicu", "2300"));
+			
+			sleep(1000);
+			
+			mediator.sendGuiMessage(new MakeOfferMessage("BaniGratis", "gicu", "1800"));
+			
+			sleep(3000);
+			
+			mediator.sendNetworkMessage(new OfferAcceptedMessage("BaniGratis", "gicu", "1800"));
+			
+
 		}
 	}
 }

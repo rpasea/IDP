@@ -91,7 +91,7 @@ public class StartTransactionCommand implements Command {
 		}
 		
 		if (embeddedRow == embeddedModel.getRowCount())
-			return false;
+			return null;
 		
 		final JProgressBar progressBar = new JProgressBar(0, Transaction.MaxProgress);
 		progressBar.setSize(50, 8);

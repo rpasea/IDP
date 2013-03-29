@@ -46,6 +46,9 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		Object result = null;
 		String tip = "";
 		switch (message.getType()) {
+		/**
+		 * Login
+		 */
 		case Login: {
 			LoginMessage mess = (LoginMessage) message;
 			Command com = new LoginCommand(mess.getUser(), mess.getPassword(),
@@ -71,6 +74,9 @@ public class Mediator implements GUIMediator, NetworkMediator,
 
 			tip = "Logout";
 			break;
+		/**
+		 * Buyer
+		 */
 		case LaunchAuction: {
 			LaunchAuctionMessage mess = (LaunchAuctionMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
@@ -112,11 +118,15 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			tip = "RejectOffer";
 			break;
 		}
+		/**
+		 * Seller
+		 */
 		case MakeOffer: {
 			MakeOfferMessage mess = (MakeOfferMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new MakeOfferCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, dataManager, null);
+					mess.getPerson(), mess.getOffer(), controllerMediator,
+					dataManager, null, this);
 			result = com.run();
 
 			tip = "MakeOffer";
@@ -161,6 +171,9 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		Object result = null;
 		String tip = "";
 		switch (message.getType()) {
+		/**
+		 * Buyer
+		 */
 		case StartTransaction: {
 			StartTransactionMessage mess = (StartTransactionMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
@@ -173,12 +186,51 @@ public class Mediator implements GUIMediator, NetworkMediator,
 						+ "_" + mess.getBuyer(), (Transaction) result);
 				final Transaction t = (Transaction)result;
 				result = true;
-				//for testing purpose 
+				//FIXME: for testing purpose 
 				(new TestWorker(t)).execute();
 			} else {
 				result = false;
 			}
 			tip = "StartTransaction";
+			break;
+		}
+		/**
+		 * Seller
+		 */
+		case OfferAccepted: {
+			OfferAcceptedMessage mess = (OfferAcceptedMessage) message;
+			Command com = new OfferAcceptedCommand(mess.getService(),
+					mess.getPerson(), mess.getOffer(), controllerMediator,
+					dataManager, null);
+			result = com.run();
+			if (result != null) {
+				final Transaction t = (Transaction)result;
+				result = true;
+				//FIXME: for testing purpose 
+				(new TestWorker(t)).execute();
+			} else {
+				result = false;
+			}
+			
+			tip = "OfferAccepted";
+			break;
+		}
+		case OfferRefused: {
+			OfferRefusedMessage mess = (OfferRefusedMessage) message;
+			Command com = new OfferRefusedCommand(mess.getService(),
+					mess.getPerson(), controllerMediator, dataManager, null);
+			result = com.run();
+			
+			tip = "OfferRefused";
+			break;
+		}
+		case OfferExceed: {
+			OfferExceedMessage mess = (OfferExceedMessage) message;
+			Command com = new OfferExceedCommand(mess.getService(),
+					mess.getPerson(), controllerMediator, dataManager, null);
+			result = com.run();
+			
+			tip = "OfferExceed";
 			break;
 		}
 

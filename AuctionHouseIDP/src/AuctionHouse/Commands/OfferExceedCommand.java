@@ -9,36 +9,28 @@ import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
-import AuctionHouse.Mediator.NetworkMediator;
-import AuctionHouse.Messages.Message;
-import AuctionHouse.Messages.StartTransactionMessage;
 
-public class MakeOfferCommand implements Command {
+public class OfferExceedCommand implements Command {
 	private DataManager dataManager;
 
 	// TODO: the network module goes here
 	private Object networkCommunicator;
 	private String service;
 	private String buyer;
-	private String offer;
 	private ControllerMediator mediator;
-	private NetworkMediator networkMediator;
-	
-	public MakeOfferCommand(String service, String buyer, String offer,
+
+	public OfferExceedCommand(String service, String buyer,
 			ControllerMediator mediator, DataManager dataManager,
-			Object networkCommunicator, NetworkMediator networkMediator) {
+			Object networkCommunicator) {
 		this.service = service;
 		this.buyer = buyer;
-		this.offer = offer;
 		this.mediator = mediator;
 		this.dataManager = dataManager;
 		this.networkCommunicator = networkCommunicator;
-		this.networkMediator = networkMediator;
 	}
-	
+
 	@Override
 	public Object run() {
-		
 		AHTableModel model = mediator.getModel();
 
 		Vector<Vector<Object>> data = model.getDataVector();
@@ -65,7 +57,7 @@ public class MakeOfferCommand implements Command {
 		ServiceEntry se = s.getEntry(buyer);
 		if (se == null)
 			return false;
-		if (!se.getStatus().equals("No Offer") && !se.getStatus().equals("Offer Exceed"))
+		if (!se.getStatus().equals("Offer Made"))
 			return false;
 		JTable embedded = (JTable) model.getValueAt(rowNr, 2);
 		AHTableModel embeddedModel = (AHTableModel) embedded.getModel();
@@ -81,14 +73,14 @@ public class MakeOfferCommand implements Command {
 		if (offerRow == embeddedModel.getRowCount())
 			return false;
 		
-		se.setStatus("Offer Made");
-		embeddedModel.setValueAt("Offer Made", offerRow, 1);
+		se.setStatus("Offer Exceed");
+		embeddedModel.setValueAt("Offer Exceed", offerRow, 1);
 		
-		
-//		Message msg = ...;
-//		networkMediator.sendNetworkMessage(msg);
-		
+		/*
+		 * TODO: Do something to attach the transaction to the service entry
+		 * 		create the progress bar, propagate it's change events all the 
+		 *      way  to the primary table
+		 */
 		return true;
 	}
-
 }

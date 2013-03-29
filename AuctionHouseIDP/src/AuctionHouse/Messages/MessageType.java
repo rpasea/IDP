@@ -1,13 +1,19 @@
 package AuctionHouse.Messages;
 
 public enum MessageType {
+	// Login
 	Login,
 	Logout,
+	// Buyer
 	LaunchAuction,
-	DropOffer,
+	DropAuction,
 	AcceptOffer,
 	RejectOffer,
+	StartTransaction,
+	// Seller
 	MakeOffer,
-	DropAuction,
-	StartTransaction
+	DropOffer,
+	OfferExceed,
+	OfferAccepted,
+	OfferRefused
 }
