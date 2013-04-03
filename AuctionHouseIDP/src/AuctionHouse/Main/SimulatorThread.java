@@ -30,63 +30,17 @@ public class SimulatorThread extends Thread {
 	
 	public void run() {
 		if(role == Mediator.ROL_CUMPARATOR){
-			System.out.println("-----------------------------");
-			System.out.println("Simulare CUMPARATOR inceputa.");
-			System.out.println("-----------------------------");
-			
-			sleep(5000);
-			
-			mediator.sendGuiMessage(new LaunchAuctionMessage("BaniGratis"));
-			
-			sleep(5000);
-			
-			mediator.sendGuiMessage(new DropAuctionMessage("BaniGratis"));
-			
-			sleep(5000);
-			
-			mediator.sendGuiMessage(new LaunchAuctionMessage("BaniGratis"));
-			
-			sleep(5000);
-			
-			mediator.sendGuiMessage(new AcceptOfferMessage("BaniGratis", "Fragulea", "100"));
-			
-			sleep(22000);
-			
-			mediator.sendGuiMessage(new DropAuctionMessage("BaniGratis"));
+//			System.out.println("-----------------------------");
+//			System.out.println("Simulare CUMPARATOR inceputa.");
+//			System.out.println("-----------------------------");
+//			
+//			sleep(5000);
+//			
+//			mediator.sendGuiMessage(new LaunchAuctionMessage("BaniGratis"));
 		} else {
-			System.out.println("---------------------------");
-			System.out.println("Simulare FURNIZOR inceputa.");
-			System.out.println("---------------------------");
-
-			sleep(1000);
-			
-			mediator.sendGuiMessage(new MakeOfferMessage("BaniGratis", "Pamfila", "500"));
-			
-			sleep(1000);
-			
-			mediator.sendGuiMessage(new MakeOfferMessage("BaniGratis", "gicu", "2300"));
-
-			sleep(1000);
-			
-			mediator.sendGuiMessage(new MakeOfferMessage("BaniGratis", "Bilioana", "2"));
-			
-			sleep(4000);
-			
-			mediator.sendNetworkMessage(new OfferRefusedMessage("BaniGratis", "Pamfila", "500"));
-			
-			sleep(3000);
-			
-			mediator.sendNetworkMessage(new OfferExceedMessage("BaniGratis", "gicu", "2300"));
-			
-			sleep(1000);
-			
-			mediator.sendGuiMessage(new MakeOfferMessage("BaniGratis", "gicu", "1800"));
-			
-			sleep(3000);
-			
-			mediator.sendNetworkMessage(new OfferAcceptedMessage("BaniGratis", "gicu", "1800"));
-			
-
+//			System.out.println("---------------------------");
+//			System.out.println("Simulare FURNIZOR inceputa.");
+//			System.out.println("---------------------------");
 		}
 	}
 }
