@@ -9,24 +9,20 @@ import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
+import AuctionHouse.Network.NetworkCommMediator;
 
 public class OfferExceedCommand implements Command {
-	private DataManager dataManager;
-
-	// TODO: the network module goes here
-	private Object networkCommunicator;
+	private NetworkCommMediator networkCommMediator;
 	private String service;
 	private String buyer;
 	private ControllerMediator mediator;
 
 	public OfferExceedCommand(String service, String buyer,
-			ControllerMediator mediator, DataManager dataManager,
-			Object networkCommunicator) {
+			ControllerMediator mediator, NetworkCommMediator networkCommMediator) {
 		this.service = service;
 		this.buyer = buyer;
 		this.mediator = mediator;
-		this.dataManager = dataManager;
-		this.networkCommunicator = networkCommunicator;
+		this.networkCommMediator = networkCommMediator;
 	}
 
 	@Override
@@ -48,7 +44,7 @@ public class OfferExceedCommand implements Command {
 		if (row == null)
 			return false;
 
-		Service s = dataManager.getService(service);
+		Service s = networkCommMediator.getService(service);
 		if (s == null)
 			return false;
 		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))

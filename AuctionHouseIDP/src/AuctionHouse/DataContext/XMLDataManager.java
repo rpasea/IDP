@@ -17,6 +17,8 @@ public class XMLDataManager implements DataManager {
 
 	public XMLDataManager(String filename) {
 		this.filename = filename;
+		
+		init();
 	}
 
 	public void init() {
@@ -27,12 +29,12 @@ public class XMLDataManager implements DataManager {
 			db = (AuctionHouseDB) xstream.fromXML(new FileReader(
 					filename));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			System.out.println("ERROR: reading xml database");
 			e.printStackTrace();
 		}
 	}
 	
-	public boolean isLoginValid(String user, String password, int role) {
+	private boolean isLoginValid(String user, String password, int role) {
 		for (Person p : db.getPeople()) {
 			if (p.getName().equals(user) && p.getRole()==role && p.getPassword().equals(password) ) {
 				return true;
@@ -50,6 +52,9 @@ public class XMLDataManager implements DataManager {
 	}
 	
 	public List<Service> doLogin(String user, String password, int role) {
+		if(!isLoginValid(user, password, role))
+			return null;
+		
 		for (Person p : db.getPeople()) {
 			if (p.getName().equals(user) && p.getRole()==role && p.getPassword().equals(password) ) {
 				identity = p;

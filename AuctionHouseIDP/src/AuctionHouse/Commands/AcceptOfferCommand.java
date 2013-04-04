@@ -4,7 +4,6 @@ import java.util.Vector;
 
 import javax.swing.JTable;
 
-import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
@@ -12,33 +11,30 @@ import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.NetworkMediator;
 import AuctionHouse.Messages.Message;
 import AuctionHouse.Messages.StartTransactionMessage;
+import AuctionHouse.Network.NetworkCommMediator;
 
 public class AcceptOfferCommand implements Command {
-	private DataManager dataManager;
-
-	// TODO: the network module goes here
-	private Object networkCommunicator;
 	private String service;
 	private String seller;
 	private String offer;
-	private ControllerMediator mediator;
+	private ControllerMediator controllerMediator;
 	private NetworkMediator networkMediator;
+	private NetworkCommMediator networkCommMediator;
 
 	public AcceptOfferCommand(String service, String seller, String offer,
-			ControllerMediator mediator, DataManager dataManager,
-			Object networkCommunicator, NetworkMediator networkMediator) {
+			ControllerMediator mediator, NetworkCommMediator networkCommMediator,
+			NetworkMediator networkMediator) {
 		this.service = service;
 		this.seller = seller;
 		this.offer = offer;
-		this.mediator = mediator;
-		this.dataManager = dataManager;
-		this.networkCommunicator = networkCommunicator;
+		this.controllerMediator = mediator;
 		this.networkMediator = networkMediator;
+		this.networkCommMediator = networkCommMediator;
 	}
 
 	@Override
 	public Object run() {
-		AHTableModel model = mediator.getModel();
+		AHTableModel model = controllerMediator.getModel();
 
 		Vector<Vector<Object>> data = model.getDataVector();
 		Vector<Object> row = null;
@@ -55,7 +51,7 @@ public class AcceptOfferCommand implements Command {
 		if (row == null)
 			return false;
 
-		Service s = dataManager.getService(service);
+		Service s = networkCommMediator.getService(service);
 		if (s == null)
 			return false;
 		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))
@@ -83,10 +79,8 @@ public class AcceptOfferCommand implements Command {
 		se.setStatus("Offer Accepted");
 		embeddedModel.setValueAt("Offer Accepted", offerRow, 1);
 		
-		/*
-		 * TODO: use the network module to notify the seller
-		 */
-		Message msg = new StartTransactionMessage(service,seller, dataManager.getIdentity().getName(),offer);
+		// Use the network module to notify the seller
+		Message msg = new StartTransactionMessage(service,seller, networkCommMediator.getIdentity().getName(),offer);
 		networkMediator.sendNetworkMessage(msg);
 		return true;
 	}

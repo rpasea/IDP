@@ -6,39 +6,35 @@ import java.util.Vector;
 
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.Mediator;
 import AuctionHouse.Mediator.Transaction;
+import AuctionHouse.Network.NetworkCommMediator;
 
 public class StartTransactionCommand implements Command {
 
 	private String service, seller, buyer, offer;
-	private ControllerMediator mediator;
-	private DataManager dataManager;
-	// TODO: the network module goes here
-	private Object networkCommunicator;
+	private ControllerMediator controllerMediator;
+	private NetworkCommMediator networkCommMediator;
 
 	public StartTransactionCommand(String service, String seller, String buyer,
-			String offer, ControllerMediator mediator, DataManager dataManager,
-			Object networkCommunicator) {
+			String offer, ControllerMediator controllerMediator,
+			NetworkCommMediator networkCommMediator) {
 		this.service = service;
 		this.seller = seller;
 		this.buyer = buyer;
 		this.offer = offer;
-		this.mediator = mediator;
-		this.dataManager = dataManager;
+		this.controllerMediator = controllerMediator;
+		this.networkCommMediator = networkCommMediator;
 	}
 
 	@Override
 	public Object run() {
-		AHTableModel model = mediator.getModel();
+		AHTableModel model = controllerMediator.getModel();
 
 		Vector<Vector<Object>> data = model.getDataVector();
 		Vector<Object> row = null;
@@ -55,12 +51,12 @@ public class StartTransactionCommand implements Command {
 		if (row == null)
 			return null;
 
-		Service s = dataManager.getService(service);
+		Service s = networkCommMediator.getService(service);
 		ServiceEntry se = null;
 		if (s == null)
 			return null;
 		
-		if (dataManager.getRole() == Mediator.ROL_CUMPARATOR) {
+		if (networkCommMediator.getRole() == Mediator.ROL_CUMPARATOR) {
 			if (s.getStatus().equals("Inactive")
 					|| row.get(1).equals("Inactive"))
 				return null;

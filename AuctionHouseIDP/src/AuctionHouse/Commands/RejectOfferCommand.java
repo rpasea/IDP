@@ -4,29 +4,24 @@ import java.util.Vector;
 
 import javax.swing.JTable;
 
-import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
+import AuctionHouse.Network.NetworkCommMediator;
 
 public class RejectOfferCommand implements Command {
-	private DataManager dataManager;
-
-	// TODO: the network module goes here
-	private Object networkCommunicator;
+	private NetworkCommMediator networkCommMediator;
 	private String service;
 	private String seller;
 	private ControllerMediator mediator;
 
 	public RejectOfferCommand(String service, String seller,
-			ControllerMediator mediator, DataManager dataManager,
-			Object networkCommunicator) {
+			ControllerMediator mediator, NetworkCommMediator networkCommMediator) {
 		this.service = service;
 		this.seller = seller;
 		this.mediator = mediator;
-		this.dataManager = dataManager;
-		this.networkCommunicator = networkCommunicator;
+		this.networkCommMediator = networkCommMediator;
 	}
 
 	@Override
@@ -48,7 +43,7 @@ public class RejectOfferCommand implements Command {
 		if (row == null)
 			return false;
 
-		Service s = dataManager.getService(service);
+		Service s = networkCommMediator.getService(service);
 		if (s == null)
 			return false;
 		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))

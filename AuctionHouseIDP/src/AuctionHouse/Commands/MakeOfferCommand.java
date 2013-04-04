@@ -4,41 +4,35 @@ import java.util.Vector;
 
 import javax.swing.JTable;
 
-import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.NetworkMediator;
-import AuctionHouse.Messages.Message;
-import AuctionHouse.Messages.StartTransactionMessage;
+import AuctionHouse.Network.NetworkCommMediator;
 
 public class MakeOfferCommand implements Command {
-	private DataManager dataManager;
-
-	// TODO: the network module goes here
-	private Object networkCommunicator;
+	private NetworkCommMediator networkCommMediator;
 	private String service;
 	private String buyer;
 	private String offer;
-	private ControllerMediator mediator;
-	private NetworkMediator networkMediator;
+	private ControllerMediator controllerMediator;
+	private NetworkMediator mediator;
 	
 	public MakeOfferCommand(String service, String buyer, String offer,
-			ControllerMediator mediator, DataManager dataManager,
-			Object networkCommunicator, NetworkMediator networkMediator) {
+			ControllerMediator controllerMediator, NetworkCommMediator networkCommMediator,
+			NetworkMediator networkMediator) {
 		this.service = service;
 		this.buyer = buyer;
 		this.offer = offer;
-		this.mediator = mediator;
-		this.dataManager = dataManager;
-		this.networkCommunicator = networkCommunicator;
-		this.networkMediator = networkMediator;
+		this.controllerMediator = controllerMediator;
+		this.networkCommMediator = networkCommMediator;
+		this.mediator = networkMediator;
 	}
 	
 	@Override
 	public Object run() {
-		AHTableModel model = mediator.getModel();
+		AHTableModel model = controllerMediator.getModel();
 
 		Vector<Vector<Object>> data = model.getDataVector();
 		Vector<Object> row = null;
@@ -55,7 +49,7 @@ public class MakeOfferCommand implements Command {
 		if (row == null)
 			return false;
 
-		Service s = dataManager.getService(service);
+		Service s = networkCommMediator.getService(service);
 		if (s == null)
 			return false;
 		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))

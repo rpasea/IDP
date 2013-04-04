@@ -9,14 +9,12 @@ public class SimulatorThread extends Thread {
 	
 	private Mediator mediator;
 	private ControllerMediator controllerMediator;
-	private DataManager dataManager;
 	
 	public int role;
 
-	public SimulatorThread(Mediator mediator, ControllerMediator controllerMediator, DataManager dataManager){
+	public SimulatorThread(Mediator mediator, ControllerMediator controllerMediator){
 		this.mediator = mediator;
 		this.controllerMediator = controllerMediator;
-		this.dataManager = dataManager;
 	}
 	
 	private void sleep(int milis){

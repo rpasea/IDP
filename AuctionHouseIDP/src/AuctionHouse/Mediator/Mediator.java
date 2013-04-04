@@ -3,38 +3,30 @@ package AuctionHouse.Mediator;
 import java.util.HashMap;
 
 import AuctionHouse.Commands.*;
-import AuctionHouse.DataContext.DataManager;
-import AuctionHouse.DataContext.XMLDataManager;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Main.SimulatorThread;
 import AuctionHouse.Main.TestWorker;
 import AuctionHouse.Messages.*;
+import AuctionHouse.Network.NetworkCommMediator;
 
-public class Mediator implements GUIMediator, NetworkMediator,
-		WebClientMediator {
+public class Mediator implements GUIMediator,
+		NetworkMediator, WebClientMediator {
 
 	public static final int ROL_FURNIZOR = 0;
 	public static final int ROL_CUMPARATOR = 1;
 
 	private ControllerMediator controllerMediator;
-	private DataManager dataManager;
+	private NetworkCommMediator networkMediator;
 	private HashMap<String, Transaction> transactions;
 
-	// FIXME: for testing purpose
-	private SimulatorThread simulation;
-
-	public Mediator(DataManager dataMgr) {
+	public Mediator() {
 		controllerMediator = new ControllerMediator(this);
-		dataManager = dataMgr;
+		networkMediator = new NetworkCommMediator(this);
 		transactions = new HashMap<String, Transaction>();
-
-		// FIXME: for testing purpose
-		simulation = new SimulatorThread(this, controllerMediator, dataManager);
 	}
 
 	public void init() {
 		controllerMediator.initGui();
-		dataManager.init();
 	}
 
 	/*
@@ -52,11 +44,12 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		case Login: {
 			LoginMessage mess = (LoginMessage) message;
 			Command com = new LoginCommand(mess.getUser(), mess.getPassword(),
-					mess.getRole(), dataManager, controllerMediator);
+					mess.getRole(), networkMediator, controllerMediator);
 			result = com.run();
 
 			// FIXME: for testing purpose
 			if ((Boolean) result) {
+				SimulatorThread simulation = new SimulatorThread(this, controllerMediator);
 				if (mess.getUser().equals("gicu")) {
 					simulation.role = ROL_CUMPARATOR;
 				} else {
@@ -81,7 +74,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			LaunchAuctionMessage mess = (LaunchAuctionMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new LaunchAuctionCommand(mess.getService(),
-					controllerMediator, dataManager, null);
+					controllerMediator, networkMediator);
 			result = com.run();
 
 			tip = "LaunchAuction";
@@ -91,7 +84,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			DropAuctionMessage mess = (DropAuctionMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new DropAuctionCommand(mess.getService(),
-					controllerMediator, dataManager, null);
+					controllerMediator, networkMediator);
 			result = com.run();
 
 			tip = "DropAuction";
@@ -102,7 +95,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new AcceptOfferCommand(mess.getService(),
 					mess.getPerson(), mess.getOffer(), controllerMediator,
-					dataManager, null, this);
+					networkMediator, this);
 			result = com.run();
 
 			tip = "AcceptOffer";
@@ -112,7 +105,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			RejectOfferMessage mess = (RejectOfferMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new RejectOfferCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, dataManager, null);
+					mess.getPerson(), controllerMediator, networkMediator);
 			result = com.run();
 
 			tip = "RejectOffer";
@@ -126,7 +119,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new MakeOfferCommand(mess.getService(),
 					mess.getPerson(), mess.getOffer(), controllerMediator,
-					dataManager, null, this);
+					networkMediator, this);
 			result = com.run();
 
 			tip = "MakeOffer";
@@ -136,7 +129,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			DropOfferMessage mess = (DropOfferMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new DropOfferCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, dataManager, null);
+					mess.getPerson(), controllerMediator, networkMediator);
 			result = com.run();
 			tip = "DropOffer";
 			break;
@@ -149,7 +142,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	}
 
 	public int getRole() {
-		return dataManager.getRole();
+		return networkMediator.getRole();
 	}
 
 	/*
@@ -179,7 +172,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new StartTransactionCommand(mess.getService(),
 					mess.getSeller(), mess.getBuyer(), mess.getOffer(),
-					controllerMediator, dataManager, null);
+					controllerMediator, networkMediator);
 			result = com.run();
 			if (result != null) {
 				transactions.put(mess.getService() + "_" + mess.getSeller()
@@ -201,7 +194,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			OfferAcceptedMessage mess = (OfferAcceptedMessage) message;
 			Command com = new OfferAcceptedCommand(mess.getService(),
 					mess.getPerson(), mess.getOffer(), controllerMediator,
-					dataManager, null);
+					networkMediator);
 			result = com.run();
 			if (result != null) {
 				final Transaction t = (Transaction)result;
@@ -218,7 +211,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		case OfferRefused: {
 			OfferRefusedMessage mess = (OfferRefusedMessage) message;
 			Command com = new OfferRefusedCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, dataManager, null);
+					mess.getPerson(), controllerMediator, networkMediator, null);
 			result = com.run();
 			
 			tip = "OfferRefused";
@@ -227,7 +220,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		case OfferExceed: {
 			OfferExceedMessage mess = (OfferExceedMessage) message;
 			Command com = new OfferExceedCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, dataManager, null);
+					mess.getPerson(), controllerMediator, networkMediator);
 			result = com.run();
 			
 			tip = "OfferExceed";

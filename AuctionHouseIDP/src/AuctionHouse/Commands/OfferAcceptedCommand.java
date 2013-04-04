@@ -13,12 +13,10 @@ import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.Transaction;
+import AuctionHouse.Network.NetworkCommMediator;
 
 public class OfferAcceptedCommand implements Command {
-	private DataManager dataManager;
-
-	// TODO: the network module goes here
-	private Object networkCommunicator;
+	private NetworkCommMediator networkCommMediator;
 	private String service;
 	private String buyer;
 	private final String offer;
@@ -26,14 +24,12 @@ public class OfferAcceptedCommand implements Command {
 
 
 	public OfferAcceptedCommand(String service, String buyer, String offer,
-			ControllerMediator mediator, DataManager dataManager,
-			Object networkCommunicator) {
+			ControllerMediator mediator, NetworkCommMediator networkCommMediator) {
 		this.service = service;
 		this.buyer = buyer;
 		this.offer = offer;
 		this.mediator = mediator;
-		this.dataManager = dataManager;
-		this.networkCommunicator = networkCommunicator;
+		this.networkCommMediator = networkCommMediator;
 	}
 
 	@Override
@@ -55,7 +51,7 @@ public class OfferAcceptedCommand implements Command {
 		if (row == null)
 			return null;
 
-		Service s = dataManager.getService(service);
+		Service s = networkCommMediator.getService(service);
 		if (s == null)
 			return null;
 		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))
@@ -89,7 +85,7 @@ public class OfferAcceptedCommand implements Command {
 		progressBar.setVisible(true);
 		
 		Transaction transaction = new Transaction (service,
-						dataManager.getIdentity().getName(), buyer, offer);
+						networkCommMediator.getIdentity().getName(), buyer, offer);
 		transaction.addObserver(new Observer() {
 			
 			@Override

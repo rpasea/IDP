@@ -14,22 +14,19 @@ import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableCellRenderer;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
+import AuctionHouse.Network.NetworkCommMediator;
 
 public class DropAuctionCommand implements Command{
 
-	private DataManager dataManager;
-
-	// TODO: the network module goes here
-	private Object networkCommunicator;
+	private NetworkCommMediator networkCommMediator;
 	private String service;
 	private ControllerMediator mediator;
 
 	public DropAuctionCommand(String service, ControllerMediator mediator,
-			DataManager dataManager, Object networkCommunicator) {
+			NetworkCommMediator networkCommMediator) {
 		this.service = service;
 		this.mediator = mediator;
-		this.dataManager = dataManager;
-		this.networkCommunicator = networkCommunicator;
+		this.networkCommMediator = networkCommMediator;
 	}
 
 	@Override
@@ -50,7 +47,7 @@ public class DropAuctionCommand implements Command{
 		
 		if (row == null) 
 			return false;
-		Service s = dataManager.getService(service);
+		Service s = networkCommMediator.getService(service);
 		if (s == null)
 			return false;
 		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))

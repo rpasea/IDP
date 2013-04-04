@@ -4,29 +4,25 @@ import java.util.Vector;
 
 import javax.swing.JTable;
 
-import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
+import AuctionHouse.Network.NetworkCommMediator;
 
 public class DropOfferCommand implements Command {
-	private DataManager dataManager;
-
-	// TODO: the network module goes here
-	private Object networkCommunicator;
+	private NetworkCommMediator networkCommMediator;
 	private String service;
 	private String buyer;
 	private ControllerMediator mediator;
 	
 	public DropOfferCommand(String service, String buyer,
-			ControllerMediator mediator, DataManager dataManager,
-			Object networkCommunicator) {
+			ControllerMediator mediator,
+			NetworkCommMediator networkCommMediator) {
 		this.service = service;
 		this.buyer = buyer;
 		this.mediator = mediator;
-		this.dataManager = dataManager;
-		this.networkCommunicator = networkCommunicator;
+		this.networkCommMediator = networkCommMediator;
 	}
 	
 	@Override
@@ -48,7 +44,7 @@ public class DropOfferCommand implements Command {
 		if (row == null)
 			return false;
 
-		Service s = dataManager.getService(service);
+		Service s = networkCommMediator.getService(service);
 		if (s == null)
 			return false;
 
@@ -73,6 +69,7 @@ public class DropOfferCommand implements Command {
 		se.setStatus("Offer Made");
 		embeddedModel.setValueAt("No Offer", offerRow, 1);
 		embeddedModel.setValueAt("", offerRow, 2);
+		
 		/*
 		 * TODO: use the network module to notify the buyer
 		 */
