@@ -79,10 +79,9 @@ public class MakeOfferCommand implements Command {
 		embeddedModel.setValueAt(offer, offerRow, 2);
 		
 		/*
-		 * TODO: use the network module to send the offer
+		 * Use the network module to send the offer
 		 */
-//		Message msg = ...;
-//		networkMediator.sendNetworkMessage(msg);
+		networkCommMediator.sendMakeOffer(service, buyer, offer);
 		
 		return true;
 	}
