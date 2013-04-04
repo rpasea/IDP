@@ -11,6 +11,11 @@ public class MakeOfferNetworkMessage implements NetworkMessage {
 		this.offer = offer;
 		
 	}
+
+	@Override
+	public String getDestinationPerson() {
+		return buyer;
+	}
 	
 	@Override
 	public byte[] getSerialized() {
@@ -23,5 +28,4 @@ public class MakeOfferNetworkMessage implements NetworkMessage {
 		// TODO Auto-generated method stub
 
 	}
-
 }

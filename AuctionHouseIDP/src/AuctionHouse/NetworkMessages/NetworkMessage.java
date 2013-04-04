@@ -5,10 +5,12 @@ package AuctionHouse.NetworkMessages;
  */
 
 public interface NetworkMessage {
+	public static final int MAKE_OFFER = 0;
 	
 	/**
 	 * TODO: getDestination()
 	 */
+	String getDestinationPerson();
 	
 	/**
 	 * Returns a serialized message

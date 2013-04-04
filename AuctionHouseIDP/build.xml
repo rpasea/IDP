@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." default="run" name="AuctionHouse">
+<project basedir="." default="run1" name="AuctionHouse">
 	<target name="init">
 		<mkdir dir="bin" />
 	</target>
@@ -12,7 +12,7 @@
 			</classpath>
 		</javac>
 	</target>
-	<target name="run" depends="build">
+	<target name="run1" depends="build">
 		<java fork="true" classname="AuctionHouse.Main.Main">
 			<classpath>
 				<pathelement path="bin/" />
@@ -20,6 +20,18 @@
 				<pathelement path="lib/xpp3_min-1.1.4c.jar" />
 				<pathelement path="lib/xstream-1.4.4.jar" />
 			</classpath>
+			<arg value="1"/>
+		</java>
+	</target>
+	<target name="run2" depends="build">
+		<java fork="true" classname="AuctionHouse.Main.Main">
+			<classpath>
+				<pathelement path="bin/" />
+				<pathelement path="lib/xmlpull-1.1.3.1.jar" />
+				<pathelement path="lib/xpp3_min-1.1.4c.jar" />
+				<pathelement path="lib/xstream-1.4.4.jar" />
+			</classpath>
+			<arg value="2"/>
 		</java>
 	</target>
 	<target name="clean">

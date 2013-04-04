@@ -1,5 +1,6 @@
 package AuctionHouse.Network;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 
 import AuctionHouse.DataContext.Person;
@@ -17,11 +18,11 @@ public class NetworkCommMediator {
 	private WebServiceClient wsClient;
 	private NetworkCommunicator netComm;
 	
-	public NetworkCommMediator(NetworkMediator mediator) {
+	public NetworkCommMediator(NetworkMediator mediator, String hostIp, int hostPort) {
 		this.mediator = mediator;
 		
-		wsClient = new WebServiceClientMockup(this);
-		netComm = new NetworkCommunicator(this);
+		wsClient = new WebServiceClientMockup(this, hostIp, hostPort);
+		netComm = new NetworkCommunicator(this, hostIp, hostPort);
 	}
 	
 	/*
@@ -29,7 +30,14 @@ public class NetworkCommMediator {
 	 */
 	
 	public List<Service> doLogin(String user, String password, int role) {
-		return wsClient.doLogin(user, password, role);
+		List<Service> result = wsClient.doLogin(user, password, role);
+		if(result != null) netComm.startRunning();
+		
+		return result;
+	}
+	
+	public void doLogout(){
+		netComm.stopRunning();
 	}
 
 	public Service getService(String service) {
@@ -42,6 +50,14 @@ public class NetworkCommMediator {
 
 	public int getRole() {
 		return wsClient.getRole();
+	}
+	
+	/*
+	 * WebService related
+	 */
+	
+	public InetSocketAddress getPersonsAddress(String person){
+		return wsClient.getPersonsAddress(person);
 	}
 
 

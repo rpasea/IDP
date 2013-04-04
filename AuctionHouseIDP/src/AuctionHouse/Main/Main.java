@@ -14,7 +14,11 @@ import AuctionHouse.Mediator.Mediator;
  * @author iulius
  */
 public class Main {
+	static int simnr;
+	
     public static void main(String args[]) {
+    	simnr = Integer.parseInt(args[0]);
+    	
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -41,8 +45,12 @@ public class Main {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+            	int port = 50000 + simnr;
+            	
+            	System.out.println("HostPort: " + port);
+            	
                 // Create a new Mediator for all the components
-                Mediator med = new Mediator();
+                Mediator med = new Mediator("127.0.0.1", port);
                 
                 med.init();
             }

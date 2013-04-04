@@ -16,12 +16,12 @@ public class Mediator implements GUIMediator,
 	public static final int ROL_CUMPARATOR = 1;
 
 	private ControllerMediator controllerMediator;
-	private NetworkCommMediator networkMediator;
+	private NetworkCommMediator networkCommMediator;
 	private HashMap<String, Transaction> transactions;
 
-	public Mediator() {
+	public Mediator(String hostIp, int hostPort) {
 		controllerMediator = new ControllerMediator(this);
-		networkMediator = new NetworkCommMediator(this);
+		networkCommMediator = new NetworkCommMediator(this, hostIp, hostPort);
 		transactions = new HashMap<String, Transaction>();
 	}
 
@@ -44,7 +44,7 @@ public class Mediator implements GUIMediator,
 		case Login: {
 			LoginMessage mess = (LoginMessage) message;
 			Command com = new LoginCommand(mess.getUser(), mess.getPassword(),
-					mess.getRole(), networkMediator, controllerMediator);
+					mess.getRole(), networkCommMediator, controllerMediator);
 			result = com.run();
 
 			// FIXME: for testing purpose
@@ -64,6 +64,7 @@ public class Mediator implements GUIMediator,
 		}
 		case Logout:
 			result = controllerMediator.logout();
+			networkCommMediator.doLogout();
 
 			tip = "Logout";
 			break;
@@ -74,7 +75,7 @@ public class Mediator implements GUIMediator,
 			LaunchAuctionMessage mess = (LaunchAuctionMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new LaunchAuctionCommand(mess.getService(),
-					controllerMediator, networkMediator);
+					controllerMediator, networkCommMediator);
 			result = com.run();
 
 			tip = "LaunchAuction";
@@ -84,7 +85,7 @@ public class Mediator implements GUIMediator,
 			DropAuctionMessage mess = (DropAuctionMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new DropAuctionCommand(mess.getService(),
-					controllerMediator, networkMediator);
+					controllerMediator, networkCommMediator);
 			result = com.run();
 
 			tip = "DropAuction";
@@ -95,7 +96,7 @@ public class Mediator implements GUIMediator,
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new AcceptOfferCommand(mess.getService(),
 					mess.getPerson(), mess.getOffer(), controllerMediator,
-					networkMediator, this);
+					networkCommMediator, this);
 			result = com.run();
 
 			tip = "AcceptOffer";
@@ -105,7 +106,7 @@ public class Mediator implements GUIMediator,
 			RejectOfferMessage mess = (RejectOfferMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new RejectOfferCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, networkMediator);
+					mess.getPerson(), controllerMediator, networkCommMediator);
 			result = com.run();
 
 			tip = "RejectOffer";
@@ -119,7 +120,7 @@ public class Mediator implements GUIMediator,
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new MakeOfferCommand(mess.getService(),
 					mess.getPerson(), mess.getOffer(), controllerMediator,
-					networkMediator, this);
+					networkCommMediator, this);
 			result = com.run();
 
 			tip = "MakeOffer";
@@ -129,7 +130,7 @@ public class Mediator implements GUIMediator,
 			DropOfferMessage mess = (DropOfferMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new DropOfferCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, networkMediator);
+					mess.getPerson(), controllerMediator, networkCommMediator);
 			result = com.run();
 			tip = "DropOffer";
 			break;
@@ -142,7 +143,7 @@ public class Mediator implements GUIMediator,
 	}
 
 	public int getRole() {
-		return networkMediator.getRole();
+		return networkCommMediator.getRole();
 	}
 
 	/*
@@ -172,7 +173,7 @@ public class Mediator implements GUIMediator,
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new StartTransactionCommand(mess.getService(),
 					mess.getSeller(), mess.getBuyer(), mess.getOffer(),
-					controllerMediator, networkMediator);
+					controllerMediator, networkCommMediator);
 			result = com.run();
 			if (result != null) {
 				transactions.put(mess.getService() + "_" + mess.getSeller()
@@ -194,7 +195,7 @@ public class Mediator implements GUIMediator,
 			OfferAcceptedMessage mess = (OfferAcceptedMessage) message;
 			Command com = new OfferAcceptedCommand(mess.getService(),
 					mess.getPerson(), mess.getOffer(), controllerMediator,
-					networkMediator);
+					networkCommMediator);
 			result = com.run();
 			if (result != null) {
 				final Transaction t = (Transaction)result;
@@ -211,7 +212,7 @@ public class Mediator implements GUIMediator,
 		case OfferRefused: {
 			OfferRefusedMessage mess = (OfferRefusedMessage) message;
 			Command com = new OfferRefusedCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, networkMediator, null);
+					mess.getPerson(), controllerMediator, networkCommMediator, null);
 			result = com.run();
 			
 			tip = "OfferRefused";
@@ -220,7 +221,7 @@ public class Mediator implements GUIMediator,
 		case OfferExceed: {
 			OfferExceedMessage mess = (OfferExceedMessage) message;
 			Command com = new OfferExceedCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, networkMediator);
+					mess.getPerson(), controllerMediator, networkCommMediator);
 			result = com.run();
 			
 			tip = "OfferExceed";
