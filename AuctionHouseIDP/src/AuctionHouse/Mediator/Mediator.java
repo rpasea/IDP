@@ -20,7 +20,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	private DataManager dataManager;
 	private HashMap<String, Transaction> transactions;
 
-	// FIXME: Sters la etapa 2
+	// FIXME: for testing purpose
 	private SimulatorThread simulation;
 
 	public Mediator(DataManager dataMgr) {
@@ -28,7 +28,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		dataManager = dataMgr;
 		transactions = new HashMap<String, Transaction>();
 
-		// FIXME: Sters la etapa 2
+		// FIXME: for testing purpose
 		simulation = new SimulatorThread(this, controllerMediator, dataManager);
 	}
 
@@ -55,7 +55,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 					mess.getRole(), dataManager, controllerMediator);
 			result = com.run();
 
-			// FIXME: Sters la etapa 2
+			// FIXME: for testing purpose
 			if ((Boolean) result) {
 				if (mess.getUser().equals("gicu")) {
 					simulation.role = ROL_CUMPARATOR;
@@ -206,7 +206,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			if (result != null) {
 				final Transaction t = (Transaction)result;
 				result = true;
-				//FIXME: for testing purpose 
+				//FIXME: for testing purpose
 				(new TestWorker(t)).execute();
 			} else {
 				result = false;
