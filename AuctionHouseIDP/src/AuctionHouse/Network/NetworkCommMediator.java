@@ -1,21 +1,20 @@
 package AuctionHouse.Network;
 
-import java.awt.Component;
 import java.util.List;
 
 import AuctionHouse.DataContext.Person;
 import AuctionHouse.DataContext.Service;
-import AuctionHouse.Mediator.Mediator;
+import AuctionHouse.Mediator.NetworkMediator;
 
 /**
  * Mediates network workers with main mediator
  */
 
 public class NetworkCommMediator {
-	private Mediator mediator;
+	private NetworkMediator mediator;
 	private WebServiceClient wsClient;
 	
-	public NetworkCommMediator(Mediator mediator) {
+	public NetworkCommMediator(NetworkMediator mediator) {
 		this.mediator = mediator;
 		
 		wsClient = new WebServiceClientMockup(this);
