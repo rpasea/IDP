@@ -1,4 +1,4 @@
-package AuctionHouseIDP.Network;
+package AuctionHouse.Network;
 
 /**
  * Mediates network workers with main mediator

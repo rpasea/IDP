@@ -1,4 +1,4 @@
-package AuctionHouseIDP.Network;
+package AuctionHouse.Network;
 
 /**
  * Communicates with WebService for login, database info and p2p

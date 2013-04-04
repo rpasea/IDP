@@ -1,4 +1,4 @@
-package AuctionHouseIDP.Network;
+package AuctionHouse.Network;
 
 /**
  * Takes care of network messages serialization

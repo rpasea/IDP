@@ -1,4 +1,4 @@
-package AuctionHouseIDP.Network;
+package AuctionHouse.Network;
 
 /**
  * Communicates directly (p2p) with another user (of opposite role)
