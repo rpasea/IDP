@@ -8,6 +8,7 @@ import AuctionHouse.Main.SimulatorThread;
 import AuctionHouse.Main.TestWorker;
 import AuctionHouse.Messages.*;
 import AuctionHouse.Network.NetworkCommMediator;
+import AuctionHouse.NetworkMessages.NetworkMessage;
 
 public class Mediator implements GUIMediator,
 		NetworkMediator, WebClientMediator {
@@ -227,7 +228,14 @@ public class Mediator implements GUIMediator,
 			tip = "OfferExceed";
 			break;
 		}
-
+		case MakeOffer: {
+			MakeOfferMessage mess = (MakeOfferMessage) message;
+			
+			System.out.println(mess.getService() + " " + mess.getPerson());
+			
+			tip = "Make Offer";
+			break;
+		}
 		}
 		System.out.println("Mesaj: " + tip);
 		return result;

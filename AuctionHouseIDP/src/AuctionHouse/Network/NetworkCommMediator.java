@@ -22,7 +22,7 @@ public class NetworkCommMediator {
 		this.mediator = mediator;
 		
 		wsClient = new WebServiceClientMockup(this, hostIp, hostPort);
-		netComm = new NetworkCommunicator(this, hostIp, hostPort);
+		netComm = new NetworkCommunicator(this, hostIp, hostPort, mediator);
 	}
 	
 	/*
