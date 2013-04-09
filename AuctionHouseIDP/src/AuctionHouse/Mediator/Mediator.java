@@ -183,7 +183,7 @@ public class Mediator implements GUIMediator,
 				final Transaction t = (Transaction) result;
 				result = true;
 				// FIXME: for testing purpose
-				(new TestWorker(t)).execute();
+				//(new TestWorker(t)).execute();
 			} else {
 				result = false;
 			}

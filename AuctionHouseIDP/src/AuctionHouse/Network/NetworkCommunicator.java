@@ -42,7 +42,7 @@ public class NetworkCommunicator extends Thread {
 	private LinkedBlockingQueue<ByteBuffer> bufferPool;
 	private HashMap <SocketAddress, String> addressToPerson;
 	
-	private ByteBuffer rBuffer = ByteBuffer.allocate(8192);
+	//private ByteBuffer rBuffer = ByteBuffer.allocate(8192);
 	
 	
 	private HashMap<SelectionKey, MessageBuffer> readBuffers;
@@ -132,7 +132,15 @@ public class NetworkCommunicator extends Thread {
 
 					if (key.isReadable()) {
 						System.out.println("Read with key: " + key);
-						this.doRead(key);
+						//this.doRead(key);
+						/*
+						 * We set the key as unreadable, so no more reads from this key until
+						 * the current one is treated
+						 */
+						synchronized (this) {
+							key.interestOps(key.interestOps() ^ SelectionKey.OP_READ);
+						}
+						this.threadPool.submit(new ReadJob(this, key));
 					}
 				}
 
@@ -174,17 +182,19 @@ public class NetworkCommunicator extends Thread {
 
 	protected void doRead(SelectionKey key) throws Exception {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
-
-		this.rBuffer.clear();
+		SocketAddress addr = socketChannel.getRemoteAddress();
+		
+		ByteBuffer rBuffer = this.bufferPool.take();
+		rBuffer.clear();
 
 		int numRead;
 		
 		try {
-			numRead = socketChannel.read(this.rBuffer);
+			numRead = socketChannel.read(rBuffer);
 		} catch (Exception e) {
 			numRead = -1000000000;
 		}
-
+		
 		if (numRead <= 0) {
 			System.out.println("[NetworkCommunicator] S-a inchis socket-ul asociat cheii " + key);
 			key.channel().close();
@@ -193,23 +203,31 @@ public class NetworkCommunicator extends Thread {
 			return;
 		}
 		
-		byte[] currentBuf = this.rBuffer.array();
+		System.out.println("[NetworkCommunicator] S-au citit " + numRead + " bytes.");
+		
+		byte[] currentBuf = rBuffer.array();
 		MessageBuffer msgBuf = readBuffers.get(key);
 		
 		if (msgBuf == null) {
 			msgBuf = new MessageBuffer();
-			msgBuf.setSource(mediator.getPerson(socketChannel.getRemoteAddress()));
+			msgBuf.setSource(mediator.getPerson(addr));
 			this.readBuffers.put(key, msgBuf);
 		}
 		
 		msgBuf.putBytes(currentBuf,numRead);
 		
-		/*
-		 * TODO: This has to be dispatched to another thread
-		 */
 		if (msgBuf.hasMessages())
 			for (NetworkMessage nMess : msgBuf.getAndClearMessages())
 				mediator.sendNetworkMessage(nMess.toMessage());
+		
+		this.bufferPool.add(rBuffer);
+		
+		/*
+		 * Set the key to accept further reads
+		 */
+		synchronized (this) {
+			key.interestOps(key.interestOps() | SelectionKey.OP_READ);
+		}
 
 	}
 
