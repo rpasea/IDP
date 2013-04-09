@@ -30,4 +30,8 @@ public interface NetworkMessage {
 	 * Transforms the network message into an internal message
 	 */
 	Message toMessage();
+	
+	void setSource(String source);
+	
+	String getSource();
 }

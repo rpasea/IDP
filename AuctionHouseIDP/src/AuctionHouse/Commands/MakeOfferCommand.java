@@ -18,6 +18,7 @@ public class MakeOfferCommand implements Command {
 	private String offer;
 	private ControllerMediator controllerMediator;
 	private NetworkMediator mediator;
+	private boolean sendToNetwork;
 	
 	public MakeOfferCommand(String service, String buyer, String offer,
 			ControllerMediator controllerMediator, NetworkCommMediator networkCommMediator,
@@ -28,6 +29,19 @@ public class MakeOfferCommand implements Command {
 		this.controllerMediator = controllerMediator;
 		this.networkCommMediator = networkCommMediator;
 		this.mediator = networkMediator;
+		this.sendToNetwork = true;
+	}
+	
+	public MakeOfferCommand(String service, String buyer, String offer,
+			ControllerMediator controllerMediator, NetworkCommMediator networkCommMediator,
+			NetworkMediator networkMediator, boolean sendToNetwork) {
+		this.service = service;
+		this.buyer = buyer;
+		this.offer = offer;
+		this.controllerMediator = controllerMediator;
+		this.networkCommMediator = networkCommMediator;
+		this.mediator = networkMediator;
+		this.sendToNetwork = sendToNetwork;
 	}
 	
 	@Override
@@ -81,7 +95,8 @@ public class MakeOfferCommand implements Command {
 		/*
 		 * Use the network module to send the offer
 		 */
-		networkCommMediator.sendMakeOffer(service, buyer, offer);
+		if (sendToNetwork)
+			networkCommMediator.sendMakeOffer(service, buyer, offer);
 		
 		return true;
 	}

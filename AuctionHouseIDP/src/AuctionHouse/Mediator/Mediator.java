@@ -1,5 +1,6 @@
 package AuctionHouse.Mediator;
 
+import java.net.SocketAddress;
 import java.util.HashMap;
 
 import AuctionHouse.Commands.*;
@@ -231,14 +232,27 @@ public class Mediator implements GUIMediator,
 		case MakeOffer: {
 			MakeOfferMessage mess = (MakeOfferMessage) message;
 			
-			System.out.println(mess.getService() + " " + mess.getPerson());
-			
+			Command com = new MakeOfferCommand(mess.getService(),
+					mess.getPerson(), mess.getOffer(), controllerMediator,
+					networkCommMediator, this, false);
+			result = com.run();
+
 			tip = "Make Offer";
 			break;
 		}
 		}
 		System.out.println("Mesaj: " + tip);
 		return result;
+	}
+	
+	/*
+	 * TODO: implement this
+	 */
+	public String getPerson(SocketAddress addr) {
+		if (networkCommMediator.getIdentity().getName().equals("gicu"))
+			return "Lulache";
+		else 
+			return "gicu";
 	}
 
 }

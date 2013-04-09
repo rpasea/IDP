@@ -13,6 +13,7 @@ public class MessageBuffer {
 	private Integer currentMsgSize;
 	private Integer currentMsgType;
 	private ByteBuffer byteBuffer;
+	private String source;
 	private int intBufferPos;
 
 	public MessageBuffer() {
@@ -22,6 +23,15 @@ public class MessageBuffer {
 		messages = new LinkedList<NetworkMessage>();
 		intBufferPos = 0;
 	}
+	
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
 
 	public synchronized void putBytes(byte[] bytes, int size) {
 		for (int i = 0 ; i < size; i++) {
@@ -54,6 +64,7 @@ public class MessageBuffer {
 					byteBuffer.flip();
 					
 					msg.deserialize(byteBuffer);
+					msg.setSource(source);
 					
 					byteBuffer.flip();
 					

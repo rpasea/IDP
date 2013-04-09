@@ -11,13 +11,26 @@ public class MakeOfferNetworkMessage implements NetworkMessage {
 	private final SerializableString service;
 	private final SerializableString buyer;
 	private final SerializableString offer;
+	/*
+	 * This field is generated on receive, don't serialize it
+	 */
+	private String source;
 	private final int type;
 	
 	public MakeOfferNetworkMessage() {
 		this.service = new SerializableString();
 		this.buyer = new SerializableString();
 		this.offer = new SerializableString();
+		this.source = null;
 		this.type = NetworkMessage.MAKE_OFFER;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
 	}
 
 	public MakeOfferNetworkMessage(String service, String buyer, String offer){
@@ -63,6 +76,6 @@ public class MakeOfferNetworkMessage implements NetworkMessage {
 
 	@Override
 	public Message toMessage() {
-		return new MakeOfferMessage(service.getString(),buyer.getString(),offer.getString());
+		return new MakeOfferMessage(service.getString(),source,offer.getString());
 	}
 }

@@ -3,6 +3,7 @@ package AuctionHouse.Network;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -39,6 +40,7 @@ public class NetworkCommunicator extends Thread {
 	private ArrayList<SocketChannel> socketChannels;
 	private ExecutorService threadPool;
 	private LinkedBlockingQueue<ByteBuffer> bufferPool;
+	private HashMap <SocketAddress, String> addressToPerson;
 	
 	private ByteBuffer rBuffer = ByteBuffer.allocate(8192);
 	
@@ -67,6 +69,7 @@ public class NetworkCommunicator extends Thread {
 		}
 		
 		readBuffers = new HashMap<SelectionKey, MessageBuffer>();
+		addressToPerson = new HashMap<SocketAddress, String>();
 
 		socketChannels = new ArrayList<SocketChannel>();
 	}
@@ -164,6 +167,8 @@ public class NetworkCommunicator extends Thread {
 		socketChannel.register(this.selector, SelectionKey.OP_READ
 				| SelectionKey.OP_READ);
 
+		
+		addressToPerson.put(socketChannel.getRemoteAddress(), mediator.getPerson(socketChannel.getRemoteAddress()));
 		this.socketChannels.add(socketChannel);
 	}
 
@@ -193,6 +198,7 @@ public class NetworkCommunicator extends Thread {
 		
 		if (msgBuf == null) {
 			msgBuf = new MessageBuffer();
+			msgBuf.setSource(mediator.getPerson(socketChannel.getRemoteAddress()));
 			this.readBuffers.put(key, msgBuf);
 		}
 		
