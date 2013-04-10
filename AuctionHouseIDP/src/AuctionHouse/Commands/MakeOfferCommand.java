@@ -58,7 +58,8 @@ public class MakeOfferCommand implements Command {
 		ServiceEntry se = s.getEntry(buyer);
 		
 		if (se.getState() != ServiceEntry.State.NO_OFFER
-				&& se.getState() != ServiceEntry.State.OFFER_EXCEED){
+				&& se.getState() != ServiceEntry.State.OFFER_EXCEED
+				&& se.getState() != ServiceEntry.State.OFFER_REJECTED){
 			System.out.println("ServiceEntry [" + se.getPerson() + "] isn't NO_OFFER, nor OFFER_EXCEED: " + se.getState() + ", " + se.getStatus());
 			return false;
 		}
@@ -67,7 +68,7 @@ public class MakeOfferCommand implements Command {
 		int offerRow = embeddedModel.getInnerPersonRowNr(se.getPerson());
 		
 		embeddedModel.setValueAt("Offer Made", offerRow, 1);
-		embeddedModel.setValueAt(se.getOffer(), offerRow, 2);
+		embeddedModel.setValueAt(offer, offerRow, 2);
 		
 		se.setOffer(offer);
 		se.setState(ServiceEntry.State.OFFER_MADE);
