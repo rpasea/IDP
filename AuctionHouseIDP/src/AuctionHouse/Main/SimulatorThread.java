@@ -1,9 +1,7 @@
 package AuctionHouse.Main;
 
-import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.Mediator;
-import AuctionHouse.Messages.*;
 
 public class SimulatorThread extends Thread {
 	

@@ -1,6 +1,5 @@
 package AuctionHouse.GUI;
 
-import AuctionHouse.Mediator.GUIMediator;
 import java.awt.event.KeyEvent;
 
 public class LoginView extends javax.swing.JFrame {

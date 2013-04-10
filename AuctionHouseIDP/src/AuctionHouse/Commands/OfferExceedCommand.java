@@ -9,7 +9,6 @@ import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
-import AuctionHouse.DataContext.DataManager;
 
 public class OfferExceedCommand implements Command {
 	private DataManager dataManager;

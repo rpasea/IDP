@@ -15,6 +15,7 @@ public interface NetworkMessage {
 	 * TODO: getDestination()
 	 */
 	String getDestinationPerson();
+	void setDestinationPerson(String dest);
 	
 	/**
 	 * Returns a serialized message

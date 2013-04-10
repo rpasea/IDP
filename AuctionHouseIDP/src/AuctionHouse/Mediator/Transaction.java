@@ -1,11 +1,7 @@
 package AuctionHouse.Mediator;
 
 
-import java.util.List;
 import java.util.Observable;
-import java.util.concurrent.Semaphore;
-
-import javax.swing.SwingWorker;
 
 public class Transaction extends Observable {
 

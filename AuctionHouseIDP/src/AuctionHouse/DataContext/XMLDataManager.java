@@ -1,11 +1,8 @@
 package AuctionHouse.DataContext;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.List;
-
-import AuctionHouse.Mediator.Mediator;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;

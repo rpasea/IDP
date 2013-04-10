@@ -15,6 +15,10 @@ public class MakeOfferNetworkMessage implements NetworkMessage {
 	 * This field is generated on receive, don't serialize it
 	 */
 	private String source;
+	/*
+	 * This field is generated on send, don't serialize it
+	 */
+	private String dest;
 	private final int type;
 	
 	public MakeOfferNetworkMessage() {
@@ -43,12 +47,16 @@ public class MakeOfferNetworkMessage implements NetworkMessage {
 
 	@Override
 	public String getDestinationPerson() {
-		return buyer.getString();
+		return dest;
+	}
+	
+	@Override
+	public void setDestinationPerson(String dest) {
+		this.dest = dest;
 	}
 	
 	@Override
 	public byte[] serialize() {
-		LinkedList<byte[]> list = new LinkedList<byte[]>();
 		int size = 4; // the type int
 		byte[] service = this.service.serialize();
 		byte[] buyer = this.buyer.serialize();

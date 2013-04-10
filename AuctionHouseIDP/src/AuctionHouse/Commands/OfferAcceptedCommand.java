@@ -13,7 +13,6 @@ import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.Transaction;
-import AuctionHouse.DataContext.DataManager;
 
 public class OfferAcceptedCommand implements Command {
 	private DataManager dataManager;

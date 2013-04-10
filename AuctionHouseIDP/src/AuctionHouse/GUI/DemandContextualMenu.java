@@ -7,8 +7,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import AuctionHouse.Messages.AcceptOfferMessage;
-import AuctionHouse.Messages.DropAuctionMessage;
-import AuctionHouse.Messages.MakeOfferMessage;
 import AuctionHouse.Messages.Message;
 import AuctionHouse.Messages.RejectOfferMessage;
 

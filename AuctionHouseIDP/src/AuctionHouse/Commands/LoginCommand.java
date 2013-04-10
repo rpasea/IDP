@@ -10,14 +10,12 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 import AuctionHouse.DataContext.DataManager;
-import AuctionHouse.DataContext.Person;
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableCellRenderer;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.Mediator;
-import AuctionHouse.DataContext.DataManager;
 
 public class LoginCommand implements Command {
 

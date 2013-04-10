@@ -6,7 +6,6 @@ import java.awt.Component;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
 public class AHTableCellRenderer implements TableCellRenderer {

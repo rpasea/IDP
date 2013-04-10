@@ -2,19 +2,10 @@ package AuctionHouse.Commands;
 
 import java.util.Vector;
 
-import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumnModel;
-
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.Service;
-import AuctionHouse.DataContext.ServiceEntry;
-import AuctionHouse.GUI.AHTableCellRenderer;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
-import AuctionHouse.DataContext.DataManager;
 
 public class DropAuctionCommand implements Command{
 

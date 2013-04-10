@@ -1,7 +1,5 @@
 package AuctionHouse.GUI;
 
-import javax.swing.JPopupMenu;
-
 import AuctionHouse.Mediator.Mediator;
 import AuctionHouse.Messages.Message;
 

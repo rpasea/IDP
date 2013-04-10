@@ -11,7 +11,6 @@ import AuctionHouse.Main.SimulatorThread;
 import AuctionHouse.Main.TestWorker;
 import AuctionHouse.Messages.*;
 import AuctionHouse.Network.NetworkCommunicator;
-import AuctionHouse.NetworkMessages.NetworkMessage;
 
 public class Mediator implements GUIMediator,
 		NetworkMediator, WebClientMediator {

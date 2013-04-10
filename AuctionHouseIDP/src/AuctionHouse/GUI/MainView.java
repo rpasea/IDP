@@ -2,13 +2,10 @@ package AuctionHouse.GUI;
 
 import java.awt.Component;
 
-import javax.swing.DefaultCellEditor;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
-
-import AuctionHouse.Mediator.GUIMediator;
 
 public class MainView extends javax.swing.JFrame {
 	private AHTableModel tableModel;

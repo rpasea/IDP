@@ -5,7 +5,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 

@@ -311,7 +311,20 @@ public class NetworkCommunicator extends Thread {
 			while (wbuf.size() > 0) {
 				byte[] bbuf = wbuf.get(0);
 				wbuf.remove(0);
-
+				int available = wBuffer.capacity() - wBuffer.position();
+				
+				/*
+				 * We make sure there is no overflow
+				 */
+				if (bbuf.length > available) {
+					byte[] treated = new byte[available];
+					byte[] remaining = new byte[bbuf.length - available];
+					System.arraycopy(bbuf, 0, treated, 0, available);
+					System.arraycopy(bbuf, available, remaining, 0, bbuf.length - available);
+					wbuf.add(0,remaining);
+					bbuf = treated;
+				}
+				
 				wBuffer.clear();
 				wBuffer.put(bbuf);
 				wBuffer.flip();

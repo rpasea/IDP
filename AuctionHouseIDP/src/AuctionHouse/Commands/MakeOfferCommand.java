@@ -8,7 +8,6 @@ import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
-import AuctionHouse.Mediator.NetworkMediator;
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.Network.NetworkCommunicator;
 import AuctionHouse.NetworkMessages.MakeOfferNetworkMessage;
@@ -105,6 +104,7 @@ public class MakeOfferCommand implements Command {
 		 */
 		if (sendToNetwork){
 			NetworkMessage netMsg = new MakeOfferNetworkMessage(service, buyer, offer);
+			netMsg.setDestinationPerson(buyer);
 			communicator.sendMessage(netMsg);
 		}
 		
