@@ -17,29 +17,29 @@ import AuctionHouse.GUI.AHTableCellRenderer;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.Mediator;
-import AuctionHouse.Network.NetworkCommMediator;
+import AuctionHouse.DataContext.DataManager;
 
 public class LoginCommand implements Command {
 
 	private String user, password;
 	private int role;
 	private ControllerMediator mediator;
-	private NetworkCommMediator netMediator;
+	private DataManager dataManager;
 
 	public LoginCommand(String user, String password, int role,
-			NetworkCommMediator dataManager, ControllerMediator med) {
+			DataManager dataManager, ControllerMediator med) {
 		this.user = user;
 		this.password = password;
 		this.role = role;
 		this.mediator = med;
-		this.netMediator = dataManager;
+		this.dataManager = dataManager;
 	}
 
 	public Object run() {
-		if (!isLoginValid(user, password, role))
+		if (!dataManager.isLoginValid(user, password, role))
 			return false;
 
-		List<Service> services = netMediator.doLogin(user, password, role);
+		List<Service> services = dataManager.doLogin(user, password, role);
 
 		Vector<Object> columnNames = new Vector<Object>();
 		columnNames.add("Service");
@@ -106,13 +106,4 @@ public class LoginCommand implements Command {
 
 		return true;
 	}
-
-	private boolean isLoginValid(String user, String password, int role) {
-		if(user == null || user.equals("") ||
-				password == null ||
-				role < 0 || role > 1)
-			return false;
-		return true;
-	}
-
 }

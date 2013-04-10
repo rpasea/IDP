@@ -32,7 +32,6 @@ public class NetworkCommunicator extends Thread {
 	 */
 	public static final int NumberOfThreadsInPool = 3;
 
-	private NetworkCommMediator netMediator;
 	private NetworkMediator mediator;
 
 	private InetSocketAddress hostSocketAddress;
@@ -56,12 +55,11 @@ public class NetworkCommunicator extends Thread {
 
 	private boolean running;
 
-	public NetworkCommunicator(NetworkCommMediator netMediator, String hostIp,
-			int hostPort, NetworkMediator mediator) {
+	public NetworkCommunicator(NetworkMediator mediator, String hostIp,
+			int hostPort) {
 		super();
 
 		this.mediator = mediator;
-		this.netMediator = netMediator;
 		hostSocketAddress = new InetSocketAddress(hostIp, hostPort);
 		try {
 			selector = SelectorProvider.provider().openSelector();
@@ -351,7 +349,7 @@ public class NetworkCommunicator extends Thread {
 
 	public void sendMessage(NetworkMessage netMsg) {
 		String person = netMsg.getDestinationPerson();
-		InetSocketAddress addr = netMediator.getPersonsAddress(person);
+		InetSocketAddress addr = mediator.getPersonsAddress(person);
 		byte[] msg = netMsg.serialize();
 
 		if (addressToChannel.containsKey(addr)) { // Not tested !!!
@@ -392,6 +390,10 @@ public class NetworkCommunicator extends Thread {
 			}
 		}
 
+	}
+
+	public int getPort() {
+		return hostSocketAddress.getPort();
 	}
 
 }

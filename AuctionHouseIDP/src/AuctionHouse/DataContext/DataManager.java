@@ -8,4 +8,5 @@ public interface DataManager {
 	public List<Service> doLogin(String user, String password, int role); 
 	public Service getService(String service);
 	public Person getIdentity();
+	boolean isLoginValid(String user, String password, int role);
 }

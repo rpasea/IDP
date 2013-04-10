@@ -8,20 +8,20 @@ import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
-import AuctionHouse.Network.NetworkCommMediator;
+import AuctionHouse.DataContext.DataManager;
 
 public class RejectOfferCommand implements Command {
-	private NetworkCommMediator networkCommMediator;
+	private DataManager dataManager;
 	private String service;
 	private String seller;
 	private ControllerMediator mediator;
 
 	public RejectOfferCommand(String service, String seller,
-			ControllerMediator mediator, NetworkCommMediator networkCommMediator) {
+			ControllerMediator mediator, DataManager dataManager) {
 		this.service = service;
 		this.seller = seller;
 		this.mediator = mediator;
-		this.networkCommMediator = networkCommMediator;
+		this.dataManager = dataManager;
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class RejectOfferCommand implements Command {
 		if (row == null)
 			return false;
 
-		Service s = networkCommMediator.getService(service);
+		Service s = dataManager.getService(service);
 		if (s == null)
 			return false;
 		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))

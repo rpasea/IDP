@@ -34,7 +34,7 @@ public class XMLDataManager implements DataManager {
 		}
 	}
 	
-	private boolean isLoginValid(String user, String password, int role) {
+	public boolean isLoginValid(String user, String password, int role) {
 		for (Person p : db.getPeople()) {
 			if (p.getName().equals(user) && p.getRole()==role && p.getPassword().equals(password) ) {
 				return true;

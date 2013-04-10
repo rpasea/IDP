@@ -11,7 +11,7 @@ import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.NetworkMediator;
 import AuctionHouse.Messages.Message;
 import AuctionHouse.Messages.StartTransactionMessage;
-import AuctionHouse.Network.NetworkCommMediator;
+import AuctionHouse.DataContext.DataManager;
 
 public class AcceptOfferCommand implements Command {
 	private String service;
@@ -19,17 +19,17 @@ public class AcceptOfferCommand implements Command {
 	private String offer;
 	private ControllerMediator controllerMediator;
 	private NetworkMediator networkMediator;
-	private NetworkCommMediator networkCommMediator;
+	private DataManager dataManager;
 
 	public AcceptOfferCommand(String service, String seller, String offer,
-			ControllerMediator mediator, NetworkCommMediator networkCommMediator,
+			ControllerMediator mediator, DataManager dataManager,
 			NetworkMediator networkMediator) {
 		this.service = service;
 		this.seller = seller;
 		this.offer = offer;
 		this.controllerMediator = mediator;
 		this.networkMediator = networkMediator;
-		this.networkCommMediator = networkCommMediator;
+		this.dataManager = dataManager;
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class AcceptOfferCommand implements Command {
 		if (row == null)
 			return false;
 
-		Service s = networkCommMediator.getService(service);
+		Service s = dataManager.getService(service);
 		if (s == null)
 			return false;
 		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))
@@ -80,7 +80,7 @@ public class AcceptOfferCommand implements Command {
 		embeddedModel.setValueAt("Offer Accepted", offerRow, 1);
 		
 		// Use the network module to notify the seller
-		Message msg = new StartTransactionMessage(service,seller, networkCommMediator.getIdentity().getName(),offer);
+		Message msg = new StartTransactionMessage(service,seller, dataManager.getIdentity().getName(),offer);
 		networkMediator.sendNetworkMessage(msg);
 		return true;
 	}

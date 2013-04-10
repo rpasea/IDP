@@ -8,21 +8,21 @@ import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
-import AuctionHouse.Network.NetworkCommMediator;
+import AuctionHouse.DataContext.DataManager;
 
 public class DropOfferCommand implements Command {
-	private NetworkCommMediator networkCommMediator;
+	private DataManager dataManager;
 	private String service;
 	private String buyer;
 	private ControllerMediator mediator;
 	
 	public DropOfferCommand(String service, String buyer,
 			ControllerMediator mediator,
-			NetworkCommMediator networkCommMediator) {
+			DataManager dataManager) {
 		this.service = service;
 		this.buyer = buyer;
 		this.mediator = mediator;
-		this.networkCommMediator = networkCommMediator;
+		this.dataManager = dataManager;
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class DropOfferCommand implements Command {
 		if (row == null)
 			return false;
 
-		Service s = networkCommMediator.getService(service);
+		Service s = dataManager.getService(service);
 		if (s == null)
 			return false;
 

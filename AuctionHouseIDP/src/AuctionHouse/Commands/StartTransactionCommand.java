@@ -13,23 +13,23 @@ import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.Mediator;
 import AuctionHouse.Mediator.Transaction;
-import AuctionHouse.Network.NetworkCommMediator;
+import AuctionHouse.DataContext.DataManager;
 
 public class StartTransactionCommand implements Command {
 
 	private String service, seller, buyer, offer;
 	private ControllerMediator controllerMediator;
-	private NetworkCommMediator networkCommMediator;
+	private DataManager dataManager;
 
 	public StartTransactionCommand(String service, String seller, String buyer,
 			String offer, ControllerMediator controllerMediator,
-			NetworkCommMediator networkCommMediator) {
+			DataManager dataManager) {
 		this.service = service;
 		this.seller = seller;
 		this.buyer = buyer;
 		this.offer = offer;
 		this.controllerMediator = controllerMediator;
-		this.networkCommMediator = networkCommMediator;
+		this.dataManager = dataManager;
 	}
 
 	@Override
@@ -51,12 +51,12 @@ public class StartTransactionCommand implements Command {
 		if (row == null)
 			return null;
 
-		Service s = networkCommMediator.getService(service);
+		Service s = dataManager.getService(service);
 		ServiceEntry se = null;
 		if (s == null)
 			return null;
 		
-		if (networkCommMediator.getRole() == Mediator.ROL_CUMPARATOR) {
+		if (dataManager.getRole() == Mediator.ROL_CUMPARATOR) {
 			if (s.getStatus().equals("Inactive")
 					|| row.get(1).equals("Inactive"))
 				return null;

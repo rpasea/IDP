@@ -49,8 +49,9 @@ public class Main {
             	
             	System.out.println("HostPort: " + port);
             	
+            	DataManager dm = new XMLDataManager("Database.xml");
                 // Create a new Mediator for all the components
-                Mediator med = new Mediator("127.0.0.1", port);
+                Mediator med = new Mediator(dm,"127.0.0.1", port);
                 
                 med.init();
             }
