@@ -12,7 +12,6 @@ import javax.swing.table.TableColumnModel;
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
-import AuctionHouse.DataContext.ServicesObserver;
 import AuctionHouse.GUI.AHTableCellRenderer;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
@@ -51,14 +50,8 @@ public class LoginCommand implements Command {
 		embeddedCNames.add("Progress");
 
 		final AHTableModel tableModel = new AHTableModel(columnNames, 0);
-		ServicesObserver observer = new ServicesObserver(tableModel);
 
 		for (Service s : services) {
-			// Register the observer
-			s.registerObserver(observer);
-			for (ServiceEntry se : s.getEntries())
-				se.registerObserver(observer);
-			
 			Vector<Object> outerTableEntry = new Vector<Object>();
 			outerTableEntry.add(s.getName());
 			if (role == Mediator.ROL_FURNIZOR) {

@@ -11,8 +11,6 @@ public class ServiceEntry {
 	
 	private State state;
 	
-	private ServicesObserver observer;
-	
 	private Service service;
 	private String person;
 	private String status;
@@ -66,10 +64,6 @@ public class ServiceEntry {
 
 	public void setState(State state) {
 		this.state = state;
-		
-		// Notify the observer
-		if(observer != null)
-			observer.notify(this);
 	}
 
 	public Service getService() {
@@ -78,9 +72,5 @@ public class ServiceEntry {
 
 	public void setService(Service service) {
 		this.service = service;
-	}
-
-	public void registerObserver(ServicesObserver observer) {
-		this.observer = observer;
 	}
 }

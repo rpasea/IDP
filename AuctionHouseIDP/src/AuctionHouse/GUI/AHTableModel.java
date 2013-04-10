@@ -43,6 +43,17 @@ public class AHTableModel extends DefaultTableModel{
 	public AHTableModel getInnerTableModel(String service){
 		return (AHTableModel) ((JTable) getValueAt(getRowNr(service), 2)).getModel();
 	}
+	
+	public int getInnerPersonRowNr(String person){ 
+		int offerRow = 0;
+		for (int i = 0 ; i < getRowCount(); i++) {
+			String name = (String)getValueAt(i, 0);
+			if (name.equals(person))
+				break;
+			offerRow++;
+		}
+		return offerRow;
+	}
 
 	public boolean isCellEditable (int row, int column) {
 		//if (column == this.getColumnCount() - 1)

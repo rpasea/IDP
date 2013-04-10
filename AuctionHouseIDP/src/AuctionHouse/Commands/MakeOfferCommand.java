@@ -63,6 +63,12 @@ public class MakeOfferCommand implements Command {
 			return false;
 		}
 		
+		AHTableModel embeddedModel = model.getInnerTableModel(se.getService().getName());
+		int offerRow = embeddedModel.getInnerPersonRowNr(se.getPerson());
+		
+		embeddedModel.setValueAt("Offer Made", offerRow, 1);
+		embeddedModel.setValueAt(se.getOffer(), offerRow, 2);
+		
 		se.setOffer(offer);
 		se.setState(ServiceEntry.State.OFFER_MADE);
 		

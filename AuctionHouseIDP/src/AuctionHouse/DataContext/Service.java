@@ -8,7 +8,6 @@ public class Service {
 	private List<ServiceEntry> entries;
 	
 	private boolean active;
-	private ServicesObserver observer;
 	
 	public Service( String name, List<ServiceEntry> entries, String status) {
 		this.name = name;
@@ -59,13 +58,5 @@ public class Service {
 
 	public void setActive(boolean active) {
 		this.active = active;
-
-		// Notify the observer
-		if(observer != null)
-			observer.notify(this);
-	}
-	
-	public void registerObserver(ServicesObserver observer) {
-		this.observer = observer;
 	}
 }
