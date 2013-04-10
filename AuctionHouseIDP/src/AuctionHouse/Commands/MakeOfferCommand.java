@@ -54,50 +54,17 @@ public class MakeOfferCommand implements Command {
 	@Override
 	public Object run() {
 		AHTableModel model = controllerMediator.getModel();
-
-		Vector<Vector<Object>> data = model.getDataVector();
-		Vector<Object> row = null;
-		int rowNr = 0;
-
-		for (Vector<Object> r : data) {
-			if (r.get(0).equals(service)) {
-				row = r;
-				break;
-			}
-			rowNr++;
-		}
-
-		if (row == null)
-			return false;
-
 		Service s = dataManager.getService(service);
-		if (s == null)
-			return false;
-		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))
-			return false;
-
 		ServiceEntry se = s.getEntry(buyer);
-		if (se == null)
-			return false;
-		if (!se.getStatus().equals("No Offer") && !se.getStatus().equals("Offer Exceed"))
-			return false;
-		JTable embedded = (JTable) model.getValueAt(rowNr, 2);
-		AHTableModel embeddedModel = (AHTableModel) embedded.getModel();
 		
-		int offerRow = 0;
-		for (int i = 0 ; i < embeddedModel.getRowCount(); i++) {
-			String name = (String)embeddedModel.getValueAt(i, 0);
-			if (name.equals(buyer))
-				break;
-			offerRow++;
+		if (se.getState() != ServiceEntry.State.NO_OFFER
+				&& se.getState() != ServiceEntry.State.OFFER_EXCEED){
+			System.out.println("ServiceEntry [" + se.getPerson() + "] isn't NO_OFFER, nor OFFER_EXCEED: " + se.getState() + ", " + se.getStatus());
+			return false;
 		}
 		
-		if (offerRow == embeddedModel.getRowCount())
-			return false;
-		
-		se.setStatus("Offer Made");
-		embeddedModel.setValueAt("Offer Made", offerRow, 1);
-		embeddedModel.setValueAt(offer, offerRow, 2);
+		se.setOffer(offer);
+		se.setState(ServiceEntry.State.OFFER_MADE);
 		
 		/*
 		 * Use the network module to send the offer

@@ -23,7 +23,7 @@ public class GenerateXML {
 		List<Service> services = new LinkedList<Service>();
 		services.add(service);
 
-		Person person = new Person("gicu", "password", 1, services);
+		Person person = new Person("gicu", "p", 1, services);
 
 		List<Person> people = new LinkedList<Person>();
 		people.add(person);
@@ -40,7 +40,7 @@ public class GenerateXML {
 		services = new LinkedList<Service>();
 		services.add(service);
 
-		person = new Person("Lulache", "password", 0, services);
+		person = new Person("Lulache", "p", 0, services);
 		people.add(person);
 
 		AuctionHouseDB db = new AuctionHouseDB(people);

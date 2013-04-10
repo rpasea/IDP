@@ -3,14 +3,21 @@ package AuctionHouse.DataContext;
 import java.util.List;
 
 public class Service {
-	String name;
-	String status;
-	List<ServiceEntry> entries;
+	private String name;
+	private String status;
+	private List<ServiceEntry> entries;
+	
+	private boolean active;
+	private ServicesObserver observer;
 	
 	public Service( String name, List<ServiceEntry> entries, String status) {
 		this.name = name;
 		this.entries = entries;
 		this.status = status;
+		active = false;
+		
+		for(ServiceEntry e : entries)
+			e.setService(this);
 	}
 	
 	public ServiceEntry getEntry(String personName) {
@@ -44,5 +51,21 @@ public class Service {
 
 	public void setEntries(List<ServiceEntry> entries) {
 		this.entries = entries;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+
+		// Notify the observer
+		if(observer != null)
+			observer.notify(this);
+	}
+	
+	public void registerObserver(ServicesObserver observer) {
+		this.observer = observer;
 	}
 }
