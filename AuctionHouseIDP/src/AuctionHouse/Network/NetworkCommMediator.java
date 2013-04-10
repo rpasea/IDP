@@ -65,10 +65,7 @@ public class NetworkCommMediator {
 	 * P2P communication related
 	 */
 	
-	public void sendMakeOffer(String service, String buyer, String offer) {
-		NetworkMessage netMsg = new MakeOfferNetworkMessage(service, buyer, offer);
-		
-		netComm.sendMessage(netMsg);
+	public void sendNetworkMessage(NetworkMessage msg){
+		netComm.sendMessage(msg);
 	}
-
 }

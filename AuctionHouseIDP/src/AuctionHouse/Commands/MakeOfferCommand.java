@@ -10,6 +10,8 @@ import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.NetworkMediator;
 import AuctionHouse.Network.NetworkCommMediator;
+import AuctionHouse.NetworkMessages.MakeOfferNetworkMessage;
+import AuctionHouse.NetworkMessages.NetworkMessage;
 
 /*
  * Class that incapsulates de Make Offer command from the GUI
@@ -100,8 +102,10 @@ public class MakeOfferCommand implements Command {
 		/*
 		 * Use the network module to send the offer
 		 */
-		if (sendToNetwork)
-			networkCommMediator.sendMakeOffer(service, buyer, offer);
+		if (sendToNetwork){
+			NetworkMessage netMsg = new MakeOfferNetworkMessage(service, buyer, offer);
+			networkCommMediator.sendNetworkMessage(netMsg);
+		}
 		
 		return true;
 	}
