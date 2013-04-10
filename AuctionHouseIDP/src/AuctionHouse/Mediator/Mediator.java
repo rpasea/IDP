@@ -230,7 +230,7 @@ public class Mediator implements GUIMediator,
 		}
 		case OfferRefused: {
 			OfferRefusedMessage mess = (OfferRefusedMessage) message;
-			Command com = new OfferRefusedCommand(mess.getService(),
+			Command com = new OfferRejectedCommand(mess.getService(),
 					mess.getPerson(), controllerMediator, dataManager, null);
 			result = com.run();
 			

@@ -28,45 +28,17 @@ public class DropOfferCommand implements Command {
 	@Override
 	public Object run() {
 		AHTableModel model = mediator.getModel();
-
-		Vector<Vector<Object>> data = model.getDataVector();
-		Vector<Object> row = null;
-		int rowNr = 0;
-
-		for (Vector<Object> r : data) {
-			if (r.get(0).equals(service)) {
-				row = r;
-				break;
-			}
-			rowNr++;
-		}
-
-		if (row == null)
-			return false;
-
 		Service s = dataManager.getService(service);
-		if (s == null)
-			return false;
-
 		ServiceEntry se = s.getEntry(buyer);
-		if (se == null)
-			return false;
-
-		JTable embedded = (JTable) model.getValueAt(rowNr, 2);
-		AHTableModel embeddedModel = (AHTableModel) embedded.getModel();
 		
-		int offerRow = 0;
-		for (int i = 0 ; i < embeddedModel.getRowCount(); i++) {
-			String name = (String)embeddedModel.getValueAt(i, 0);
-			if (name.equals(buyer))
-				break;
-			offerRow++;
-		}
-		
-		if (offerRow == embeddedModel.getRowCount())
+		if (se.getState() != ServiceEntry.State.OFFER_MADE)
 			return false;
 		
-		se.setStatus("Offer Made");
+		AHTableModel embeddedModel = model.getInnerTableModel(se.getService().getName());
+		int offerRow = embeddedModel.getInnerPersonRowNr(se.getPerson());
+		
+		se.setState(ServiceEntry.State.NO_OFFER);
+		se.setStatus("No Offer");
 		embeddedModel.setValueAt("No Offer", offerRow, 1);
 		embeddedModel.setValueAt("", offerRow, 2);
 		

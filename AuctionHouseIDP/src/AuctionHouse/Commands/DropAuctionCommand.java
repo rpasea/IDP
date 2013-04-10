@@ -23,27 +23,10 @@ public class DropAuctionCommand implements Command{
 	@Override
 	public Object run() {
 		final AHTableModel model = mediator.getModel();
-		
-		Vector<Vector<Object>> data = model.getDataVector();
-		Vector<Object> row = null;
-		int rowNr = 0;
-		
-		for (Vector<Object> r : data) {
-			if (r.get(0).equals(service)) {
-				row = r;
-				break;
-			}
-			rowNr++;
-		}
-		
-		if (row == null) 
-			return false;
+		int rowNr = model.getRowNr(service);
 		Service s = dataManager.getService(service);
-		if (s == null)
-			return false;
-		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))
-			return false;
 		
+		s.setActive(false);
 		s.setStatus("Inactive");
 		model.setValueAt("Inactive", rowNr, 1);
 		model.setValueAt("", rowNr, 2);

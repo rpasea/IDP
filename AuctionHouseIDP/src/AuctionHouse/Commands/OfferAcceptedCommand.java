@@ -34,47 +34,14 @@ public class OfferAcceptedCommand implements Command {
 	@Override
 	public Object run() {
 		AHTableModel model = mediator.getModel();
-
-		Vector<Vector<Object>> data = model.getDataVector();
-		Vector<Object> row = null;
-		int rowNr = 0;
-
-		for (Vector<Object> r : data) {
-			if (r.get(0).equals(service)) {
-				row = r;
-				break;
-			}
-			rowNr++;
-		}
-
-		if (row == null)
-			return null;
-
 		Service s = dataManager.getService(service);
-		if (s == null)
-			return null;
-		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))
-			return null;
-
 		ServiceEntry se = s.getEntry(buyer);
-		if (se == null)
-			return null;
-		if (!se.getStatus().equals("Offer Made"))
-			return null;
 		
-		JTable embedded = (JTable) model.getValueAt(rowNr, 2);
-		final AHTableModel embeddedModel = (AHTableModel) embedded.getModel();
+		if (se.getState() != ServiceEntry.State.OFFER_MADE)
+			return false;
 		
-		int offerRow = 0;
-		for (int i = 0 ; i < embeddedModel.getRowCount(); i++) {
-			String name = (String)embeddedModel.getValueAt(i, 0);
-			if (name.equals(buyer))
-				break;
-			offerRow++;
-		}
-		
-		if (offerRow == embeddedModel.getRowCount())
-			return null;
+		final AHTableModel embeddedModel = model.getInnerTableModel(se.getService().getName());
+		int offerRow = embeddedModel.getInnerPersonRowNr(se.getPerson());
 		
 		final JProgressBar progressBar = new JProgressBar(0, Transaction.MaxProgress);
 		progressBar.setSize(50, 8);
@@ -103,6 +70,7 @@ public class OfferAcceptedCommand implements Command {
 			}
 		});
 		
+		se.setState(ServiceEntry.State.OFFER_ACCEPTED);
 		se.setStatus("Offer Accepted");
 		embeddedModel.setValueAt("Offer Accepted", offerRow, 1);
 		

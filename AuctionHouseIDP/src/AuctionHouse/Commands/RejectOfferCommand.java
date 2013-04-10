@@ -27,47 +27,16 @@ public class RejectOfferCommand implements Command {
 	@Override
 	public Object run() {
 		AHTableModel model = mediator.getModel();
-
-		Vector<Vector<Object>> data = model.getDataVector();
-		Vector<Object> row = null;
-		int rowNr = 0;
-
-		for (Vector<Object> r : data) {
-			if (r.get(0).equals(service)) {
-				row = r;
-				break;
-			}
-			rowNr++;
-		}
-
-		if (row == null)
-			return false;
-
 		Service s = dataManager.getService(service);
-		if (s == null)
-			return false;
-		if (s.getStatus().equals("Inactive") || row.get(1).equals("Inactive"))
-			return false;
-
 		ServiceEntry se = s.getEntry(seller);
-		if (se == null)
-			return false;
-		if (!se.getStatus().equals("Offer Made"))
-			return false;
-		JTable embedded = (JTable) model.getValueAt(rowNr, 2);
-		AHTableModel embeddedModel = (AHTableModel) embedded.getModel();
 		
-		int offerRow = 0;
-		for (int i = 0 ; i < embeddedModel.getRowCount(); i++) {
-			String name = (String)embeddedModel.getValueAt(i, 0);
-			if (name.equals(seller))
-				break;
-			offerRow++;
-		}
-		
-		if (offerRow == embeddedModel.getRowCount())
+		if (se.getState() != ServiceEntry.State.OFFER_MADE)
 			return false;
 		
+		AHTableModel embeddedModel = model.getInnerTableModel(se.getService().getName());
+		int offerRow = embeddedModel.getInnerPersonRowNr(se.getPerson());
+		
+		se.setState(ServiceEntry.State.OFFER_REJECTED);
 		se.setStatus("Offer Rejected");
 		embeddedModel.setValueAt("Offer Rejected", offerRow, 1);
 		

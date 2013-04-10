@@ -30,28 +30,9 @@ public class LaunchAuctionCommand implements Command{
 
 	@Override
 	public Object run() {
-		final AHTableModel model = mediator.getModel();
-		
-		Vector<Vector<Object>> data = model.getDataVector();
-		Vector<Object> row = null;
-		int rowNr = 0;
-		
-		for (Vector<Object> r : data) {
-			if (r.get(0).equals(service)) {
-				row = r;
-				break;
-			}
-			rowNr++;
-		}
-		
-		if (row == null) 
-			return false;
-		
 		Service s = dataManager.getService(service);
-		if (s == null)
-			return false;
-		if (s.getStatus().equals("Active") || row.get(1).equals("Active"))
-			return false;
+		final AHTableModel model = mediator.getModel();
+		int rowNr = model.getRowNr(service);
 		
 		Vector<Object> embeddedCNames = new Vector<Object>();
 		embeddedCNames.add("Name");
@@ -90,7 +71,10 @@ public class LaunchAuctionCommand implements Command{
 		
 		model.setValueAt("Active", rowNr, 1);
 		model.setValueAt(embedded, rowNr, 2);
+		
 		s.setStatus("Active");
+		s.setActive(true);
+		
 		mediator.refreshGUI();
 		return true;
 		
