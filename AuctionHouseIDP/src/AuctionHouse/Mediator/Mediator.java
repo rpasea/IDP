@@ -125,7 +125,8 @@ public class Mediator implements GUIMediator,
 			RejectOfferMessage mess = (RejectOfferMessage) message;
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new RejectOfferCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, dataManager);
+					mess.getPerson(), mess.getOffer(), controllerMediator,
+					dataManager, networkCommunicator);
 			result = com.run();
 
 			tip = "RejectOffer";

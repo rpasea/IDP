@@ -10,6 +10,7 @@ import AuctionHouse.Messages.Message;
 
 public interface NetworkMessage {
 	public static final int MAKE_OFFER = 0;
+	public static final int REJECT_OFFER = 1;
 	
 	/**
 	 * TODO: getDestination()
