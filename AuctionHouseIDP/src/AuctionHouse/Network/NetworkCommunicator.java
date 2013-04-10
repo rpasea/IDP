@@ -2,7 +2,6 @@ package AuctionHouse.Network;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -41,14 +40,20 @@ public class NetworkCommunicator extends Thread {
 	private ArrayList<SocketChannel> socketChannels;
 	private ExecutorService threadPool;
 	private LinkedBlockingQueue<ByteBuffer> bufferPool;
+
+	/*
+	 * Is the hash() method of these classes well implemented? Or is it a hash
+	 * on the Object reference? Possible source of bugs
+	 */
 	private HashMap<SocketAddress, String> addressToPerson;
+	private HashMap<SocketAddress, SocketChannel> addressToChannel;
+	private HashMap<SelectionKey, MessageBuffer> readBuffers;
+	private HashMap<SocketChannel, LinkedList<byte[]>> writeBuffers;
 
 	private LinkedList<ChangeRequest> changeRequestQueue;
 
 	// private ByteBuffer rBuffer = ByteBuffer.allocate(8192);
 
-	private HashMap<SelectionKey, MessageBuffer> readBuffers;
-	private HashMap<SocketChannel, LinkedList<byte[]>> writeBuffers;
 	private boolean running;
 
 	public NetworkCommunicator(NetworkCommMediator netMediator, String hostIp,
@@ -74,6 +79,8 @@ public class NetworkCommunicator extends Thread {
 		readBuffers = new HashMap<SelectionKey, MessageBuffer>();
 		writeBuffers = new HashMap<SocketChannel, LinkedList<byte[]>>();
 		addressToPerson = new HashMap<SocketAddress, String>();
+		addressToChannel = new HashMap<SocketAddress, SocketChannel>();
+
 		this.changeRequestQueue = new LinkedList<ChangeRequest>();
 
 		socketChannels = new ArrayList<SocketChannel>();
@@ -164,7 +171,7 @@ public class NetworkCommunicator extends Thread {
 					 * the selector (not really sure)
 					 */
 				}
-				
+
 				ChangeRequest creq;
 				synchronized (this.changeRequestQueue) {
 					while ((creq = this.changeRequestQueue.poll()) != null) {
@@ -201,22 +208,22 @@ public class NetworkCommunicator extends Thread {
 	}
 
 	private void doConnect(SelectionKey key) {
-		SocketChannel socketChannel = (SocketChannel) key
-				.channel();
-		
+		SocketChannel socketChannel = (SocketChannel) key.channel();
+
 		try {
-		      socketChannel.finishConnect();
-		    } catch (IOException e) {
-		      // Cancel the channel's registration with our selector
-		      key.cancel();
-		      return;
-		    }
-		  
+			socketChannel.finishConnect();
+		} catch (IOException e) {
+			// Cancel the channel's registration with our selector
+			key.cancel();
+			return;
+		}
+
 		/*
 		 * Set the key to accept writes
 		 */
 		synchronized (this.changeRequestQueue) {
-			this.changeRequestQueue.add(new ChangeRequest(key, SelectionKey.OP_WRITE));
+			this.changeRequestQueue.add(new ChangeRequest(key,
+					SelectionKey.OP_WRITE));
 		}
 
 		this.selector.wakeup();
@@ -233,6 +240,8 @@ public class NetworkCommunicator extends Thread {
 		addressToPerson.put(socketChannel.getRemoteAddress(),
 				mediator.getPerson(socketChannel.getRemoteAddress()));
 		this.socketChannels.add(socketChannel);
+
+		addressToChannel.put(socketChannel.getRemoteAddress(), socketChannel);
 	}
 
 	protected void doRead(SelectionKey key) throws Exception {
@@ -294,45 +303,48 @@ public class NetworkCommunicator extends Thread {
 
 	protected void doWrite(SelectionKey key) throws Exception {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
-		
+
 		ByteBuffer wBuffer = this.bufferPool.take();
 		List<byte[]> wbuf = null;
-		
+
 		synchronized (key) {
 			wbuf = this.writeBuffers.get(socketChannel);
 
 			while (wbuf.size() > 0) {
 				byte[] bbuf = wbuf.get(0);
 				wbuf.remove(0);
-				
+
 				wBuffer.clear();
 				wBuffer.put(bbuf);
 				wBuffer.flip();
-	
+
 				int numWritten = socketChannel.write(wBuffer);
-				System.out.println("[NetworkCommunicator] Am scris " + numWritten + " bytes pe socket-ul asociat cheii " + key);
-	
+				System.out.println("[NetworkCommunicator] Am scris "
+						+ numWritten + " bytes pe socket-ul asociat cheii "
+						+ key);
+
 				if (numWritten < bbuf.length) {
 					byte[] newBuf = new byte[bbuf.length - numWritten];
-	
+
 					// Copiaza datele inca nescrise din bbuf in newBuf.
 					for (int i = numWritten; i < bbuf.length; i++) {
 						newBuf[i - numWritten] = bbuf[i];
 					}
-					
+
 					wbuf.add(0, newBuf);
 				}
 			}
-		
+
 			if (wbuf.size() > 0) {
 				synchronized (this.changeRequestQueue) {
-					this.changeRequestQueue.add(new ChangeRequest(key, key.interestOps() | SelectionKey.OP_WRITE));
+					this.changeRequestQueue.add(new ChangeRequest(key, key
+							.interestOps() | SelectionKey.OP_WRITE));
 				}
 
 				this.selector.wakeup();
 			}
 		}
-		
+
 		this.bufferPool.add(wBuffer);
 
 	}
@@ -342,33 +354,42 @@ public class NetworkCommunicator extends Thread {
 		InetSocketAddress addr = netMediator.getPersonsAddress(person);
 		byte[] msg = netMsg.serialize();
 
-		/*TODO: Look for the socketChannel... if existing connection, then use it
-		 * if found, this code should start the writing, after setting up the write buffer  
-		 * synchronized (this.changeRequestQueue) {
-		 *	this.changeRequestQueue.add(new ChangeRequest(socketChannel.keyFor(selector),
-		 *			socketChannel.keyFor(selector).interestOps() | SelectionKey.Write));
-		 *}
-		 */
-		
-		try {
-			SocketChannel socketChannel = SocketChannel.open();
-			socketChannel.configureBlocking(false);
-			
-			socketChannel.connect(new InetSocketAddress(addr.getAddress(), addr
-					.getPort()));
-			LinkedList<byte[]> list = new LinkedList<byte[]>();
+		if (addressToChannel.containsKey(addr)) { // Not tested !!!
+			SocketChannel socketChannel = addressToChannel.get(addr);
+			LinkedList<byte[]> list = writeBuffers.get(socketChannel);
 			list.add(msg);
-			writeBuffers.put(socketChannel, list);
-
 			synchronized (this.changeRequestQueue) {
-				this.changeRequestQueue.add(new ChangeRequest(socketChannel,
-						SelectionKey.OP_CONNECT));
+				this.changeRequestQueue.add(new ChangeRequest(socketChannel
+						.keyFor(selector), socketChannel.keyFor(selector)
+						.interestOps() | SelectionKey.OP_WRITE));
 			}
-			
 			this.selector.wakeup();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} else {
+			try {
+				SocketChannel socketChannel = SocketChannel.open();
+				socketChannel.configureBlocking(false);
+
+				socketChannel.connect(new InetSocketAddress(addr.getAddress(),
+						addr.getPort()));
+
+				this.socketChannels.add(socketChannel);
+				addressToChannel.put(socketChannel.getRemoteAddress(),
+						socketChannel);
+
+				LinkedList<byte[]> list = new LinkedList<byte[]>();
+				list.add(msg);
+				writeBuffers.put(socketChannel, list);
+
+				synchronized (this.changeRequestQueue) {
+					this.changeRequestQueue.add(new ChangeRequest(
+							socketChannel, SelectionKey.OP_CONNECT));
+				}
+
+				this.selector.wakeup();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}

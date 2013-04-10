@@ -11,6 +11,11 @@ import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.NetworkMediator;
 import AuctionHouse.Network.NetworkCommMediator;
 
+/*
+ * Class that incapsulates de Make Offer command from the GUI
+ * It is also used to notify the GUI when an offer is received through the network 
+ * module
+ */
 public class MakeOfferCommand implements Command {
 	private NetworkCommMediator networkCommMediator;
 	private String service;
