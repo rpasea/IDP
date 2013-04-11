@@ -6,7 +6,7 @@ public class NetworkMessageFactory {
 		case NetworkMessage.MAKE_OFFER:
 			return new MakeOfferNetworkMessage();
 		case NetworkMessage.REJECT_OFFER:
-			return new MakeOfferNetworkMessage();
+			return new RejectOfferNetworkMessage();
 		default:
 			return null;
 		}
