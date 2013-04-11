@@ -13,6 +13,9 @@ import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.Transaction;
+import AuctionHouse.Network.NetworkCommunicator;
+import AuctionHouse.NetworkMessages.NetworkMessage;
+import AuctionHouse.NetworkMessages.StartTransactionNetworkMessage;
 
 public class OfferAcceptedCommand implements Command {
 	private DataManager dataManager;
@@ -20,15 +23,17 @@ public class OfferAcceptedCommand implements Command {
 	private String buyer;
 	private final String offer;
 	private ControllerMediator mediator;
+	private NetworkCommunicator networkCommunicator;
 
 
 	public OfferAcceptedCommand(String service, String buyer, String offer,
-			ControllerMediator mediator, DataManager dataManager) {
+			ControllerMediator mediator, DataManager dataManager, NetworkCommunicator networkCommunicator) {
 		this.service = service;
 		this.buyer = buyer;
 		this.offer = offer;
 		this.mediator = mediator;
 		this.dataManager = dataManager;
+		this.networkCommunicator = networkCommunicator;
 	}
 
 	@Override
@@ -73,12 +78,11 @@ public class OfferAcceptedCommand implements Command {
 		se.setState(ServiceEntry.State.OFFER_ACCEPTED);
 		se.setStatus("Offer Accepted");
 		embeddedModel.setValueAt("Offer Accepted", offerRow, 1);
+		NetworkMessage msg = new StartTransactionNetworkMessage(service,dataManager.getIdentity().getName(), buyer, offer);
+		msg.setSource(dataManager.getIdentity().getName());
 		
-		/*
-		 * TODO: Do something to attach the transaction to the service entry
-		 * 		create the progress bar, propagate it's change events all the 
-		 *      way  to the primary table
-		 */
+		networkCommunicator.sendMessage(msg);
+		
 		return transaction;
 	}
 }

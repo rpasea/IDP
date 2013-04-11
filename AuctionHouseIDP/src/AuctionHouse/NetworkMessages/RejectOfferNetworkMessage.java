@@ -6,19 +6,10 @@ import AuctionHouse.Messages.Message;
 import AuctionHouse.Messages.OfferRefusedMessage;
 import AuctionHouse.Network.SerializableString;
 
-public class RejectOfferNetworkMessage implements NetworkMessage {
+public class RejectOfferNetworkMessage extends NetworkMessage {
 	private final SerializableString service;
 	private final SerializableString seller;
 	private final SerializableString offer;
-	/*
-	 * This field is generated on receive, don't serialize it
-	 */
-	private String source;
-	/*
-	 * This field is generated on send, don't serialize it
-	 */
-	private String dest;
-	private final int type;
 	
 	public RejectOfferNetworkMessage() {
 		this.service = new SerializableString();
@@ -28,30 +19,12 @@ public class RejectOfferNetworkMessage implements NetworkMessage {
 		this.type = NetworkMessage.REJECT_OFFER;
 	}
 
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
-	}
-
 	public RejectOfferNetworkMessage(String service, String seller, String offer){
 		this.service = new SerializableString(service);
 		this.seller = new SerializableString(seller);
 		this.offer = new SerializableString(offer);
 		this.type = NetworkMessage.REJECT_OFFER;
 		
-	}
-
-	@Override
-	public String getDestinationPerson() {
-		return dest;
-	}
-	
-	@Override
-	public void setDestinationPerson(String dest) {
-		this.dest = dest;
 	}
 	
 	@Override

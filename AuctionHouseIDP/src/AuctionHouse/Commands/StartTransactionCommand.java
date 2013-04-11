@@ -45,10 +45,7 @@ public class StartTransactionCommand implements Command {
 		}
 		if (se.getState() != ServiceEntry.State.OFFER_ACCEPTED)
 			return null;
-		
-		if (se.getState() != ServiceEntry.State.OFFER_MADE)
-			return false;
-		
+
 		final AHTableModel embeddedModel = model.getInnerTableModel(se.getService().getName());
 		final int offerRow = embeddedModel.getInnerPersonRowNr(se.getPerson());
 		

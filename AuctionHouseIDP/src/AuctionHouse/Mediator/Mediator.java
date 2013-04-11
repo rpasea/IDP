@@ -115,7 +115,7 @@ public class Mediator implements GUIMediator,
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new AcceptOfferCommand(mess.getService(),
 					mess.getPerson(), mess.getOffer(), controllerMediator,
-					dataManager, this);
+					dataManager, networkCommunicator);
 			result = com.run();
 
 			tip = "AcceptOffer";
@@ -184,6 +184,8 @@ public class Mediator implements GUIMediator,
 	public Object sendNetworkMessage(Message message) {
 		Object result = null;
 		String tip = "";
+		if (message == null)
+			return false;
 		switch (message.getType()) {
 		/**
 		 * Buyer
@@ -201,7 +203,7 @@ public class Mediator implements GUIMediator,
 				final Transaction t = (Transaction) result;
 				result = true;
 				// FIXME: for testing purpose
-				//(new TestWorker(t)).execute();
+				(new TestWorker(t)).execute();
 			} else {
 				result = false;
 			}
@@ -215,7 +217,7 @@ public class Mediator implements GUIMediator,
 			OfferAcceptedMessage mess = (OfferAcceptedMessage) message;
 			Command com = new OfferAcceptedCommand(mess.getService(),
 					mess.getPerson(), mess.getOffer(), controllerMediator,
-					dataManager);
+					dataManager, networkCommunicator);
 			result = com.run();
 			if (result != null) {
 				final Transaction t = (Transaction)result;

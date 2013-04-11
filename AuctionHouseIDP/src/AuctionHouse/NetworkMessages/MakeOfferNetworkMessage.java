@@ -7,19 +7,10 @@ import AuctionHouse.Messages.MakeOfferMessage;
 import AuctionHouse.Messages.Message;
 import AuctionHouse.Network.SerializableString;
 
-public class MakeOfferNetworkMessage implements NetworkMessage {
+public class MakeOfferNetworkMessage extends NetworkMessage {
 	private final SerializableString service;
 	private final SerializableString buyer;
 	private final SerializableString offer;
-	/*
-	 * This field is generated on receive, don't serialize it
-	 */
-	private String source;
-	/*
-	 * This field is generated on send, don't serialize it
-	 */
-	private String dest;
-	private final int type;
 	
 	public MakeOfferNetworkMessage() {
 		this.service = new SerializableString();
@@ -29,30 +20,12 @@ public class MakeOfferNetworkMessage implements NetworkMessage {
 		this.type = NetworkMessage.MAKE_OFFER;
 	}
 
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
-	}
-
 	public MakeOfferNetworkMessage(String service, String buyer, String offer){
 		this.service = new SerializableString(service);
 		this.buyer = new SerializableString(buyer);
 		this.offer = new SerializableString(offer);
 		this.type = NetworkMessage.MAKE_OFFER;
 		
-	}
-
-	@Override
-	public String getDestinationPerson() {
-		return dest;
-	}
-	
-	@Override
-	public void setDestinationPerson(String dest) {
-		this.dest = dest;
 	}
 	
 	@Override
