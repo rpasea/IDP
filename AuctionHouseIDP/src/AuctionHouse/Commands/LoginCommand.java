@@ -16,6 +16,7 @@ import AuctionHouse.GUI.AHTableCellRenderer;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.Mediator;
+import AuctionHouse.NetworkMessages.NetworkMessage;
 
 public class LoginCommand implements Command {
 
@@ -102,6 +103,7 @@ public class LoginCommand implements Command {
 		System.out.println("LOGED IN: " + user + " / " + password + " (role: "
 				+ role + ")");
 
+		NetworkMessage.CurrentUserName = user;
 		return true;
 	}
 }

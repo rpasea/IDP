@@ -11,6 +11,8 @@ public class NetworkMessageFactory {
 			return new AcceptOfferNetworkMessage();
 		case NetworkMessage.START_TRANSACTION:
 			return new StartTransactionNetworkMessage();
+		case NetworkMessage.FILE_TRANSFER:
+			return new FileNetworkMessage();
 		default:
 			return null;
 		}

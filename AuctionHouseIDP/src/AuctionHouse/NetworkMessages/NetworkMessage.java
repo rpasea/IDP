@@ -14,6 +14,12 @@ public abstract class NetworkMessage {
 	public static final int REJECT_OFFER = 1;
 	public static final int ACCEPT_OFFER = 2;
 	public static final int START_TRANSACTION = 3;
+	public static final int FILE_TRANSFER = 4;
+	
+	/*
+	 * Hack for the file message -> find a more intelligent way to do this
+	 */
+	public static String CurrentUserName = "";
 	
 	/*
 	 * This field is generated on send, don't serialize it
