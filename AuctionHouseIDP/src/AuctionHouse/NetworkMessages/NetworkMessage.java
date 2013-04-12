@@ -1,6 +1,7 @@
 package AuctionHouse.NetworkMessages;
 
 import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 
 import AuctionHouse.Messages.Message;
 
@@ -26,6 +27,17 @@ public abstract class NetworkMessage {
 
 	protected int type;
 	
+	protected SocketChannel socketChannel;
+	
+	/*
+	 * Should we use this for the get source/destination?
+	 */
+	public SocketChannel getSocketChannel() {
+		return socketChannel;
+	}
+	public void setSocketChannel(SocketChannel socketChannel) {
+		this.socketChannel = socketChannel;
+	}
 	/**
 	 * TODO: getDestination()
 	 */
@@ -44,7 +56,7 @@ public abstract class NetworkMessage {
 	/**
 	 * Inits current object with the deserialized msg. msg should NOT contain the size and type int-s.
 	 */
-	public abstract void deserialize(ByteBuffer msg);
+	public abstract void deserialize();
 	
 	/*
 	 * Transforms the network message into an internal message
@@ -58,4 +70,6 @@ public abstract class NetworkMessage {
 	public String getSource() {
 		return source;
 	}
+	
+	public abstract void put(byte b);
 }

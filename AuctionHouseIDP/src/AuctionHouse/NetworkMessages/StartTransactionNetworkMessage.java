@@ -1,5 +1,6 @@
 package AuctionHouse.NetworkMessages;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 import AuctionHouse.Messages.Message;
@@ -9,6 +10,7 @@ import AuctionHouse.Network.SerializableString;
 public class StartTransactionNetworkMessage extends NetworkMessage {
 
 	private SerializableString service, seller, buyer, offer;
+	private ByteArrayOutputStream outputStream;
 	
 	public StartTransactionNetworkMessage(String service,
 			String seller, String buyer,
@@ -21,6 +23,8 @@ public class StartTransactionNetworkMessage extends NetworkMessage {
 		dest = "";
 		source = "";
 		type = START_TRANSACTION;
+		this.socketChannel = null;
+		this.outputStream = new ByteArrayOutputStream();
 	}
 	
 	public StartTransactionNetworkMessage() {
@@ -31,6 +35,8 @@ public class StartTransactionNetworkMessage extends NetworkMessage {
 		dest = "";
 		source = "";
 		type = START_TRANSACTION;
+		this.socketChannel = null;
+		this.outputStream = new ByteArrayOutputStream();
 	}
 
 	@Override
@@ -55,11 +61,12 @@ public class StartTransactionNetworkMessage extends NetworkMessage {
 	}
 
 	@Override
-	public void deserialize(ByteBuffer msg) {
-		service.deserialize(msg);
-		seller.deserialize(msg);
-		buyer.deserialize(msg);
-		offer.deserialize(msg);
+	public void deserialize() {
+		ByteBuffer bbuf = ByteBuffer.wrap(outputStream.toByteArray());
+		service.deserialize(bbuf);
+		seller.deserialize(bbuf);
+		buyer.deserialize(bbuf);
+		offer.deserialize(bbuf);
 
 	}
 
@@ -69,6 +76,10 @@ public class StartTransactionNetworkMessage extends NetworkMessage {
 			return new StartTransactionMessage(service.getString(),seller.getString(),buyer.getString(),offer.getString());
 		else
 			return null;
+	}
+	
+	public void put(byte b) {
+		outputStream.write(b);
 	}
 
 }

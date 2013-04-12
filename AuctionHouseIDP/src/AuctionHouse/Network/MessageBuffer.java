@@ -12,7 +12,7 @@ public class MessageBuffer {
 	private LinkedList<NetworkMessage> messages;
 	private Integer currentMsgSize;
 	private Integer currentMsgType;
-	private ByteBuffer byteBuffer;
+	private int messageBufferPos;
 	private String source;
 	private int intBufferPos;
 
@@ -22,6 +22,7 @@ public class MessageBuffer {
 		currentMsgType = null;
 		messages = new LinkedList<NetworkMessage>();
 		intBufferPos = 0;
+		messageBufferPos = 0;
 	}
 	
 	public String getSource() {
@@ -44,7 +45,6 @@ public class MessageBuffer {
 					/*
 					 * allocate the size minus the type int
 					 */
-					byteBuffer = ByteBuffer.allocate(currentMsgSize - 4);
 					intBufferPos = 0;
 				}
 			} else if (currentMsgType == null) {
@@ -52,33 +52,36 @@ public class MessageBuffer {
 				intBufferPos++;
 				if (intBufferPos == 4) {
 					currentMsgType = ByteBuffer.wrap(intBuffer).getInt();
+					messages.add(NetworkMessageFactory
+							.createMessage(currentMsgType));
 					intBufferPos = 0;
 				}
 			} else {
-				byteBuffer.put(b);
-				if (byteBuffer.position() == (currentMsgSize - 4)) {
-					NetworkMessage msg = NetworkMessageFactory
-							.createMessage(currentMsgType);
-					
-					/* dubiosenia dubioseniilor */
-					byteBuffer.flip();
-					
-					msg.deserialize(byteBuffer);
-					msg.setSource(source);
-					
-					byteBuffer.flip();
-					
-					messages.add(msg);
+				messages.getLast().put(b);
+				messageBufferPos++;
+				if (messageBufferPos == (currentMsgSize - 4)) {
+					messages.getLast().deserialize();
+					messages.getLast().setSource(source);
 					currentMsgSize = null;
 					currentMsgType = null;
+					messageBufferPos = 0;
 				}
 			}
 		}
 	}
 	
 	public synchronized List<NetworkMessage> getAndClearMessages() {
-		List<NetworkMessage> tmp = messages;
-		messages = new LinkedList<NetworkMessage>();
+		List<NetworkMessage> tmp;
+		if ( messageBufferPos == 0) {
+			tmp = messages;
+			messages = new LinkedList<NetworkMessage>();
+		} else { // there is an incomplete message, we need to save it
+			tmp =  new LinkedList<NetworkMessage>();
+			NetworkMessage msg = messages.pollLast();
+			tmp.addAll(messages);
+			messages.clear();
+			messages.add(msg);
+		}
 		return tmp;
 	}
 	

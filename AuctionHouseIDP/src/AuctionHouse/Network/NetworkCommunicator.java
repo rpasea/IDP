@@ -1,6 +1,10 @@
 package AuctionHouse.Network;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.SequenceInputStream;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -47,7 +51,7 @@ public class NetworkCommunicator extends Thread {
 	private HashMap<SocketAddress, String> addressToPerson;
 	private HashMap<SocketAddress, SocketChannel> addressToChannel;
 	private HashMap<SelectionKey, MessageBuffer> readBuffers;
-	private HashMap<SocketChannel, LinkedList<byte[]>> writeBuffers;
+	private HashMap<SocketChannel, LinkedList<InputStream>> writeBuffers;
 
 	private LinkedList<ChangeRequest> changeRequestQueue;
 
@@ -75,7 +79,7 @@ public class NetworkCommunicator extends Thread {
 		}
 
 		readBuffers = new HashMap<SelectionKey, MessageBuffer>();
-		writeBuffers = new HashMap<SocketChannel, LinkedList<byte[]>>();
+		writeBuffers = new HashMap<SocketChannel, LinkedList<InputStream>>();
 		addressToPerson = new HashMap<SocketAddress, String>();
 		addressToChannel = new HashMap<SocketAddress, SocketChannel>();
 
@@ -282,8 +286,10 @@ public class NetworkCommunicator extends Thread {
 		msgBuf.putBytes(currentBuf, numRead);
 
 		if (msgBuf.hasMessages())
-			for (NetworkMessage nMess : msgBuf.getAndClearMessages())
+			for (NetworkMessage nMess : msgBuf.getAndClearMessages()) {
+				nMess.setSocketChannel(socketChannel);
 				mediator.sendNetworkMessage(nMess.toMessage());
+			}
 
 		this.bufferPool.add(rBuffer);
 
@@ -303,30 +309,28 @@ public class NetworkCommunicator extends Thread {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 
 		ByteBuffer wBuffer = this.bufferPool.take();
-		List<byte[]> wbuf = null;
+		List<InputStream> wbuf = null;
 
 		synchronized (key) {
 			wbuf = this.writeBuffers.get(socketChannel);
-
+			
 			while (wbuf.size() > 0) {
-				byte[] bbuf = wbuf.get(0);
+				InputStream is = wbuf.get(0);
 				wbuf.remove(0);
 				int available = wBuffer.capacity() - wBuffer.position();
-				
+				byte[] bbuf = new byte[available];
 				/*
 				 * We make sure there is no overflow
 				 */
-				if (bbuf.length > available) {
-					byte[] treated = new byte[available];
-					byte[] remaining = new byte[bbuf.length - available];
-					System.arraycopy(bbuf, 0, treated, 0, available);
-					System.arraycopy(bbuf, available, remaining, 0, bbuf.length - available);
-					wbuf.add(0,remaining);
-					bbuf = treated;
-				}
+				int readFromStream = is.read(bbuf, 0, available);
 				
+				if (readFromStream == -1) {
+					is.close();
+					continue;
+				}
+					
 				wBuffer.clear();
-				wBuffer.put(bbuf);
+				wBuffer.put(bbuf, 0, readFromStream);
 				wBuffer.flip();
 
 				int numWritten = socketChannel.write(wBuffer);
@@ -334,7 +338,7 @@ public class NetworkCommunicator extends Thread {
 						+ numWritten + " bytes pe socket-ul asociat cheii "
 						+ key);
 
-				if (numWritten < bbuf.length) {
+				if (numWritten < readFromStream) {
 					byte[] newBuf = new byte[bbuf.length - numWritten];
 
 					// Copiaza datele inca nescrise din bbuf in newBuf.
@@ -342,7 +346,11 @@ public class NetworkCommunicator extends Thread {
 						newBuf[i - numWritten] = bbuf[i];
 					}
 
-					wbuf.add(0, newBuf);
+					InputStream newIs = new SequenceInputStream(new ByteArrayInputStream(newBuf),
+							is);
+					wbuf.add(0, newIs);
+				} else {
+					wbuf.add(0, is);
 				}
 			}
 
@@ -367,8 +375,8 @@ public class NetworkCommunicator extends Thread {
 
 		if (addressToChannel.containsKey(addr)) { // Not tested !!!
 			SocketChannel socketChannel = addressToChannel.get(addr);
-			LinkedList<byte[]> list = writeBuffers.get(socketChannel);
-			list.add(msg);
+			LinkedList<InputStream> list = writeBuffers.get(socketChannel);
+			list.add(new ByteArrayInputStream(msg));
 			synchronized (this.changeRequestQueue) {
 				this.changeRequestQueue.add(new ChangeRequest(socketChannel
 						.keyFor(selector), socketChannel.keyFor(selector)
@@ -387,8 +395,8 @@ public class NetworkCommunicator extends Thread {
 				addressToChannel.put(socketChannel.getRemoteAddress(),
 						socketChannel);
 
-				LinkedList<byte[]> list = new LinkedList<byte[]>();
-				list.add(msg);
+				LinkedList<InputStream> list = new LinkedList<InputStream>();
+				list.add(new ByteArrayInputStream(msg));
 				writeBuffers.put(socketChannel, list);
 
 				synchronized (this.changeRequestQueue) {

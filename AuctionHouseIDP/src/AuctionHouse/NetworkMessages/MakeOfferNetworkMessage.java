@@ -1,5 +1,6 @@
 package AuctionHouse.NetworkMessages;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 
@@ -11,21 +12,25 @@ public class MakeOfferNetworkMessage extends NetworkMessage {
 	private final SerializableString service;
 	private final SerializableString buyer;
 	private final SerializableString offer;
+	private ByteArrayOutputStream outputStream;
 	
 	public MakeOfferNetworkMessage() {
 		this.service = new SerializableString();
 		this.buyer = new SerializableString();
 		this.offer = new SerializableString();
 		this.source = null;
+		this.socketChannel = null;
 		this.type = NetworkMessage.MAKE_OFFER;
+		this.outputStream = new ByteArrayOutputStream();
 	}
 
 	public MakeOfferNetworkMessage(String service, String buyer, String offer){
 		this.service = new SerializableString(service);
 		this.buyer = new SerializableString(buyer);
 		this.offer = new SerializableString(offer);
+		this.socketChannel = null;
 		this.type = NetworkMessage.MAKE_OFFER;
-		
+		this.outputStream = new ByteArrayOutputStream();
 	}
 	
 	@Override
@@ -48,15 +53,20 @@ public class MakeOfferNetworkMessage extends NetworkMessage {
 	}
 
 	@Override
-	public void deserialize(ByteBuffer msg) {
-		
-		service.deserialize(msg);
-		buyer.deserialize(msg);
-		offer.deserialize(msg);
+	public void deserialize() {
+		ByteBuffer bbuf = ByteBuffer.wrap(outputStream.toByteArray());
+		service.deserialize(bbuf);
+		buyer.deserialize(bbuf);
+		offer.deserialize(bbuf);
 	}
 
 	@Override
 	public Message toMessage() {
 		return new MakeOfferMessage(service.getString(),source,offer.getString());
+	}
+
+	@Override
+	public void put(byte b) {
+		outputStream.write(b);	
 	}
 }

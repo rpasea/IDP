@@ -1,5 +1,6 @@
 package AuctionHouse.NetworkMessages;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 import AuctionHouse.Messages.Message;
@@ -10,6 +11,7 @@ public class RejectOfferNetworkMessage extends NetworkMessage {
 	private final SerializableString service;
 	private final SerializableString seller;
 	private final SerializableString offer;
+	private ByteArrayOutputStream outputStream;
 	
 	public RejectOfferNetworkMessage() {
 		this.service = new SerializableString();
@@ -17,6 +19,8 @@ public class RejectOfferNetworkMessage extends NetworkMessage {
 		this.offer = new SerializableString();
 		this.source = null;
 		this.type = NetworkMessage.REJECT_OFFER;
+		this.socketChannel = null;
+		this.outputStream = new ByteArrayOutputStream();
 	}
 
 	public RejectOfferNetworkMessage(String service, String seller, String offer){
@@ -24,7 +28,8 @@ public class RejectOfferNetworkMessage extends NetworkMessage {
 		this.seller = new SerializableString(seller);
 		this.offer = new SerializableString(offer);
 		this.type = NetworkMessage.REJECT_OFFER;
-		
+		this.socketChannel = null;
+		this.outputStream = new ByteArrayOutputStream();
 	}
 	
 	@Override
@@ -47,14 +52,20 @@ public class RejectOfferNetworkMessage extends NetworkMessage {
 	}
 
 	@Override
-	public void deserialize(ByteBuffer msg) {
-		service.deserialize(msg);
-		seller.deserialize(msg);
-		offer.deserialize(msg);
+	public Message toMessage() {
+		return new OfferRefusedMessage(service.getString(), source, offer.getString());
 	}
 
 	@Override
-	public Message toMessage() {
-		return new OfferRefusedMessage(service.getString(), source, offer.getString());
+	public void deserialize() {
+		ByteBuffer bbuf = ByteBuffer.wrap(outputStream.toByteArray());
+		service.deserialize(bbuf);
+		seller.deserialize(bbuf);
+		offer.deserialize(bbuf);
+	}
+
+	@Override
+	public void put(byte b) {
+		outputStream.write(b);
 	}
 }

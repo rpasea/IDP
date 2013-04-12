@@ -1,5 +1,6 @@
 package AuctionHouse.NetworkMessages;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 import AuctionHouse.Messages.Message;
@@ -12,6 +13,8 @@ public class AcceptOfferNetworkMessage extends NetworkMessage {
 	 * Do we need this?
 	 */
 	private SerializableString offer;
+	
+	private ByteArrayOutputStream outputStream;
 
 	public AcceptOfferNetworkMessage() {
 		this.service = new SerializableString();
@@ -19,6 +22,8 @@ public class AcceptOfferNetworkMessage extends NetworkMessage {
 		this.type = NetworkMessage.ACCEPT_OFFER;
 		this.source = "";
 		this.dest = "";
+		this.socketChannel = null;
+		this.outputStream = new ByteArrayOutputStream();
 	}
 
 	public AcceptOfferNetworkMessage(String service, String offer) {
@@ -27,6 +32,8 @@ public class AcceptOfferNetworkMessage extends NetworkMessage {
 		this.type = NetworkMessage.ACCEPT_OFFER;
 		this.source = "";
 		this.dest = "";
+		this.socketChannel = null;
+		this.outputStream = new ByteArrayOutputStream();
 	}
 
 	@Override
@@ -47,14 +54,20 @@ public class AcceptOfferNetworkMessage extends NetworkMessage {
 	}
 
 	@Override
-	public void deserialize(ByteBuffer msg) {
-		service.deserialize(msg);
-		offer.deserialize(msg);
+	public void deserialize() {
+		ByteBuffer bbuf = ByteBuffer.wrap(outputStream.toByteArray());
+		service.deserialize(bbuf);
+		offer.deserialize(bbuf);
 	}
 
 	@Override
 	public Message toMessage() {
 		return new OfferAcceptedMessage(service.getString(),source,offer.getString());
+	}
+
+	@Override
+	public void put(byte b) {
+		outputStream.write(b);
 	}
 
 }

@@ -57,6 +57,9 @@ public class MakeOfferCommand implements Command {
 		Service s = dataManager.getService(service);
 		ServiceEntry se = s.getEntry(buyer);
 		
+		if (se == null)
+			return false;
+		
 		if (se.getState() != ServiceEntry.State.NO_OFFER
 				&& se.getState() != ServiceEntry.State.OFFER_EXCEED
 				&& se.getState() != ServiceEntry.State.OFFER_REJECTED){
