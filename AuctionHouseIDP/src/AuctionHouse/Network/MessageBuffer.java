@@ -35,6 +35,7 @@ public class MessageBuffer {
 
 
 	public synchronized void putBytes(byte[] bytes, int size) {
+		System.out.println(size);
 		for (int i = 0 ; i < size; i++) {
 			byte b = bytes[i];
 			if (currentMsgSize == null) {
@@ -72,7 +73,7 @@ public class MessageBuffer {
 	
 	public synchronized List<NetworkMessage> getAndClearMessages() {
 		List<NetworkMessage> tmp;
-		if ( messageBufferPos == 0) {
+		if ( messageBufferPos == 0 && intBufferPos == 0) {
 			tmp = messages;
 			messages = new LinkedList<NetworkMessage>();
 		} else { // there is an incomplete message, we need to save it

@@ -22,7 +22,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import AuctionHouse.Mediator.NetworkMediator;
+import AuctionHouse.Mediator.Transaction;
+import AuctionHouse.NetworkMessages.FileNetworkMessage;
 import AuctionHouse.NetworkMessages.NetworkMessage;
+import AuctionHouse.NetworkMessages.StartTransactionNetworkMessage;
 
 /**
  * Communicates directly (p2p) with another user (of opposite role) Also
@@ -48,7 +51,6 @@ public class NetworkCommunicator extends Thread {
 	 * Is the hash() method of these classes well implemented? Or is it a hash
 	 * on the Object reference? Possible source of bugs
 	 */
-	private HashMap<SocketAddress, String> addressToPerson;
 	private HashMap<SocketAddress, SocketChannel> addressToChannel;
 	private HashMap<SelectionKey, MessageBuffer> readBuffers;
 	private HashMap<SocketChannel, LinkedList<InputStream>> writeBuffers;
@@ -80,7 +82,6 @@ public class NetworkCommunicator extends Thread {
 
 		readBuffers = new HashMap<SelectionKey, MessageBuffer>();
 		writeBuffers = new HashMap<SocketChannel, LinkedList<InputStream>>();
-		addressToPerson = new HashMap<SocketAddress, String>();
 		addressToChannel = new HashMap<SocketAddress, SocketChannel>();
 
 		this.changeRequestQueue = new LinkedList<ChangeRequest>();
@@ -239,11 +240,13 @@ public class NetworkCommunicator extends Thread {
 		socketChannel.configureBlocking(false);
 		socketChannel.register(this.selector, SelectionKey.OP_READ);
 
-		addressToPerson.put(socketChannel.getRemoteAddress(),
-				mediator.getPerson(socketChannel.getRemoteAddress()));
 		this.socketChannels.add(socketChannel);
 
-		addressToChannel.put(socketChannel.getRemoteAddress(), socketChannel);
+		if (!addressToChannel.containsKey(socketChannel.getRemoteAddress()))
+			addressToChannel.put(socketChannel.getRemoteAddress(), socketChannel);
+		
+		key.interestOps(key.interestOps()
+				| SelectionKey.OP_ACCEPT);
 	}
 
 	protected void doRead(SelectionKey key) throws Exception {
@@ -268,6 +271,8 @@ public class NetworkCommunicator extends Thread {
 			key.channel().close();
 			key.cancel();
 			readBuffers.remove(key);
+			this.addressToChannel.remove(key.channel());
+			this.socketChannels.remove(key.channel());
 			return;
 		}
 
@@ -313,7 +318,7 @@ public class NetworkCommunicator extends Thread {
 
 		synchronized (key) {
 			wbuf = this.writeBuffers.get(socketChannel);
-			
+
 			while (wbuf.size() > 0) {
 				InputStream is = wbuf.get(0);
 				wbuf.remove(0);
@@ -323,16 +328,16 @@ public class NetworkCommunicator extends Thread {
 				 * We make sure there is no overflow
 				 */
 				int readFromStream = is.read(bbuf, 0, available);
-				
+
 				if (readFromStream == -1) {
 					is.close();
 					continue;
 				}
-					
+
 				wBuffer.clear();
 				wBuffer.put(bbuf, 0, readFromStream);
 				wBuffer.flip();
-
+				
 				int numWritten = socketChannel.write(wBuffer);
 				System.out.println("[NetworkCommunicator] Am scris "
 						+ numWritten + " bytes pe socket-ul asociat cheii "
@@ -346,8 +351,8 @@ public class NetworkCommunicator extends Thread {
 						newBuf[i - numWritten] = bbuf[i];
 					}
 
-					InputStream newIs = new SequenceInputStream(new ByteArrayInputStream(newBuf),
-							is);
+					InputStream newIs = new SequenceInputStream(
+							new ByteArrayInputStream(newBuf), is);
 					wbuf.add(0, newIs);
 				} else {
 					wbuf.add(0, is);
@@ -411,6 +416,51 @@ public class NetworkCommunicator extends Thread {
 			}
 		}
 
+	}
+
+	/*
+	 * Always create a new socket channel for file
+	 */
+	public void startTransaction(StartTransactionNetworkMessage netMsg,
+			FileNetworkMessage fileMess, AHFileInputStream stream,
+			Transaction trans) {
+
+		String person = netMsg.getDestinationPerson();
+		InetSocketAddress addr = mediator.getPersonsAddress(person);
+		byte[] msg = netMsg.serialize();
+		byte[] fileInfo = fileMess.serialize();
+
+		try {
+			SocketChannel socketChannel = SocketChannel.open();
+			socketChannel.configureBlocking(false);
+
+			socketChannel.connect(new InetSocketAddress(addr.getAddress(), addr
+					.getPort()));
+
+			this.socketChannels.add(socketChannel);
+
+			trans.setSocketChannel(socketChannel);
+
+			LinkedList<InputStream> list = new LinkedList<InputStream>();
+			/*
+			 * We send the start transaction message, then the file info
+			 * and finally the actual file
+			 */
+			list.add(new ByteArrayInputStream(msg));
+			list.add(new ByteArrayInputStream(fileInfo));
+			list.add(stream);
+			writeBuffers.put(socketChannel, list);
+
+			synchronized (this.changeRequestQueue) {
+				this.changeRequestQueue.add(new ChangeRequest(socketChannel,
+						SelectionKey.OP_CONNECT));
+			}
+
+			this.selector.wakeup();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public int getPort() {

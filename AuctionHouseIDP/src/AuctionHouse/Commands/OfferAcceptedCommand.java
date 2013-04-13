@@ -1,5 +1,7 @@
 package AuctionHouse.Commands;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
@@ -13,7 +15,9 @@ import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Mediator.Transaction;
+import AuctionHouse.Network.AHFileInputStream;
 import AuctionHouse.Network.NetworkCommunicator;
+import AuctionHouse.NetworkMessages.FileNetworkMessage;
 import AuctionHouse.NetworkMessages.NetworkMessage;
 import AuctionHouse.NetworkMessages.StartTransactionNetworkMessage;
 
@@ -42,6 +46,21 @@ public class OfferAcceptedCommand implements Command {
 		Service s = dataManager.getService(service);
 		ServiceEntry se = s.getEntry(buyer);
 		
+		File f = new File (dataManager.getIdentity().getName() + "/" + service);
+		if (!f.exists()) {
+			/*
+			 * Do something to notify the buyer
+			 */
+			return false;
+		}
+		
+		if (!f.isFile()) {
+			/*
+			 * Do something to notify the buyer
+			 */
+			return false;
+		}
+		
 		if (se.getState() != ServiceEntry.State.OFFER_MADE)
 			return false;
 		
@@ -55,8 +74,10 @@ public class OfferAcceptedCommand implements Command {
 		embeddedModel.setValueAt(progressBar, embRowNr, 3);
 		progressBar.setVisible(true);
 		
+		
+		
 		Transaction transaction = new Transaction (service,
-						dataManager.getIdentity().getName(), buyer, offer);
+						dataManager.getIdentity().getName(), buyer, offer, (int) f.length());
 		transaction.addObserver(new Observer() {
 			
 			@Override
@@ -78,10 +99,24 @@ public class OfferAcceptedCommand implements Command {
 		se.setState(ServiceEntry.State.OFFER_ACCEPTED);
 		se.setStatus("Offer Accepted");
 		embeddedModel.setValueAt("Offer Accepted", offerRow, 1);
-		NetworkMessage msg = new StartTransactionNetworkMessage(service,dataManager.getIdentity().getName(), buyer, offer);
+		StartTransactionNetworkMessage msg = new StartTransactionNetworkMessage(service,
+				dataManager.getIdentity().getName(), buyer, offer,
+				(int) f.length());
 		msg.setSource(dataManager.getIdentity().getName());
+		msg.setDestinationPerson(buyer);
 		
-		networkCommunicator.sendMessage(msg);
+		FileNetworkMessage fileMsg = new FileNetworkMessage(f.getName(), (int) f.length());
+		fileMsg.setDestinationPerson(buyer);
+		
+		try {
+			AHFileInputStream stream = new AHFileInputStream(f, transaction);
+			networkCommunicator.startTransaction( msg, fileMsg, stream, transaction);
+		} catch (FileNotFoundException e) {
+			// should not happen, already checked for this
+			transaction = null;
+			e.printStackTrace();
+		}
+		
 		
 		return transaction;
 	}

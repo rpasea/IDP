@@ -195,15 +195,13 @@ public class Mediator implements GUIMediator,
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new StartTransactionCommand(mess.getService(),
 					mess.getSeller(), mess.getBuyer(), mess.getOffer(),
-					controllerMediator, dataManager);
+					controllerMediator, dataManager, mess.getFileSize(), mess.getSocketChannel());
 			result = com.run();
 			if (result != null) {
 				transactions.put(mess.getService() + "_" + mess.getSeller()
 						+ "_" + mess.getBuyer(), (Transaction) result);
 				final Transaction t = (Transaction) result;
 				result = true;
-				// FIXME: for testing purpose
-				(new TestWorker(t)).execute();
 			} else {
 				result = false;
 			}
@@ -222,8 +220,6 @@ public class Mediator implements GUIMediator,
 			if (result != null) {
 				final Transaction t = (Transaction)result;
 				result = true;
-				//FIXME: for testing purpose
-				(new TestWorker(t)).execute();
 			} else {
 				result = false;
 			}

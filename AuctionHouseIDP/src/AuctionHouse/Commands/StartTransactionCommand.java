@@ -1,5 +1,6 @@
 package AuctionHouse.Commands;
 
+import java.nio.channels.SocketChannel;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
@@ -20,16 +21,20 @@ public class StartTransactionCommand implements Command {
 	private String service, seller, buyer, offer;
 	private ControllerMediator controllerMediator;
 	private DataManager dataManager;
+	private int fileSize;
+	private SocketChannel socketChannel;
 
 	public StartTransactionCommand(String service, String seller, String buyer,
 			String offer, ControllerMediator controllerMediator,
-			DataManager dataManager) {
+			DataManager dataManager, int fileSize, SocketChannel socketChannel) {
 		this.service = service;
 		this.seller = seller;
 		this.buyer = buyer;
 		this.offer = offer;
 		this.controllerMediator = controllerMediator;
 		this.dataManager = dataManager;
+		this.fileSize = fileSize;
+		this.socketChannel = socketChannel;
 	}
 
 	@Override
@@ -55,7 +60,8 @@ public class StartTransactionCommand implements Command {
 		embeddedModel.setValueAt(progressBar, offerRow, 3);
 		progressBar.setVisible(true);
 		
-		Transaction transaction = new Transaction (service, seller, buyer, offer);
+		Transaction transaction = new Transaction (service, seller, buyer, offer, fileSize);
+		transaction.setSocketChannel(socketChannel);
 		transaction.addObserver(new Observer() {
 			
 			@Override

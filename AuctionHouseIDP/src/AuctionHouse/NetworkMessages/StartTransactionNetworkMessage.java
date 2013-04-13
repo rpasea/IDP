@@ -10,16 +10,18 @@ import AuctionHouse.Network.SerializableString;
 public class StartTransactionNetworkMessage extends NetworkMessage {
 
 	private SerializableString service, seller, buyer, offer;
+	private int fileSize;
 	private ByteArrayOutputStream outputStream;
 	
 	public StartTransactionNetworkMessage(String service,
 			String seller, String buyer,
-			String offer) {
+			String offer, int fileSize) {
 		
 		this.service = new SerializableString(service);
 		this.seller = new SerializableString(seller);
 		this.buyer = new SerializableString(buyer);
 		this.offer = new SerializableString(offer);
+		this.fileSize = fileSize;
 		dest = "";
 		source = "";
 		type = START_TRANSACTION;
@@ -41,7 +43,7 @@ public class StartTransactionNetworkMessage extends NetworkMessage {
 
 	@Override
 	public byte[] serialize() {
-		int size = 4; // the type int
+		int size = 4 + 4; // the type int + the fileSize int
 		byte[] service = this.service.serialize();
 		byte[] seller = this.seller.serialize();
 		byte[] buyer = this.buyer.serialize();
@@ -52,6 +54,7 @@ public class StartTransactionNetworkMessage extends NetworkMessage {
 		ByteBuffer bbuf = ByteBuffer.allocate( 4 /* sizeof(int) */ + size);
 		bbuf.putInt(size);
 		bbuf.putInt(type);
+		bbuf.putInt(fileSize);
 		bbuf.put(service);
 		bbuf.put(seller);
 		bbuf.put(buyer);
@@ -63,6 +66,7 @@ public class StartTransactionNetworkMessage extends NetworkMessage {
 	@Override
 	public void deserialize() {
 		ByteBuffer bbuf = ByteBuffer.wrap(outputStream.toByteArray());
+		fileSize = bbuf.getInt();
 		service.deserialize(bbuf);
 		seller.deserialize(bbuf);
 		buyer.deserialize(bbuf);
@@ -73,7 +77,7 @@ public class StartTransactionNetworkMessage extends NetworkMessage {
 	@Override
 	public Message toMessage() {
 		if ( seller.getString().equals(source) )
-			return new StartTransactionMessage(service.getString(),seller.getString(),buyer.getString(),offer.getString());
+			return new StartTransactionMessage(service.getString(),seller.getString(),buyer.getString(),offer.getString(), fileSize, this.socketChannel);
 		else
 			return null;
 	}

@@ -1,26 +1,58 @@
 package AuctionHouse.Mediator;
 
 
+import java.nio.channels.SocketChannel;
 import java.util.Observable;
 
 public class Transaction extends Observable {
 
-	public static int MaxProgress = 3;
+	public static int MaxProgress = 1000;
 	private String service, seller, buyer, offer;
 	private int progress;
+	private int soFar;
 	private String state;
-	public Transaction(String service, String seller, String buyer, String offer) {
+	private int fileLength;
+	private SocketChannel socketChannel;
+	
+	public Transaction(String service, String seller, String buyer, String offer, int length) {
 		super();
 		this.service = service;
 		this.seller = seller;
 		this.buyer = buyer;
 		this.offer = offer;
 		progress = 0;
-		state = "Offer Accepted";
+		state = "Transfer Started";
+		soFar = 0;
+		this.fileLength = length;
+		socketChannel = null;
+	}
+	
+	public SocketChannel getSocketChannel() {
+		return socketChannel;
+	}
+
+	public void setSocketChannel(SocketChannel socketChannel) {
+		this.socketChannel = socketChannel;
+	}
+
+	public void addProgress (int nr) {
+		if (nr == 0)
+			return;
+		soFar += nr;
+		if (soFar < fileLength) {
+			progress = soFar / fileLength * MaxProgress;
+			state = "Transfer in Progress";
+		} else {
+			progress = MaxProgress;
+			state = "Transfer Complete";
+		}
+		
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void setToStarted() {
-		progress = 1;
+		progress = 0;
 		state = "Transfer Started";
 		setChanged();
 		notifyObservers();
