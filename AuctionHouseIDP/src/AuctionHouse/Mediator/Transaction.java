@@ -41,7 +41,7 @@ public class Transaction extends Observable {
 			return;
 		soFar += nr;
 		if (soFar < fileLength) {
-			progress = soFar / fileLength * MaxProgress;
+			progress =  soFar * MaxProgress / fileLength;
 			state = "Transfer in Progress";
 		} else {
 			progress = MaxProgress;
@@ -55,7 +55,7 @@ public class Transaction extends Observable {
 	public void setProgress (int bytesWritten) {
 		soFar = bytesWritten;
 		if (bytesWritten < fileLength) {
-			progress = soFar / fileLength * MaxProgress;
+			progress =  soFar * MaxProgress / fileLength;
 			state = "Transfer in Progress";
 		} else {
 			progress = MaxProgress;

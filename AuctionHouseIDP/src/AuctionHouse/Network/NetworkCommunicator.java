@@ -312,6 +312,11 @@ public class NetworkCommunicator extends Thread {
 	}
 
 	protected void doWrite(SelectionKey key) throws Exception {
+		/*
+		 * TODO: for testing purpose
+		 */
+		Thread.sleep(1000);
+		
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 
 		ByteBuffer wBuffer = this.bufferPool.take();
@@ -340,10 +345,10 @@ public class NetworkCommunicator extends Thread {
 					wBuffer.flip();
 
 					int numWritten = socketChannel.write(wBuffer);
-					
+
 					System.out.println("[NetworkCommunicator] Am scris "
-								+ numWritten
-								+ " bytes pe socket-ul asociat cheii " + key);
+							+ numWritten + " bytes pe socket-ul asociat cheii "
+							+ key);
 
 					if (numWritten < readFromStream) {
 						byte[] newBuf = new byte[bbuf.length - numWritten];
@@ -479,14 +484,35 @@ public class NetworkCommunicator extends Thread {
 	public int getPort() {
 		return hostSocketAddress.getPort();
 	}
-	
+
 	public MessageBuffer getBuffer(SocketChannel chan) {
 		for (SelectionKey k : selector.keys()) {
-			if ( k.channel().equals(chan))
+			if (k.channel().equals(chan))
 				return readBuffers.get(k);
 		}
-		
+
 		return null;
+	}
+
+	public void CancelChannel(SocketChannel chan) throws IOException {
+		SelectionKey key = null;
+		for (SelectionKey k : selector.keys()) {
+			if (k.channel().equals(chan)) {
+				key = k;
+			}
+		}
+		if (key != null) {
+			System.out
+					.println("[NetworkCommunicator] S-a inchis socket-ul asociat cheii "
+							+ key);
+			key.channel().close();
+			key.cancel();
+			readBuffers.remove(key);
+			writeBuffers.remove(key.channel());
+			this.addressToChannel.remove(key.channel());
+			this.socketChannels.remove(key.channel());
+			return;
+		}
 	}
 
 }
