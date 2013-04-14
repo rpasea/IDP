@@ -110,4 +110,22 @@ public class FileNetworkMessage extends NetworkMessage {
 
 	}
 
+	public String getService() {
+		return service.getString();
+	}
+
+	public void setService(String service) {
+		this.service = new SerializableString(service);
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+	
+	
+
 }

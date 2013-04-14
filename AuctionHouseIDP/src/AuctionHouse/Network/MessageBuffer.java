@@ -35,7 +35,6 @@ public class MessageBuffer {
 
 
 	public synchronized void putBytes(byte[] bytes, int size) {
-		System.out.println(size);
 		for (int i = 0 ; i < size; i++) {
 			byte b = bytes[i];
 			if (currentMsgSize == null) {

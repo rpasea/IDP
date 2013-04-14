@@ -243,10 +243,10 @@ public class NetworkCommunicator extends Thread {
 		this.socketChannels.add(socketChannel);
 
 		if (!addressToChannel.containsKey(socketChannel.getRemoteAddress()))
-			addressToChannel.put(socketChannel.getRemoteAddress(), socketChannel);
-		
-		key.interestOps(key.interestOps()
-				| SelectionKey.OP_ACCEPT);
+			addressToChannel.put(socketChannel.getRemoteAddress(),
+					socketChannel);
+
+		key.interestOps(key.interestOps() | SelectionKey.OP_ACCEPT);
 	}
 
 	protected void doRead(SelectionKey key) throws Exception {
@@ -314,12 +314,13 @@ public class NetworkCommunicator extends Thread {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 
 		ByteBuffer wBuffer = this.bufferPool.take();
+		wBuffer.clear();
 		List<InputStream> wbuf = null;
 
 		synchronized (key) {
 			wbuf = this.writeBuffers.get(socketChannel);
 
-			while (wbuf.size() > 0) {
+			if (wbuf.size() > 0) {
 				InputStream is = wbuf.get(0);
 				wbuf.remove(0);
 				int available = wBuffer.capacity() - wBuffer.position();
@@ -331,31 +332,32 @@ public class NetworkCommunicator extends Thread {
 
 				if (readFromStream == -1) {
 					is.close();
-					continue;
-				}
-
-				wBuffer.clear();
-				wBuffer.put(bbuf, 0, readFromStream);
-				wBuffer.flip();
-				
-				int numWritten = socketChannel.write(wBuffer);
-				System.out.println("[NetworkCommunicator] Am scris "
-						+ numWritten + " bytes pe socket-ul asociat cheii "
-						+ key);
-
-				if (numWritten < readFromStream) {
-					byte[] newBuf = new byte[bbuf.length - numWritten];
-
-					// Copiaza datele inca nescrise din bbuf in newBuf.
-					for (int i = numWritten; i < bbuf.length; i++) {
-						newBuf[i - numWritten] = bbuf[i];
-					}
-
-					InputStream newIs = new SequenceInputStream(
-							new ByteArrayInputStream(newBuf), is);
-					wbuf.add(0, newIs);
 				} else {
-					wbuf.add(0, is);
+
+					wBuffer.clear();
+					wBuffer.put(bbuf, 0, readFromStream);
+					wBuffer.flip();
+
+					int numWritten = socketChannel.write(wBuffer);
+					
+					System.out.println("[NetworkCommunicator] Am scris "
+								+ numWritten
+								+ " bytes pe socket-ul asociat cheii " + key);
+
+					if (numWritten < readFromStream) {
+						byte[] newBuf = new byte[bbuf.length - numWritten];
+
+						// Copiaza datele inca nescrise din bbuf in newBuf.
+						for (int i = numWritten; i < bbuf.length; i++) {
+							newBuf[i - numWritten] = bbuf[i];
+						}
+
+						InputStream newIs = new SequenceInputStream(
+								new ByteArrayInputStream(newBuf), is);
+						wbuf.add(0, newIs);
+					} else {
+						wbuf.add(0, is);
+					}
 				}
 			}
 
@@ -430,8 +432,12 @@ public class NetworkCommunicator extends Thread {
 		byte[] msg = netMsg.serialize();
 		byte[] fileInfo = fileMess.serialize();
 
+		System.out.println("Sending file: " + fileMess.getService() + " of "
+				+ fileMess.getSize() + " bytes");
+
 		try {
 			SocketChannel socketChannel = SocketChannel.open();
+
 			socketChannel.configureBlocking(false);
 
 			socketChannel.connect(new InetSocketAddress(addr.getAddress(), addr
@@ -443,12 +449,18 @@ public class NetworkCommunicator extends Thread {
 
 			LinkedList<InputStream> list = new LinkedList<InputStream>();
 			/*
-			 * We send the start transaction message, then the file info
-			 * and finally the actual file
+			 * We send the start transaction message, then the file info and
+			 * finally the actual file
 			 */
 			list.add(new ByteArrayInputStream(msg));
 			list.add(new ByteArrayInputStream(fileInfo));
 			list.add(stream);
+
+			System.out
+					.println("available "
+							+ (stream.available()
+									+ new ByteArrayInputStream(msg).available() + new ByteArrayInputStream(
+									fileInfo).available()));
 			writeBuffers.put(socketChannel, list);
 
 			synchronized (this.changeRequestQueue) {
