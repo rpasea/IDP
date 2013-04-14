@@ -52,6 +52,20 @@ public class Transaction extends Observable {
 		notifyObservers();
 	}
 	
+	public void setProgress (int bytesWritten) {
+		soFar = bytesWritten;
+		if (bytesWritten < fileLength) {
+			progress = soFar / fileLength * MaxProgress;
+			state = "Transfer in Progress";
+		} else {
+			progress = MaxProgress;
+			state = "Transfer Complete";
+		}
+		
+		setChanged();
+		notifyObservers();
+	}
+	
 	public void setToStarted() {
 		progress = 0;
 		state = "Transfer Started";

@@ -12,8 +12,8 @@ import AuctionHouse.Main.TestWorker;
 import AuctionHouse.Messages.*;
 import AuctionHouse.Network.NetworkCommunicator;
 
-public class Mediator implements GUIMediator,
-		NetworkMediator, WebClientMediator {
+public class Mediator implements GUIMediator, NetworkMediator,
+		WebClientMediator {
 
 	public static final int ROL_FURNIZOR = 0;
 	public static final int ROL_CUMPARATOR = 1;
@@ -28,7 +28,7 @@ public class Mediator implements GUIMediator,
 		networkCommunicator = new NetworkCommunicator(this, hostIp, hostPort);
 		transactions = new HashMap<String, Transaction>();
 	}
-	
+
 	/*
 	 * used for DataManager injection
 	 */
@@ -60,7 +60,7 @@ public class Mediator implements GUIMediator,
 			Command com = new LoginCommand(mess.getUser(), mess.getPassword(),
 					mess.getRole(), dataManager, controllerMediator);
 			result = com.run();
-			
+
 			// Should probably be in the login command
 			if ((Boolean) result) {
 				networkCommunicator.startRunning();
@@ -68,7 +68,8 @@ public class Mediator implements GUIMediator,
 
 			// FIXME: for testing purpose
 			if ((Boolean) result) {
-				SimulatorThread simulation = new SimulatorThread(this, controllerMediator);
+				SimulatorThread simulation = new SimulatorThread(this,
+						controllerMediator);
 				if (mess.getUser().equals("gicu")) {
 					simulation.role = ROL_CUMPARATOR;
 				} else {
@@ -195,7 +196,8 @@ public class Mediator implements GUIMediator,
 			// TODO: don't forget the NetworkCommunicator here
 			Command com = new StartTransactionCommand(mess.getService(),
 					mess.getSeller(), mess.getBuyer(), mess.getOffer(),
-					controllerMediator, dataManager, mess.getFileSize(), mess.getSocketChannel());
+					controllerMediator, dataManager, mess.getFileSize(),
+					mess.getSocketChannel(), networkCommunicator);
 			result = com.run();
 			if (result != null) {
 				transactions.put(mess.getService() + "_" + mess.getSeller()
@@ -218,12 +220,12 @@ public class Mediator implements GUIMediator,
 					dataManager, networkCommunicator);
 			result = com.run();
 			if (result != null) {
-				final Transaction t = (Transaction)result;
+				final Transaction t = (Transaction) result;
 				result = true;
 			} else {
 				result = false;
 			}
-			
+
 			tip = "OfferAccepted";
 			break;
 		}
@@ -232,7 +234,7 @@ public class Mediator implements GUIMediator,
 			Command com = new OfferRejectedCommand(mess.getService(),
 					mess.getPerson(), controllerMediator, dataManager, null);
 			result = com.run();
-			
+
 			tip = "OfferRefused";
 			break;
 		}
@@ -241,13 +243,13 @@ public class Mediator implements GUIMediator,
 			Command com = new OfferExceedCommand(mess.getService(),
 					mess.getPerson(), controllerMediator, dataManager);
 			result = com.run();
-			
+
 			tip = "OfferExceed";
 			break;
 		}
 		case MakeOffer: {
 			MakeOfferMessage mess = (MakeOfferMessage) message;
-			
+
 			Command com = new MakeOfferCommand(mess.getService(),
 					mess.getPerson(), mess.getOffer(), controllerMediator,
 					dataManager, networkCommunicator, false);
@@ -260,25 +262,25 @@ public class Mediator implements GUIMediator,
 		System.out.println("Mesaj: " + tip);
 		return result;
 	}
-	
+
 	/*
 	 * TODO: implement this
 	 */
 	public String getPerson(SocketAddress addr) {
 		if (dataManager.getIdentity().getName().equals("gicu"))
 			return "Lulache";
-		else 
+		else
 			return "gicu";
 	}
-	
-	public InetSocketAddress getPersonsAddress(String person){
+
+	public InetSocketAddress getPersonsAddress(String person) {
 		InetSocketAddress destAddr;
-		
-		if(networkCommunicator.getPort() == 50001)
+
+		if (networkCommunicator.getPort() == 50001)
 			destAddr = new InetSocketAddress("127.0.0.1", 50002);
 		else
 			destAddr = new InetSocketAddress("127.0.0.1", 50001);
-		
+
 		return destAddr;
 	}
 

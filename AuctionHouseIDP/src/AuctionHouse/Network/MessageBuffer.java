@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
 
+import AuctionHouse.Mediator.Transaction;
+import AuctionHouse.NetworkMessages.FileNetworkMessage;
 import AuctionHouse.NetworkMessages.NetworkMessage;
 import AuctionHouse.NetworkMessages.NetworkMessageFactory;
 
@@ -15,6 +17,7 @@ public class MessageBuffer {
 	private int messageBufferPos;
 	private String source;
 	private int intBufferPos;
+	private Transaction transaction;
 
 	public MessageBuffer() {
 		intBuffer = new byte[4];
@@ -23,8 +26,17 @@ public class MessageBuffer {
 		messages = new LinkedList<NetworkMessage>();
 		intBufferPos = 0;
 		messageBufferPos = 0;
+		transaction = null;
 	}
 	
+	public Transaction getTransaction() {
+		return transaction;
+	}
+
+	public void setTransaction(Transaction transaction) {
+		this.transaction = transaction;
+	}
+
 	public String getSource() {
 		return source;
 	}
@@ -66,6 +78,19 @@ public class MessageBuffer {
 					currentMsgType = null;
 					messageBufferPos = 0;
 				}
+			}
+		}
+		
+		/*
+		 * Update the transaction progress
+		 * 
+		 * When a transaction is attached, the only message remaining in the buffer is 
+		 * a file message, so it is ok to cast
+		 */
+		if (transaction != null) {
+			if (messages.getLast() != null) {
+				FileNetworkMessage fmsg = (FileNetworkMessage) messages.getLast();
+				transaction.setProgress(fmsg.getBytesWritten());
 			}
 		}
 	}

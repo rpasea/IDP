@@ -16,6 +16,7 @@ public class FileNetworkMessage extends NetworkMessage {
 	private Integer currentStringSize;
 	
 	private int size;
+	private int bytesWrittenInFile;
 
 	private ByteBuffer stringBuffer;
 	private int intBufferPos;
@@ -29,6 +30,7 @@ public class FileNetworkMessage extends NetworkMessage {
 		intBufferPos = 0;
 		service = null;
 		type = NetworkMessage.FILE_TRANSFER;
+		bytesWrittenInFile = 0;
 	}
 	
 	public FileNetworkMessage(String name, int size) {
@@ -102,6 +104,7 @@ public class FileNetworkMessage extends NetworkMessage {
 			}
 		} else {
 			try {
+				bytesWrittenInFile++;
 				outputStream.write(b);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -124,6 +127,10 @@ public class FileNetworkMessage extends NetworkMessage {
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+	
+	public int getBytesWritten() {
+		return this.bytesWrittenInFile;
 	}
 	
 	

@@ -271,6 +271,7 @@ public class NetworkCommunicator extends Thread {
 			key.channel().close();
 			key.cancel();
 			readBuffers.remove(key);
+			writeBuffers.remove(socketChannel);
 			this.addressToChannel.remove(key.channel());
 			this.socketChannels.remove(key.channel());
 			return;
@@ -477,6 +478,15 @@ public class NetworkCommunicator extends Thread {
 
 	public int getPort() {
 		return hostSocketAddress.getPort();
+	}
+	
+	public MessageBuffer getBuffer(SocketChannel chan) {
+		for (SelectionKey k : selector.keys()) {
+			if ( k.channel().equals(chan))
+				return readBuffers.get(k);
+		}
+		
+		return null;
 	}
 
 }
