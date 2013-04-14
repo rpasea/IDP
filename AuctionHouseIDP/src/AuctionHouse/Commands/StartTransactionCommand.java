@@ -65,20 +65,23 @@ public class StartTransactionCommand implements Command {
 		transaction.addObserver(new Observer() {
 			
 			@Override
-			public void update(Observable arg0, Object arg1) {
-				Transaction t = (Transaction) arg0;
-				if ( t.getProgress() >= 0) {
-					progressBar.setValue(t.getProgress());
-					embeddedModel.setValueAt(progressBar, offerRow, 3);
-					//embeddedModel.fireTableDataChanged();
-				} else {
-					embeddedModel.setValueAt("", offerRow, 3);
-					progressBar.setVisible(false);
-				}
+			public void update(final Observable arg0, Object arg1) {
+				 java.awt.EventQueue.invokeLater(new Runnable() {
 				
-				embeddedModel.setValueAt(t.getState(), offerRow, 1);
-			}
-		});
+				@Override
+				public void run() {
+					Transaction t = (Transaction) arg0;
+					if ( t.getProgress() >= 0) {
+						progressBar.setValue(t.getProgress());
+						embeddedModel.setValueAt(progressBar, offerRow, 3);
+						//embeddedModel.fireTableDataChanged();
+					} else {
+						embeddedModel.setValueAt("", offerRow, 3);
+						progressBar.setVisible(false);
+					}
+					embeddedModel.setValueAt(t.getState(), offerRow, 1);
+				}
+			});}});
 		
 		return transaction;
 		

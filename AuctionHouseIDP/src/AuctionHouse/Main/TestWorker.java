@@ -13,21 +13,7 @@ public class TestWorker extends SwingWorker<Integer, Integer> {
 
 	@Override
 	protected Integer doInBackground() throws Exception {
-		try {
-			Thread.sleep(5000);
-			t.setToStarted();
-			Thread.sleep(5000);
-			t.setToInProgress();
-
-			Thread.sleep(5000);
-			t.setToCompleted();
-
-			Thread.sleep(5000);
-			t.setToFailed();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 		return 1;
 	}
 }

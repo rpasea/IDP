@@ -1,6 +1,7 @@
 package AuctionHouse.Mediator;
 
 
+import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.Observable;
 
@@ -36,7 +37,7 @@ public class Transaction extends Observable {
 	}
 
 	public void addProgress (int nr) {
-		if (nr == 0)
+		if (nr <= 0)
 			return;
 		soFar += nr;
 		if (soFar < fileLength) {
@@ -58,15 +59,8 @@ public class Transaction extends Observable {
 		notifyObservers();
 	}
 	
-	public void setToInProgress() {
-		progress = 2;
-		state = "Transfer in Progress";
-		setChanged();
-		notifyObservers();
-	}
-	
 	public void setToCompleted() {
-		progress = 3;
+		progress = MaxProgress;
 		state = "Transfer Complete";
 		setChanged();
 		notifyObservers();
