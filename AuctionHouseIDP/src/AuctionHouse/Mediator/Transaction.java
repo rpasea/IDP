@@ -1,6 +1,7 @@
 package AuctionHouse.Mediator;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.Observable;
@@ -121,9 +122,16 @@ public class Transaction extends Observable {
 	public void setState(String state) {
 		this.state = state;
 	}
-	
-	
-	
-	
 
+	public void finishTransaction(String userName, boolean delete) throws IOException {
+		socketChannel.close();
+		setToFailed();
+		if (delete) {
+			File f = new File (userName + "/" + service);
+			if (f.exists()) {
+				f.delete();
+			}
+		}
+		
+	}
 }

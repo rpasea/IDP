@@ -1,8 +1,12 @@
 package AuctionHouse.Mediator;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.channels.SocketChannel;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Set;
 
 import AuctionHouse.Commands.*;
 import AuctionHouse.DataContext.DataManager;
@@ -221,6 +225,8 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			result = com.run();
 			if (result != null) {
 				final Transaction t = (Transaction) result;
+				transactions.put(t.getService() + "_" + t.getSeller()
+						+ "_" + t.getBuyer(), t);
 				result = true;
 			} else {
 				result = false;
@@ -261,6 +267,29 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		}
 		System.out.println("Mesaj: " + tip);
 		return result;
+	}
+
+	public void CheckTransactionChannelClosed(SocketChannel chan) {
+		/*
+		 * Use a new list because i am going to modify the map
+		 */
+
+		LinkedList<String> list = new LinkedList<String>();
+		list.addAll(transactions.keySet());
+
+		for (String key : list) {
+			Transaction t = transactions.get(key);
+			if (t.getSocketChannel().equals(chan)) {
+				transactions.remove(key);
+				try {
+					t.finishTransaction(dataManager.getIdentity().getName(),
+							dataManager.getRole() == ROL_CUMPARATOR );
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	/*

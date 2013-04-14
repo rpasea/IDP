@@ -8,6 +8,7 @@ import java.io.SequenceInputStream;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -272,6 +273,7 @@ public class NetworkCommunicator extends Thread {
 			key.cancel();
 			readBuffers.remove(key);
 			writeBuffers.remove(socketChannel);
+			mediator.CheckTransactionChannelClosed(socketChannel);
 			this.addressToChannel.remove(key.channel());
 			this.socketChannels.remove(key.channel());
 			return;
@@ -494,7 +496,7 @@ public class NetworkCommunicator extends Thread {
 		return null;
 	}
 
-	public void CancelChannel(SocketChannel chan) throws IOException {
+	public void CancelChannel(SelectableChannel chan) throws IOException {
 		SelectionKey key = null;
 		for (SelectionKey k : selector.keys()) {
 			if (k.channel().equals(chan)) {
@@ -509,6 +511,7 @@ public class NetworkCommunicator extends Thread {
 			key.cancel();
 			readBuffers.remove(key);
 			writeBuffers.remove(key.channel());
+			mediator.CheckTransactionChannelClosed((SocketChannel)key.channel());
 			this.addressToChannel.remove(key.channel());
 			this.socketChannels.remove(key.channel());
 			return;
