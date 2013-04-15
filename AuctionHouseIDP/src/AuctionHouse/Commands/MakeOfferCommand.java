@@ -66,6 +66,7 @@ public class MakeOfferCommand implements Command {
 			System.out.println("ServiceEntry [" + se.getPerson() + "] isn't NO_OFFER, nor OFFER_EXCEED: " + se.getState() + ", " + se.getStatus());
 			return false;
 		}
+		System.out.println("ServiceEntry [" + se.getPerson() + "] is: " + se.getState() + ", " + se.getStatus());
 		
 		AHTableModel embeddedModel = model.getInnerTableModel(se.getService().getName());
 		int offerRow = embeddedModel.getInnerPersonRowNr(se.getPerson());
@@ -83,6 +84,9 @@ public class MakeOfferCommand implements Command {
 			NetworkMessage netMsg = new MakeOfferNetworkMessage(service, buyer, offer);
 			netMsg.setDestinationPerson(buyer);
 			communicator.sendMessage(netMsg);
+		} else {
+			// This actually means that this is a buyer and an offer came in
+			// TODO: Check if previous offers are exceeded and notify those sellers
 		}
 		
 		return true;

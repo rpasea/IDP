@@ -1,5 +1,7 @@
 package AuctionHouse.Mediator;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -27,8 +29,8 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	private HashMap<String, Transaction> transactions;
 	private NetworkCommunicator networkCommunicator;
 
-	public Mediator(String hostIp, int hostPort) {
-		controllerMediator = new ControllerMediator(this);
+	public Mediator(String hostIp, int hostPort,   int simnr) {
+		controllerMediator = new ControllerMediator(this,   simnr);
 		networkCommunicator = new NetworkCommunicator(this, hostIp, hostPort);
 		transactions = new HashMap<String, Transaction>();
 	}
@@ -36,9 +38,9 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	/*
 	 * used for DataManager injection
 	 */
-	public Mediator(DataManager dataManager, String hostIp, int hostPort) {
+	public Mediator(DataManager dataManager, String hostIp, int hostPort,   int simnr) {
 		this.dataManager = dataManager;
-		controllerMediator = new ControllerMediator(this);
+		controllerMediator = new ControllerMediator(this,   simnr);
 		networkCommunicator = new NetworkCommunicator(this, hostIp, hostPort);
 		transactions = new HashMap<String, Transaction>();
 	}
@@ -296,21 +298,47 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	 * TODO: implement this
 	 */
 	public String getPerson(SocketAddress addr) {
-		if (dataManager.getIdentity().getName().equals("gicu"))
-			return "Lulache";
-		else
-			return "gicu";
+		// FIXME: Repara magaria (la etapa 3)
+		BufferedReader br = null;
+		try {
+ 
+			String sCurrentLine;
+ 
+			br = new BufferedReader(new FileReader("cine.txt"));
+ 
+			sCurrentLine = br.readLine();
+			System.out.println("%%% " + sCurrentLine);
+			
+			return sCurrentLine;
+ 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 	public InetSocketAddress getPersonsAddress(String person) {
 		InetSocketAddress destAddr;
 
-		if (networkCommunicator.getPort() == 50001)
-			destAddr = new InetSocketAddress("127.0.0.1", 50002);
-		else
+		if (person.equals("gicu"))
 			destAddr = new InetSocketAddress("127.0.0.1", 50001);
+		else if (person.equals("Lulache"))
+			destAddr = new InetSocketAddress("127.0.0.1", 50002);
+		else // vene
+			destAddr = new InetSocketAddress("127.0.0.1", 50003);
 
 		return destAddr;
+	}
+
+	@Override
+	public String getSelf() {
+		return dataManager.getIdentity().getName();
 	}
 
 }

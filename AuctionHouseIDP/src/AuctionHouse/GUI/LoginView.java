@@ -6,10 +6,14 @@ public class LoginView extends javax.swing.JFrame {
 
     private LoginController controller;
     
+    int simnr; // FIXME: Testing only
+    
     /**
      * Creates new form LoginView
      */
-    public LoginView(ControllerMediator mediator) {
+    public LoginView(ControllerMediator mediator,   int simnr) {
+    	this.simnr = simnr;
+    	
         initComponents();
         controller = new LoginController(this, mediator);
     }
@@ -49,7 +53,17 @@ public class LoginView extends javax.swing.JFrame {
 
         jLabel4.setText("Account type:");
 
-        usernameField.setText("gicu");
+        // FIXME: dezhardcodare
+        // Explicatie: astea sunt harcodate aici ca sa se potriveasca cu
+        //		harcodarea din Mediator.getPerson si Mediator.getPersonAddress
+        if (simnr == 1)
+        	usernameField.setText("gicu");
+        else if (simnr == 2)
+        	usernameField.setText("Lulache");
+        else if (simnr == 3)
+        	usernameField.setText("vene");
+        // ---
+        
         usernameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usernameFieldActionPerformed(evt);

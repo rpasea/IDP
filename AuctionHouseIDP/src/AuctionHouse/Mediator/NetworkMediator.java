@@ -11,4 +11,5 @@ public interface NetworkMediator {
 	public String getPerson(SocketAddress addr);
 	public InetSocketAddress getPersonsAddress(String person);
 	public void CheckTransactionChannelClosed(SocketChannel chan);
+	public String getSelf();
 }

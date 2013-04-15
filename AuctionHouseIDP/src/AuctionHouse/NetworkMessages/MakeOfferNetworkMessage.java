@@ -62,7 +62,7 @@ public class MakeOfferNetworkMessage extends NetworkMessage {
 
 	@Override
 	public Message toMessage() {
-		return new MakeOfferMessage(service.getString(),source,offer.getString());
+		return new MakeOfferMessage(service.getString(), source, offer.getString());
 	}
 
 	@Override

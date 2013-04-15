@@ -1,5 +1,8 @@
 package AuctionHouse.Commands;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.Observable;
 import java.util.Observer;

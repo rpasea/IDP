@@ -8,12 +8,16 @@ public class ControllerMediator {
 	private LoginController loginController = null;
 	private MainController mainController = null;
 	
-	public ControllerMediator(Mediator mediator) {
+	int simnr; // FIXME: Testing purpose
+	
+	public ControllerMediator(Mediator mediator,   int simnr) {
 		this.mediator = mediator;
+		
+		this.simnr = simnr;
 	}
 	
 	public void initGui() {
-		LoginView view = new LoginView(this);
+		LoginView view = new LoginView(this,   simnr);
 		loginController = view.getController();
 		view.setVisible(true);
 	}

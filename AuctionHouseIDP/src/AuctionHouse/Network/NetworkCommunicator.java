@@ -1,6 +1,8 @@
 package AuctionHouse.Network;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -287,7 +289,10 @@ public class NetworkCommunicator extends Thread {
 
 		if (msgBuf == null) {
 			msgBuf = new MessageBuffer();
-			msgBuf.setSource(mediator.getPerson(addr));
+			
+			String persaddr = mediator.getPerson(addr);
+			System.out.println("## Person with address: "+ (((InetSocketAddress) addr).getPort()) + "  is " + persaddr);
+			msgBuf.setSource(persaddr);
 			this.readBuffers.put(key, msgBuf);
 		}
 
@@ -387,6 +392,45 @@ public class NetworkCommunicator extends Thread {
 		String person = netMsg.getDestinationPerson();
 		InetSocketAddress addr = mediator.getPersonsAddress(person);
 		byte[] msg = netMsg.serialize();
+		
+		// FIXME: O chestie hidoasa care vrea sa faca din lipsa Webserviceului bici
+		// --- Incepe magaria ---
+		FileOutputStream fop = null;
+		File file;
+		String source = mediator.getSelf();
+ 
+		try {
+ 
+			file = new File("cine.txt");
+			fop = new FileOutputStream(file);
+ 
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+ 
+			// get the content in bytes
+			byte[] contentInBytes = source.getBytes();
+ 
+			fop.write(contentInBytes);
+			fop.flush();
+			fop.close();
+ 
+			System.out.println("### Done writing my name to file");
+ 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (fop != null) {
+					fop.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		// --- Se termina magaria ---
+		
 
 		if (addressToChannel.containsKey(addr)) { // Not tested !!!
 			SocketChannel socketChannel = addressToChannel.get(addr);
@@ -402,9 +446,11 @@ public class NetworkCommunicator extends Thread {
 			try {
 				SocketChannel socketChannel = SocketChannel.open();
 				socketChannel.configureBlocking(false);
-
+				
 				socketChannel.connect(new InetSocketAddress(addr.getAddress(),
 						addr.getPort()));
+				
+				System.out.println("### Open a new Channel: " + ((InetSocketAddress) socketChannel.getLocalAddress()).getPort());
 
 				this.socketChannels.add(socketChannel);
 				addressToChannel.put(socketChannel.getRemoteAddress(),

@@ -17,6 +17,7 @@ public class GenerateXML {
 		entries.add(new ServiceEntry("Lulache", "No Offer", ""));
 		entries.add(new ServiceEntry("Fragulea", "Offer Made", "100"));
 		entries.add(new ServiceEntry("Bilioana", "No Offer", ""));
+		entries.add(new ServiceEntry("vene", "No Offer", ""));
 
 		Service service = new Service("BaniGratis", entries, "");
 
@@ -41,6 +42,9 @@ public class GenerateXML {
 		services.add(service);
 
 		person = new Person("Lulache", "p", 0, services);
+		people.add(person);
+		
+		person = new Person("vene", "p", 0, services);
 		people.add(person);
 
 		AuctionHouseDB db = new AuctionHouseDB(people);

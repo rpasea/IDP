@@ -9,10 +9,7 @@ import AuctionHouse.DataContext.XMLDataManager;
 import AuctionHouse.GUI.LoginView;
 import AuctionHouse.Mediator.Mediator;
 
-/**
- *
- * @author iulius
- */
+
 public class Main {
 	static int simnr;
 	
@@ -51,7 +48,8 @@ public class Main {
             	
             	DataManager dm = new XMLDataManager("Database.xml");
                 // Create a new Mediator for all the components
-                Mediator med = new Mediator(dm,"127.0.0.1", port);
+            	// FIXME: Remove `simnr` argument then resolve all the chain (exists just for test)
+                Mediator med = new Mediator(dm, "127.0.0.1", port,   simnr);
                 
                 med.init();
             }

@@ -2,6 +2,8 @@ package AuctionHouse.Commands;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
@@ -108,12 +110,54 @@ public class OfferAcceptedCommand implements Command {
 		msg.setSource(dataManager.getIdentity().getName());
 		msg.setDestinationPerson(buyer);
 		
+		
+
+		// FIXME: O chestie hidoasa care vrea sa faca din lipsa Webserviceului bici
+		// --- Incepe magaria ---
+		FileOutputStream fop = null;
+		File file;
+		String source = dataManager.getIdentity().getName();
+ 
+		try {
+ 
+			file = new File("cine.txt");
+			fop = new FileOutputStream(file);
+ 
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+ 
+			// get the content in bytes
+			byte[] contentInBytes = source.getBytes();
+ 
+			fop.write(contentInBytes);
+			fop.flush();
+			fop.close();
+ 
+			System.out.println("### Done writing my name to file");
+ 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (fop != null) {
+					fop.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		// --- Se termina magaria ---
+		
+		
+		
 		FileNetworkMessage fileMsg = new FileNetworkMessage(f.getName(), (int) f.length());
 		fileMsg.setDestinationPerson(buyer);
 		
 		try {
 			AHFileInputStream stream = new AHFileInputStream(f, transaction);
-			networkCommunicator.startTransaction( msg, fileMsg, stream, transaction);
+			networkCommunicator.startTransaction(msg, fileMsg, stream, transaction);
 		} catch (FileNotFoundException e) {
 			// should not happen, already checked for this
 			transaction = null;
