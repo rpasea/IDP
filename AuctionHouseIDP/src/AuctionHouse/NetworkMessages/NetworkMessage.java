@@ -15,6 +15,7 @@ public abstract class NetworkMessage {
 	public static final int ACCEPT_OFFER = 2;
 	public static final int START_TRANSACTION = 3;
 	public static final int FILE_TRANSFER = 4;
+	public static final int OFFER_EXCEEDED = 5;
 	
 	/*
 	 * Hack for the file message -> find a more intelligent way to do this

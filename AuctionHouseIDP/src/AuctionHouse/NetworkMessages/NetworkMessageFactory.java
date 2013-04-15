@@ -13,6 +13,8 @@ public class NetworkMessageFactory {
 			return new StartTransactionNetworkMessage();
 		case NetworkMessage.FILE_TRANSFER:
 			return new FileNetworkMessage();
+		case NetworkMessage.OFFER_EXCEEDED:
+			return new OfferExceedNetworkMessage();
 		default:
 			return null;
 		}

@@ -12,6 +12,7 @@ import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.Network.NetworkCommunicator;
 import AuctionHouse.NetworkMessages.MakeOfferNetworkMessage;
 import AuctionHouse.NetworkMessages.NetworkMessage;
+import AuctionHouse.NetworkMessages.OfferExceedNetworkMessage;
 
 /*
  * Class that incapsulates de Make Offer command from the GUI
@@ -62,7 +63,8 @@ public class MakeOfferCommand implements Command {
 		
 		if (se.getState() != ServiceEntry.State.NO_OFFER
 				&& se.getState() != ServiceEntry.State.OFFER_EXCEED
-				&& se.getState() != ServiceEntry.State.OFFER_REJECTED){
+				&& se.getState() != ServiceEntry.State.OFFER_REJECTED
+				&& sendToNetwork){
 			System.out.println("ServiceEntry [" + se.getPerson() + "] isn't NO_OFFER, nor OFFER_EXCEED: " + se.getState() + ", " + se.getStatus());
 			return false;
 		}
@@ -86,7 +88,21 @@ public class MakeOfferCommand implements Command {
 			communicator.sendMessage(netMsg);
 		} else {
 			// This actually means that this is a buyer and an offer came in
-			// TODO: Check if previous offers are exceeded and notify those sellers
+			// Check if previous offers are exceeded and notify those sellers
+			int currentOffer = Integer.parseInt(se.getOffer());
+			for(ServiceEntry altse : s.getEntries()){
+				if(altse != se && altse.getState() == ServiceEntry.State.OFFER_MADE){
+					int altOffer = Integer.parseInt(altse.getOffer());
+					System.out.println("Altern ServiceEntry [" + altse.getPerson() + "] is: " + altOffer);
+					// If present offer is better that this alternative,
+					// notify this seller
+					if(altOffer > currentOffer){
+						NetworkMessage netMsg = new OfferExceedNetworkMessage(service, offer);
+						netMsg.setDestinationPerson(altse.getPerson());
+						communicator.sendMessage(netMsg);
+					}
+				}
+			}
 		}
 		
 		return true;
