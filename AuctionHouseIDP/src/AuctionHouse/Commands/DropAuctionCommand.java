@@ -1,7 +1,5 @@
 package AuctionHouse.Commands;
 
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
 
 import AuctionHouse.DataContext.DataManager;

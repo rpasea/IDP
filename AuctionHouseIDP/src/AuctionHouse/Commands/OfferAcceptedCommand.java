@@ -6,11 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
-
 import javax.swing.JProgressBar;
-import javax.swing.JTable;
-
 import org.apache.log4j.Logger;
 
 import AuctionHouse.DataContext.DataManager;
@@ -22,7 +18,6 @@ import AuctionHouse.Mediator.Transaction;
 import AuctionHouse.Network.AHFileInputStream;
 import AuctionHouse.Network.NetworkCommunicator;
 import AuctionHouse.NetworkMessages.FileNetworkMessage;
-import AuctionHouse.NetworkMessages.NetworkMessage;
 import AuctionHouse.NetworkMessages.StartTransactionNetworkMessage;
 
 public class OfferAcceptedCommand implements Command {

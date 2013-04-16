@@ -8,15 +8,12 @@ import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 
 import AuctionHouse.Commands.*;
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Main.SimulatorThread;
-import AuctionHouse.Main.TestWorker;
 import AuctionHouse.Messages.*;
 import AuctionHouse.Network.NetworkCommunicator;
 

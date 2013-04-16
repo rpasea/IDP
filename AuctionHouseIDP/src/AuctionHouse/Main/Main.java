@@ -9,7 +9,6 @@ import org.apache.log4j.PropertyConfigurator;
 
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.XMLDataManager;
-import AuctionHouse.GUI.LoginView;
 import AuctionHouse.Mediator.Mediator;
 
 

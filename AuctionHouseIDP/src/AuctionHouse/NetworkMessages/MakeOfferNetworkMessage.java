@@ -2,8 +2,6 @@ package AuctionHouse.NetworkMessages;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
-import java.util.LinkedList;
-
 import AuctionHouse.Messages.MakeOfferMessage;
 import AuctionHouse.Messages.Message;
 import AuctionHouse.Network.SerializableString;

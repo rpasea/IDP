@@ -1,9 +1,5 @@
 package AuctionHouse.Commands;
 
-import java.util.Vector;
-
-import javax.swing.JTable;
-
 import org.apache.log4j.Logger;
 
 import AuctionHouse.DataContext.Service;
@@ -12,9 +8,7 @@ import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.Network.NetworkCommunicator;
 import AuctionHouse.NetworkMessages.DropOfferNetworkMessage;
-import AuctionHouse.NetworkMessages.MakeOfferNetworkMessage;
 import AuctionHouse.NetworkMessages.NetworkMessage;
-import AuctionHouse.NetworkMessages.OfferExceedNetworkMessage;
 import AuctionHouse.DataContext.DataManager;
 
 public class DropOfferCommand implements Command {

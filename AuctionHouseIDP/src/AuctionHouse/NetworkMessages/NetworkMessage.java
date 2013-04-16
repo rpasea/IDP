@@ -1,6 +1,5 @@
 package AuctionHouse.NetworkMessages;
 
-import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 import AuctionHouse.Messages.Message;

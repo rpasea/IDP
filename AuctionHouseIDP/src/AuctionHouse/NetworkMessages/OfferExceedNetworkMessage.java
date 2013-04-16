@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 import AuctionHouse.Messages.Message;
-import AuctionHouse.Messages.OfferAcceptedMessage;
 import AuctionHouse.Messages.OfferExceedMessage;
 import AuctionHouse.Network.SerializableString;
 

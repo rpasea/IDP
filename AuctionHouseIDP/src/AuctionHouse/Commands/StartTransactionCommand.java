@@ -1,16 +1,9 @@
 package AuctionHouse.Commands;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
-
 import javax.swing.JProgressBar;
-import javax.swing.JTable;
-
 import org.apache.log4j.Logger;
 
 import AuctionHouse.DataContext.Service;
