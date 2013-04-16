@@ -10,6 +10,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.RollingFileAppender;
 
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.Service;
@@ -43,6 +44,14 @@ public class LoginCommand implements Command {
 			return false;
 
 		List<Service> services = dataManager.doLogin(user, password, role);
+		if (services == null)
+			return false;
+		
+		// Log4J: switch from 'generic' file to a user specific file
+		RollingFileAppender appender = (RollingFileAppender) Logger.getRootLogger().getAppender("Afile");
+    	appender.setFile(user + ".log");
+    	appender.activateOptions();
+		// ---
 
 		Vector<Object> columnNames = new Vector<Object>();
 		columnNames.add("Service");
