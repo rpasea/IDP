@@ -271,6 +271,9 @@ public class NetworkCommunicator extends Thread {
 			numRead = -1000000000;
 		}
 
+		/*
+		 * Inchidem toate cele
+		 */
 		if (numRead <= 0) {
 			logger.info("[NetworkCommunicator] S-a inchis socket-ul asociat cheii " + key);
 			key.channel().close();
@@ -286,6 +289,10 @@ public class NetworkCommunicator extends Thread {
 		logger.info("[NetworkCommunicator] S-au citit " + numRead
 				+ " bytes.");
 
+		/*
+		 * Iau bufferul asociat acestei key.
+		 * Daca nu exista, instantiez un buffer nou
+		 */
 		byte[] currentBuf = rBuffer.array();
 		MessageBuffer msgBuf = readBuffers.get(key);
 
@@ -300,6 +307,9 @@ public class NetworkCommunicator extends Thread {
 
 		msgBuf.putBytes(currentBuf, numRead);
 
+		/*
+		 * Daca sunt mesaje complete, le tratez
+		 */
 		if (msgBuf.hasMessages())
 			for (NetworkMessage nMess : msgBuf.getAndClearMessages()) {
 				nMess.setSocketChannel(socketChannel);
@@ -334,15 +344,14 @@ public class NetworkCommunicator extends Thread {
 
 		synchronized (key) {
 			wbuf = this.writeBuffers.get(socketChannel);
-
+			/*
+			 * Iau primul stream din care trebuie sa trimit
+			 */
 			if (wbuf.size() > 0) {
 				InputStream is = wbuf.get(0);
 				wbuf.remove(0);
 				int available = wBuffer.capacity() - wBuffer.position();
 				byte[] bbuf = new byte[available];
-				/*
-				 * We make sure there is no overflow
-				 */
 				int readFromStream = is.read(bbuf, 0, available);
 
 				if (readFromStream == -1) {
@@ -367,6 +376,9 @@ public class NetworkCommunicator extends Thread {
 							newBuf[i - numWritten] = bbuf[i];
 						}
 
+						/*
+						 * Adaug ce nu am putut scrie la urmatorul stream
+						 */
 						InputStream newIs = new SequenceInputStream(
 								new ByteArrayInputStream(newBuf), is);
 						wbuf.add(0, newIs);
