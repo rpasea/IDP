@@ -23,6 +23,7 @@ public class SupplyContextualMenu implements MenuState {
 		this.mediator = mediator;
 		this.service = service;
 		this.supplier = supplier;
+		this.offer = offer;
 		
 		popup = new JPopupMenu();
 		ActionListener menuListener = new ActionListener() {
@@ -58,12 +59,12 @@ public class SupplyContextualMenu implements MenuState {
 		
 		offer = str;
 		
-		Message mess = new MakeOfferMessage(service,supplier,offer);
+		Message mess = new MakeOfferMessage(service, supplier, offer);
 		mediator.sendMessage(mess);
 	}
 	
 	private void dropOfferHandler(ActionEvent event) {
-		Message mess = new DropOfferMessage ( service,supplier,offer);
+		Message mess = new DropOfferMessage(service, supplier, offer);
 		mediator.sendMessage(mess);
 	}
 

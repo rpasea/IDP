@@ -11,11 +11,12 @@ import AuctionHouse.Messages.Message;
 
 public abstract class NetworkMessage {
 	public static final int MAKE_OFFER = 0;
-	public static final int REJECT_OFFER = 1;
-	public static final int ACCEPT_OFFER = 2;
-	public static final int START_TRANSACTION = 3;
-	public static final int FILE_TRANSFER = 4;
-	public static final int OFFER_EXCEEDED = 5;
+	public static final int DROP_OFFER = 1;
+	public static final int REJECT_OFFER = 2;
+	public static final int ACCEPT_OFFER = 3;
+	public static final int START_TRANSACTION = 4;
+	public static final int FILE_TRANSFER = 5;
+	public static final int OFFER_EXCEEDED = 6;
 	
 	/*
 	 * Hack for the file message -> find a more intelligent way to do this

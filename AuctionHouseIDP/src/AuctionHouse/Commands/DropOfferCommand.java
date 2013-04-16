@@ -10,6 +10,11 @@ import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
+import AuctionHouse.Network.NetworkCommunicator;
+import AuctionHouse.NetworkMessages.DropOfferNetworkMessage;
+import AuctionHouse.NetworkMessages.MakeOfferNetworkMessage;
+import AuctionHouse.NetworkMessages.NetworkMessage;
+import AuctionHouse.NetworkMessages.OfferExceedNetworkMessage;
 import AuctionHouse.DataContext.DataManager;
 
 public class DropOfferCommand implements Command {
@@ -19,15 +24,35 @@ public class DropOfferCommand implements Command {
 	private DataManager dataManager;
 	private String service;
 	private String buyer;
+	private String offer;
 	private ControllerMediator mediator;
+	private NetworkCommunicator communicator;
+
+	private boolean sendToNetwork;
 	
-	public DropOfferCommand(String service, String buyer,
+	public DropOfferCommand(String service, String buyer, String offer,
 			ControllerMediator mediator,
-			DataManager dataManager) {
+			DataManager dataManager,
+			NetworkCommunicator communicator) {
+		this.service = service;
+		this.buyer = buyer;
+		this.offer = offer;
+		this.mediator = mediator;
+		this.dataManager = dataManager;
+		this.communicator = communicator;
+		this.sendToNetwork = true;
+	}
+	
+	public DropOfferCommand(String service, String buyer, String offer,
+			ControllerMediator mediator,
+			DataManager dataManager,
+			NetworkCommunicator communicator, boolean sendToNetwork) {
 		this.service = service;
 		this.buyer = buyer;
 		this.mediator = mediator;
 		this.dataManager = dataManager;
+		this.communicator = communicator;
+		this.sendToNetwork = sendToNetwork;
 	}
 	
 	@Override
@@ -48,8 +73,13 @@ public class DropOfferCommand implements Command {
 		embeddedModel.setValueAt("", offerRow, 2);
 		
 		/*
-		 * TODO: use the network module to notify the buyer
+		 * Use the network module to notify the buyer
 		 */
+		if (sendToNetwork){
+			NetworkMessage netMsg = new DropOfferNetworkMessage(service, buyer, offer);
+			netMsg.setDestinationPerson(buyer);
+			communicator.sendMessage(netMsg);
+		}
 		
 		return true;
 	}

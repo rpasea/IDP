@@ -103,7 +103,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		 */
 		case LaunchAuction: {
 			LaunchAuctionMessage mess = (LaunchAuctionMessage) message;
-			// TODO: don't forget the NetworkCommunicator here
+
 			Command com = new LaunchAuctionCommand(mess.getService(),
 					controllerMediator, dataManager);
 			result = com.run();
@@ -113,7 +113,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		}
 		case DropAuction: {
 			DropAuctionMessage mess = (DropAuctionMessage) message;
-			// TODO: don't forget the NetworkCommunicator here
+
 			Command com = new DropAuctionCommand(mess.getService(),
 					controllerMediator, dataManager);
 			result = com.run();
@@ -123,7 +123,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		}
 		case AcceptOffer: {
 			AcceptOfferMessage mess = (AcceptOfferMessage) message;
-			// TODO: don't forget the NetworkCommunicator here
+
 			Command com = new AcceptOfferCommand(mess.getService(),
 					mess.getPerson(), mess.getOffer(), controllerMediator,
 					dataManager, networkCommunicator);
@@ -134,7 +134,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		}
 		case RejectOffer: {
 			RejectOfferMessage mess = (RejectOfferMessage) message;
-			// TODO: don't forget the NetworkCommunicator here
+
 			Command com = new RejectOfferCommand(mess.getService(),
 					mess.getPerson(), mess.getOffer(), controllerMediator,
 					dataManager, networkCommunicator);
@@ -148,7 +148,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		 */
 		case MakeOffer: {
 			MakeOfferMessage mess = (MakeOfferMessage) message;
-			// TODO: don't forget the NetworkCommunicator here
+
 			Command com = new MakeOfferCommand(mess.getService(),
 					mess.getPerson(), mess.getOffer(), controllerMediator,
 					dataManager, networkCommunicator);
@@ -159,10 +159,12 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		}
 		case DropOffer: {
 			DropOfferMessage mess = (DropOfferMessage) message;
-			// TODO: don't forget the NetworkCommunicator here
+
 			Command com = new DropOfferCommand(mess.getService(),
-					mess.getPerson(), controllerMediator, dataManager);
+					mess.getPerson(), mess.getOffer(), controllerMediator,
+					dataManager, networkCommunicator);
 			result = com.run();
+
 			tip = "DropOffer";
 			break;
 		}
@@ -268,6 +270,17 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			result = com.run();
 
 			tip = "Make Offer";
+			break;
+		}
+		case DropOffer: {
+			DropOfferMessage mess = (DropOfferMessage) message;
+
+			Command com = new DropOfferCommand(mess.getService(),
+					mess.getPerson(), mess.getOffer(), controllerMediator,
+					dataManager, networkCommunicator, false);
+			result = com.run();
+
+			tip = "Drop Offer";
 			break;
 		}
 		}

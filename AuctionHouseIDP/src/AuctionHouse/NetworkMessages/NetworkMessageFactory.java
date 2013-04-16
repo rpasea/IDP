@@ -5,6 +5,8 @@ public class NetworkMessageFactory {
 		switch (type) {
 		case NetworkMessage.MAKE_OFFER:
 			return new MakeOfferNetworkMessage();
+		case NetworkMessage.DROP_OFFER:
+			return new DropOfferNetworkMessage();
 		case NetworkMessage.REJECT_OFFER:
 			return new RejectOfferNetworkMessage();
 		case NetworkMessage.ACCEPT_OFFER:
