@@ -4,6 +4,8 @@ import java.util.Vector;
 
 import javax.swing.JTable;
 
+import org.apache.log4j.Logger;
+
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
@@ -11,6 +13,9 @@ import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.DataContext.DataManager;
 
 public class DropOfferCommand implements Command {
+	
+	final Logger logger = Logger.getLogger("generic.mediator.dropoffer");
+	
 	private DataManager dataManager;
 	private String service;
 	private String buyer;

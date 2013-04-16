@@ -9,6 +9,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
+import org.apache.log4j.Logger;
+
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
@@ -19,6 +21,8 @@ import AuctionHouse.Mediator.Mediator;
 import AuctionHouse.NetworkMessages.NetworkMessage;
 
 public class LoginCommand implements Command {
+	
+	final Logger logger = Logger.getLogger("generic.mediator.login");
 
 	private String user, password;
 	private int role;
@@ -100,7 +104,7 @@ public class LoginCommand implements Command {
 		// Instantiates a new MainWindow to be displayed
 		mediator.switchToMain(tableModel);
 
-		System.out.println("LOGED IN: " + user + " / " + password + " (role: "
+		logger.info("Logged in as: " + user + " / " + password + " (role: "
 				+ role + ")");
 
 		NetworkMessage.CurrentUserName = user;

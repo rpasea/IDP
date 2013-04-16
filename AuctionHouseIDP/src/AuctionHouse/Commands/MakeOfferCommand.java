@@ -4,6 +4,8 @@ import java.util.Vector;
 
 import javax.swing.JTable;
 
+import org.apache.log4j.Logger;
+
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
@@ -20,6 +22,9 @@ import AuctionHouse.NetworkMessages.OfferExceedNetworkMessage;
  * module
  */
 public class MakeOfferCommand implements Command {
+	
+	final Logger logger = Logger.getLogger("generic.mediator.makeoffer");
+	
 	private DataManager dataManager;
 	private String service;
 	private String buyer;
@@ -65,10 +70,10 @@ public class MakeOfferCommand implements Command {
 				&& se.getState() != ServiceEntry.State.OFFER_EXCEED
 				&& se.getState() != ServiceEntry.State.OFFER_REJECTED
 				&& sendToNetwork){
-			System.out.println("ServiceEntry [" + se.getPerson() + "] isn't NO_OFFER, nor OFFER_EXCEED: " + se.getState() + ", " + se.getStatus());
+			logger.debug("ServiceEntry [" + se.getPerson() + "] isn't NO_OFFER, nor OFFER_EXCEED: " + se.getState() + ", " + se.getStatus());
 			return false;
 		}
-		System.out.println("ServiceEntry [" + se.getPerson() + "] is: " + se.getState() + ", " + se.getStatus());
+		logger.debug("ServiceEntry [" + se.getPerson() + "] is: " + se.getState() + ", " + se.getStatus());
 		
 		AHTableModel embeddedModel = model.getInnerTableModel(se.getService().getName());
 		int offerRow = embeddedModel.getInnerPersonRowNr(se.getPerson());
@@ -93,7 +98,7 @@ public class MakeOfferCommand implements Command {
 			for(ServiceEntry altse : s.getEntries()){
 				if(altse != se && altse.getState() == ServiceEntry.State.OFFER_MADE){
 					int altOffer = Integer.parseInt(altse.getOffer());
-					System.out.println("Altern ServiceEntry [" + altse.getPerson() + "] is: " + altOffer);
+					logger.debug("Altern ServiceEntry [" + altse.getPerson() + "] is: " + altOffer);
 					// If present offer is better that this alternative,
 					// notify this seller
 					if(altOffer > currentOffer){

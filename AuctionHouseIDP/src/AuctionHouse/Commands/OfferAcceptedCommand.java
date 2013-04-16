@@ -11,6 +11,8 @@ import java.util.Vector;
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
 
+import org.apache.log4j.Logger;
+
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
@@ -24,6 +26,9 @@ import AuctionHouse.NetworkMessages.NetworkMessage;
 import AuctionHouse.NetworkMessages.StartTransactionNetworkMessage;
 
 public class OfferAcceptedCommand implements Command {
+	
+	final Logger logger = Logger.getLogger("generic.mediator.offeraccepted");
+	
 	private DataManager dataManager;
 	private String service;
 	private String buyer;
@@ -63,7 +68,8 @@ public class OfferAcceptedCommand implements Command {
 			return false;
 		}
 		
-		if (se.getState() != ServiceEntry.State.OFFER_MADE)
+		if (se.getState() != ServiceEntry.State.OFFER_MADE
+				&& se.getState() != ServiceEntry.State.OFFER_EXCEED)
 			return false;
 		
 		final AHTableModel embeddedModel = model.getInnerTableModel(se.getService().getName());
@@ -135,7 +141,7 @@ public class OfferAcceptedCommand implements Command {
 			fop.flush();
 			fop.close();
  
-			System.out.println("### Done writing my name to file");
+			logger.debug("### Done writing my name to file");
  
 		} catch (IOException e) {
 			e.printStackTrace();

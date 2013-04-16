@@ -1,5 +1,7 @@
 package AuctionHouse.Commands;
 
+import org.apache.log4j.Logger;
+
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
@@ -10,6 +12,9 @@ import AuctionHouse.NetworkMessages.NetworkMessage;
 import AuctionHouse.DataContext.DataManager;
 
 public class AcceptOfferCommand implements Command {
+
+	final Logger logger = Logger.getLogger("generic.mediator.acceptoffer");
+
 	private String service;
 	private String seller;
 	private String offer;

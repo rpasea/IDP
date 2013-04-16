@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import AuctionHouse.Commands.*;
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.GUI.ControllerMediator;
@@ -21,6 +23,8 @@ import AuctionHouse.Network.NetworkCommunicator;
 public class Mediator implements GUIMediator, NetworkMediator,
 		WebClientMediator {
 
+	final Logger logger = Logger.getLogger("generic.mediator");
+	
 	public static final int ROL_FURNIZOR = 0;
 	public static final int ROL_CUMPARATOR = 1;
 
@@ -164,7 +168,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 		}
 		}
 
-		System.out.println("Mesaj: " + tip);
+		logger.debug("Mesaj: " + tip);
 
 		return result;
 	}
@@ -267,7 +271,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			break;
 		}
 		}
-		System.out.println("Mesaj: " + tip);
+		logger.debug("Mesaj-retea: " + tip);
 		return result;
 	}
 
@@ -307,7 +311,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 			br = new BufferedReader(new FileReader("cine.txt"));
  
 			sCurrentLine = br.readLine();
-			System.out.println("%%% " + sCurrentLine);
+			logger.debug("%%% " + sCurrentLine);
 			
 			return sCurrentLine;
  

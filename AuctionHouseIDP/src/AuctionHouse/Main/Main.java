@@ -4,6 +4,9 @@
  */
 package AuctionHouse.Main;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.XMLDataManager;
 import AuctionHouse.GUI.LoginView;
@@ -14,10 +17,15 @@ public class Main {
 	static int simnr;
 	
     public static void main(String args[]) {
+    	// Log4j
+    	PropertyConfigurator.configure("log4j.properties");
+    	final Logger logger = Logger.getLogger("generic");
+    	
+    	
+    	// FIXME: Doar pentru folosirea targeturilor din build.xml
     	simnr = Integer.parseInt(args[0]);
     	
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
@@ -29,22 +37,21 @@ public class Main {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        	logger.fatal(ex.getMessage());
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        	logger.fatal(ex.getMessage());
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        	logger.fatal(ex.getMessage());
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        	logger.fatal(ex.getMessage());
         }
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
             	int port = 50000 + simnr;
             	
-            	System.out.println("HostPort: " + port);
+            	logger.info("HostPort: " + port);
             	
             	DataManager dm = new XMLDataManager("Database.xml");
                 // Create a new Mediator for all the components

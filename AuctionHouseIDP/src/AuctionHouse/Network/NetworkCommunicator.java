@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import org.apache.log4j.Logger;
+
 import AuctionHouse.Mediator.NetworkMediator;
 import AuctionHouse.Mediator.Transaction;
 import AuctionHouse.NetworkMessages.FileNetworkMessage;
@@ -36,6 +39,8 @@ import AuctionHouse.NetworkMessages.StartTransactionNetworkMessage;
  */
 
 public class NetworkCommunicator extends Thread {
+
+	final Logger logger = Logger.getLogger("generic.mediator.acceptoffer");
 
 	/*
 	 * this should be made configurable from file!!!
@@ -73,7 +78,7 @@ public class NetworkCommunicator extends Thread {
 		try {
 			selector = SelectorProvider.provider().openSelector();
 		} catch (Exception e) {
-			System.err.println("Error on Selector creation: " + e);
+			logger.error("Error on Selector creation: " + e);
 			e.printStackTrace();
 		}
 		this.threadPool = Executors.newFixedThreadPool(NumberOfThreadsInPool);
@@ -107,7 +112,7 @@ public class NetworkCommunicator extends Thread {
 	}
 
 	public void run() {
-		System.out.println("Server started on port: "
+		logger.info("Server started on port: "
 				+ hostSocketAddress.getPort());
 
 		// Creeaza ServerSocketChannels
@@ -119,7 +124,7 @@ public class NetworkCommunicator extends Thread {
 			serverChannel.socket().bind(hostSocketAddress);
 			serverChannel.register(this.selector, SelectionKey.OP_ACCEPT);
 		} catch (Exception e) {
-			System.err.println("Error on ServerSocketChannel creation: " + e);
+			logger.error("Error on ServerSocketChannel creation: " + e);
 			e.printStackTrace();
 		}
 
@@ -139,27 +144,27 @@ public class NetworkCommunicator extends Thread {
 					}
 
 					if (key.isConnectable()) {
-						System.out.println("Connect with key: " + key);
+						logger.debug("Connect with key: " + key);
 						key.interestOps(key.interestOps()
 								^ SelectionKey.OP_CONNECT);
 						this.doConnect(key);
 					}
 					if (key.isAcceptable()) {
-						System.out.println("Accept with key: " + key);
+						logger.debug("Accept with key: " + key);
 						key.interestOps(key.interestOps()
 								^ SelectionKey.OP_ACCEPT);
 						this.doAccept(key);
 					}
 
 					if (key.isWritable()) {
-						System.out.println("Write with key: " + key);
+						logger.debug("Write with key: " + key);
 						key.interestOps(key.interestOps()
 								^ SelectionKey.OP_WRITE);
 						this.threadPool.submit(new WriteJob(this, key));
 					}
 
 					if (key.isReadable()) {
-						System.out.println("Read with key: " + key);
+						logger.debug("Read with key: " + key);
 						// this.doRead(key);
 						/*
 						 * We set the key as unreadable, so no more reads from
@@ -191,7 +196,7 @@ public class NetworkCommunicator extends Thread {
 				}
 
 			} catch (Exception e) {
-				System.err.println("Exceptie in thread-ul Selectorului: " + e);
+				logger.error("Exceptie in thread-ul Selectorului: " + e);
 				e.printStackTrace();
 			}
 		}
@@ -210,7 +215,7 @@ public class NetworkCommunicator extends Thread {
 			}
 		}
 
-		System.out.println("Server stopped");
+		logger.warn("Server stopped");
 	}
 
 	private void doConnect(SelectionKey key) {
@@ -268,9 +273,7 @@ public class NetworkCommunicator extends Thread {
 		}
 
 		if (numRead <= 0) {
-			System.out
-					.println("[NetworkCommunicator] S-a inchis socket-ul asociat cheii "
-							+ key);
+			logger.info("[NetworkCommunicator] S-a inchis socket-ul asociat cheii " + key);
 			key.channel().close();
 			key.cancel();
 			readBuffers.remove(key);
@@ -281,7 +284,7 @@ public class NetworkCommunicator extends Thread {
 			return;
 		}
 
-		System.out.println("[NetworkCommunicator] S-au citit " + numRead
+		logger.info("[NetworkCommunicator] S-au citit " + numRead
 				+ " bytes.");
 
 		byte[] currentBuf = rBuffer.array();
@@ -291,7 +294,7 @@ public class NetworkCommunicator extends Thread {
 			msgBuf = new MessageBuffer();
 			
 			String persaddr = mediator.getPerson(addr);
-			System.out.println("## Person with address: "+ (((InetSocketAddress) addr).getPort()) + "  is " + persaddr);
+			logger.debug("## Person with address: "+ (((InetSocketAddress) addr).getPort()) + "  is " + persaddr);
 			msgBuf.setSource(persaddr);
 			this.readBuffers.put(key, msgBuf);
 		}
@@ -353,7 +356,7 @@ public class NetworkCommunicator extends Thread {
 
 					int numWritten = socketChannel.write(wBuffer);
 
-					System.out.println("[NetworkCommunicator] Am scris "
+					logger.info("[NetworkCommunicator] Am scris "
 							+ numWritten + " bytes pe socket-ul asociat cheii "
 							+ key);
 
@@ -416,7 +419,7 @@ public class NetworkCommunicator extends Thread {
 			fop.flush();
 			fop.close();
  
-			System.out.println("### Done writing my name to file");
+			logger.debug("### Done writing my name to file");
  
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -450,7 +453,7 @@ public class NetworkCommunicator extends Thread {
 				socketChannel.connect(new InetSocketAddress(addr.getAddress(),
 						addr.getPort()));
 				
-				System.out.println("### Open a new Channel: " + ((InetSocketAddress) socketChannel.getLocalAddress()).getPort());
+				logger.debug("### Open a new Channel: " + ((InetSocketAddress) socketChannel.getLocalAddress()).getPort());
 
 				this.socketChannels.add(socketChannel);
 				addressToChannel.put(socketChannel.getRemoteAddress(),
@@ -486,7 +489,7 @@ public class NetworkCommunicator extends Thread {
 		byte[] msg = netMsg.serialize();
 		byte[] fileInfo = fileMess.serialize();
 
-		System.out.println("Sending file: " + fileMess.getService() + " of "
+		logger.info("Sending file: " + fileMess.getService() + " of "
 				+ fileMess.getSize() + " bytes");
 
 		try {

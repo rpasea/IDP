@@ -8,6 +8,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
+import org.apache.log4j.Logger;
+
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableCellRenderer;
@@ -16,6 +18,8 @@ import AuctionHouse.GUI.ControllerMediator;
 import AuctionHouse.DataContext.DataManager;
 
 public class LaunchAuctionCommand implements Command{
+	
+	final Logger logger = Logger.getLogger("generic.mediator.auction");
 
 	private DataManager dataManager;
 	private String service;

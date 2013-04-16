@@ -2,12 +2,17 @@ package AuctionHouse.Commands;
 
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 
 public class DropAuctionCommand implements Command{
+	
+	final Logger logger = Logger.getLogger("generic.mediator.auction");
+	
 
 	private DataManager dataManager;
 	private String service;

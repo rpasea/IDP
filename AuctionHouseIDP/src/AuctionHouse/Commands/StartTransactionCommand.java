@@ -11,6 +11,8 @@ import java.util.Vector;
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
 
+import org.apache.log4j.Logger;
+
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
 import AuctionHouse.GUI.AHTableModel;
@@ -22,6 +24,8 @@ import AuctionHouse.Network.NetworkCommunicator;
 import AuctionHouse.DataContext.DataManager;
 
 public class StartTransactionCommand implements Command {
+	
+	final Logger logger = Logger.getLogger("generic.mediator.starttransaction");
 
 	private String service, seller, buyer, offer;
 	private ControllerMediator controllerMediator;

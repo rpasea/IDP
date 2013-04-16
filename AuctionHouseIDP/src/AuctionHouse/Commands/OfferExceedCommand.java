@@ -4,6 +4,8 @@ import java.util.Vector;
 
 import javax.swing.JTable;
 
+import org.apache.log4j.Logger;
+
 import AuctionHouse.DataContext.DataManager;
 import AuctionHouse.DataContext.Service;
 import AuctionHouse.DataContext.ServiceEntry;
@@ -11,6 +13,9 @@ import AuctionHouse.GUI.AHTableModel;
 import AuctionHouse.GUI.ControllerMediator;
 
 public class OfferExceedCommand implements Command {
+	
+	final Logger logger = Logger.getLogger("generic.mediator.offerexceed");
+	
 	private DataManager dataManager;
 	private String service;
 	private String buyer;
@@ -39,12 +44,7 @@ public class OfferExceedCommand implements Command {
 		se.setState(ServiceEntry.State.OFFER_EXCEED);
 		se.setStatus("Offer Exceed");
 		embeddedModel.setValueAt("Offer Exceed", offerRow, 1);
-		
-		/*
-		 * TODO: Do something to attach the transaction to the service entry
-		 * 		create the progress bar, propagate it's change events all the 
-		 *      way  to the primary table
-		 */
+
 		return true;
 	}
 }
