@@ -101,6 +101,10 @@ public class MakeOfferCommand implements Command {
 						NetworkMessage netMsg = new OfferExceedNetworkMessage(service, offer);
 						netMsg.setDestinationPerson(altse.getPerson());
 						communicator.sendMessage(netMsg);
+						int exceededRow = embeddedModel.getInnerPersonRowNr(altse.getPerson());
+						altse.setState(ServiceEntry.State.OFFER_EXCEED);
+						altse.setStatus("Offer Exceed");
+						embeddedModel.setValueAt("Offer Exceed", exceededRow, 1);
 					}
 				}
 			}

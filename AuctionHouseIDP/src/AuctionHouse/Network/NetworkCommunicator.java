@@ -464,7 +464,8 @@ public class NetworkCommunicator extends Thread {
 				socketChannel.connect(new InetSocketAddress(addr.getAddress(),
 						addr.getPort()));
 				
-				logger.debug("### Open a new Channel: " + ((InetSocketAddress) socketChannel.getLocalAddress()).getPort());
+				/* null exception */
+				//logger.debug("### Open a new Channel: " + ((InetSocketAddress) socketChannel.getLocalAddress()).getPort());
 
 				this.socketChannels.add(socketChannel);
 				addressToChannel.put(socketChannel.getRemoteAddress(),
