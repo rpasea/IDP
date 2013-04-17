@@ -5,12 +5,33 @@ Proiect IDP Etapa II
 
 
 Source Control
+--------------
 	URL-ul proiectului pentru GitHub:
 	https://github.com/rpasea/IDP.git
 
 
+Compilare si Rulare
+-------------------
+Sunt 3 targeturi ant pentru rulare (care initializeaza corespunzator campurile
+de login):
+
+* `ant run1`  
+    Username: gicu  
+    Rol: Cumparator  
+    Password: p
+* `ant run2`  
+    Username: Lulache  
+    Rol: Vanzator  
+    Password: p  
+* `ant run3`  
+    Username: vene  
+    Rol: Vanzator  
+    Password: p  
+
+
 
 Networking
+----------
 
 1. Infrastructura
 
@@ -56,6 +77,7 @@ diferenta intre mesaje, fisiere, rolul utilizatorului. Se ocupa doar de net).
 
 
 Logging
+-------
 
 Aplicatia produce loguri pentru diferitele evenimente ce apar in timpul
 rularii, atat mesaje de debug, cat si mesaje informative cu privire la
@@ -68,4 +90,3 @@ suprascriu cele mai vechi intrari).
 Inainte ca utilizatorul sa se autentifice, mesajele sunt salvate in fisierul
 'generic.txt', iar dupa autentificare intr-un fisier specific fiecarui
 utilizator, ce poarta numele lui.
-
