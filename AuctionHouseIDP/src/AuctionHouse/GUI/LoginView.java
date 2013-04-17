@@ -52,13 +52,17 @@ public class LoginView extends javax.swing.JFrame {
         jLabel3.setText("Password:");
 
         jLabel4.setText("Account type:");
+        
+        roleCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Furnizor", "Cumparator" }));
 
         // FIXME: dezhardcodare
         // Explicatie: astea sunt harcodate aici ca sa se potriveasca cu
         //		harcodarea din Mediator.getPerson si Mediator.getPersonAddress
-        if (simnr == 1)
+        passwordField.setText("p");
+        if (simnr == 1){
         	usernameField.setText("gicu");
-        else if (simnr == 2)
+        	roleCombo.setSelectedIndex(1);
+        } else if (simnr == 2)
         	usernameField.setText("Lulache");
         else if (simnr == 3)
         	usernameField.setText("vene");
@@ -81,7 +85,6 @@ public class LoginView extends javax.swing.JFrame {
             }
         });
         
-        roleCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Furnizor", "Cumparator" }));
         roleCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 roleComboActionPerformed(evt);

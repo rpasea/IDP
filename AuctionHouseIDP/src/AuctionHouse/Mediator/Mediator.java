@@ -30,9 +30,11 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	private HashMap<String, Transaction> transactions;
 	private NetworkCommunicator networkCommunicator;
 
+	private String hostIp;
+	private int hostPort;
+
 	public Mediator(String hostIp, int hostPort,   int simnr) {
 		controllerMediator = new ControllerMediator(this,   simnr);
-		networkCommunicator = new NetworkCommunicator(this, hostIp, hostPort);
 		transactions = new HashMap<String, Transaction>();
 	}
 
@@ -41,8 +43,9 @@ public class Mediator implements GUIMediator, NetworkMediator,
 	 */
 	public Mediator(DataManager dataManager, String hostIp, int hostPort,   int simnr) {
 		this.dataManager = dataManager;
+		this.hostIp = hostIp;
+		this.hostPort = hostPort;
 		controllerMediator = new ControllerMediator(this,   simnr);
-		networkCommunicator = new NetworkCommunicator(this, hostIp, hostPort);
 		transactions = new HashMap<String, Transaction>();
 	}
 
@@ -70,6 +73,7 @@ public class Mediator implements GUIMediator, NetworkMediator,
 
 			// Should probably be in the login command
 			if ((Boolean) result) {
+				networkCommunicator = new NetworkCommunicator(this, hostIp, hostPort);
 				networkCommunicator.startRunning();
 			}
 

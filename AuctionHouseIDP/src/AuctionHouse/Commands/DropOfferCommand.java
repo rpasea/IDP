@@ -55,7 +55,8 @@ public class DropOfferCommand implements Command {
 		Service s = dataManager.getService(service);
 		ServiceEntry se = s.getEntry(buyer);
 		
-		if (se.getState() != ServiceEntry.State.OFFER_MADE)
+		if (se.getState() != ServiceEntry.State.OFFER_MADE
+				&& se.getState() != ServiceEntry.State.OFFER_EXCEED)
 			return false;
 		
 		AHTableModel embeddedModel = model.getInnerTableModel(se.getService().getName());
