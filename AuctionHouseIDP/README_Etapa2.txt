@@ -1,3 +1,15 @@
+Iulius Curt 343C3
+Radu Pasea 343C3
+
+Proiect IDP Etapa II
+
+
+Source Control
+	URL-ul proiectului pentru GitHub:
+	https://github.com/rpasea/IDP.git
+
+
+
 Networking
 
 1. Infrastructura
