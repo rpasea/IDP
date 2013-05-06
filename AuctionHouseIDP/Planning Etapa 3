@@ -1,0 +1,43 @@
+Scriptul care genereaza baza de date e database/CreateDB.sql.
+Faci un mysql -u root -p < database/CreateDB.sql. Trebuie sa folosim aceeasi parola,
+pornesc cu student, respectand traditia.
+
+Am facut tabelele astea:
+
+	users = tabelul cu parolele, numele si rolurile userilor.
+		Ar trebui sa avem o fereastra, ceva, prin care sa 
+		putem inregistra useri (in fereastra de login sa existe un buton
+		register... stii la ce ma  refer).
+		Altfel vom putea inregistra useri doar punandu-i de mana in baza de date.
+	online_users = aici, la login, se va trece adresa ip si portul fiecarui user 
+			care e online in sistem. Cand userul iese, se scot.
+	services = servicii... e cam evident.
+	buyers_to_services, sellers_to_services = tabele many to many, se adauga 
+					  	chestii in ele la login, se scot
+						la logout.
+
+Ideea mea so far:
+
+	la login, serviciul trece ip-ul si portul userului in DB, user-ul transmite
+serviciile de care e interesat. Astea sunt trecute si ele in tabele.
+	Probleme: trebuie sa facem cumva ( fisier de initializare, alta fereastra etc)
+incat sa stie clientul ce servicii sa trimita la login.
+	Alta varianta: se trimit la register new user serviciile de care e interesat.
+	Pentru asta trebuie modificata baza de date (un tabel in plus, pentru ca nu
+mai merge faza cu reltiile many to many nepermanente. trebuie un table in care se
+retin permamanent serviciile de care sunt interesati user-ii si ramane sa hotaram
+daca adaugam functionalitate sa le modificam sau nu).
+	
+	Am lasat in script si niste linii comentate in caz ca folosim a doua varianta.
+	(De fapt, in momentul asta imi pare mai buna a doua varianta, prima e cam idioata).
+	Daca le decomentezi, sa dai commit la script.
+
+	Toate metodele din DataManager vor fi implementate de serviciu si vor intoarce
+aceleasi lucruri. In plus, clientul serviciului va avea un thread care va face polling
+pe serviciu cu un timer si va urmari modificari (mi se pare suficient sa primeasca 
+aceleasi date ca la login si sa le compare cu cele pe care le are, facand modificarile).
+
+	Serviciul are si el un timer pentru fiecare user online care se reseteaza
+la fiecare apel de la un client. Daca timer-ul face timeout, user-ul e scos. Trebuie
+sa facem cumva sa ne dam seama de asta si sa facem logout si in aplicatia client
+(la un apel de metoda a serviciului... daca nu se poate, asta e).
